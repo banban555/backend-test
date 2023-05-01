@@ -23,8 +23,8 @@ var app = express()
 //   })
 // })
 
-app.use(express.static(__dirname + '/react-web/build'))
+app.use(express.static(__dirname + '/react-web/build/'))
 
 app.get('/', (요청, 응답) => {
-    응답.sendFile('index.html');
+    응답.sendFile(__dirname + '/react-web/build/index.html');
 })

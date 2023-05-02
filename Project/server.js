@@ -1,5 +1,5 @@
-var express = require('express')
-var app = express()
+var express = require("express");
+var app = express();
 // const MongoClient = require('mongodb').MongoClient;
 
 // var db;
@@ -7,9 +7,9 @@ var app = express()
 // 	if (에러) return console.log(에러)
 // 	db = client.db('serverprac');
 
-	app.listen(8080, function () {
-		console.log('listening on 8080');
-	});
+app.listen(8080, function () {
+  console.log("listening on 8080");
+});
 // });
 
 // app.post('/add', function(요청, 응답){
@@ -23,8 +23,12 @@ var app = express()
 //   })
 // })
 
-app.use(express.static(__dirname + '/react-web/build/'))
+app.use(express.static(__dirname + "/react-web/build/"));
 
-app.get('/', (요청, 응답) => {
-    응답.sendFile(__dirname + '/react-web/build/index.html');
-})
+app.get("/", (요청, 응답) => {
+  응답.sendFile(__dirname + "/react-web/build/index.html");
+});
+
+app.get("*", function (요청, 응답) {
+  응답.sendFile(__dirname + "/react-web/build/index.html");
+});

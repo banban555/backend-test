@@ -106,8 +106,8 @@ app.post('/auth', auth, (req, res) => {
     _id : req.user._id,
     isAuth : true,
     eamil: req.user.eamail,
-    firstname : req.user.firstname,
-    lastname: req.user.lastname
+    firstName : req.user.firstName,
+    lastName: req.user.lastName
   })
 });
 

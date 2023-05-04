@@ -77,7 +77,7 @@ app.post('/signin', (req, res) => {
     if(!userInfo){
       return res.json({
         loginSuccess: false,
-        message: '이메일을 확인해주세요'
+        message: '이메일을 확인해주d세요'
       })
     }
     console.log('이메일 확인 성공!');

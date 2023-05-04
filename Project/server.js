@@ -4,15 +4,15 @@ const MongoClient = require('mongodb').MongoClient;
 app.use(express.urlencoded({ extended: true }));
 
 //========== 윤형님 코드 ===========
-// MongoClient.connect(config.mongo_url, { useUnifiedTopology:true }, function(에러, client){
+// var db;
+// MongoClient.connect('mongodb+srv://admin:qwer1234@cluster0.2jx3ncv.mongodb.net/?retryWrites=true&w=majority', function(에러, client){
 //   if (에러) return console.log(에러)
-//   //db = client.db('serverprac');
-//   db = client.db('3PLUS')
+//   db = client.db('serverprac');
+
 //   app.listen(8080, function() {
 //     console.log('listening on 8080');
 //   })
 // })
-
 // app.post('/signup', function(요청, 응답){
 //   응답.send('전송완료');
 //   console.log(요청.body.FirstName);
@@ -25,18 +25,27 @@ app.use(express.urlencoded({ extended: true }));
 // })
 
 
-//========== 추가로 작성한 부분 ===========
+//======================= 추가로 작성한 부분 =====================
+//코드 돌리기 전에 아래 항목들을 install해주세요!
+//npm install jsonwebtoken --save
+//npm install body-parser --save
+//npm install cookie-parser --save
+//npm install bcrypt --save
+//npm install mongoose@5.11.15
+
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const config = require('./config/key.js');
 const {user} = require('./models/user');
-const cookieParser = require('cookie-parser');
 const { auth } = require('./middleware/auth.js')
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
 //mongoose로 DB연결
+//각자 생성하신 local db에 연결하고 싶으신 경우에는 config > dev.js 파일에서 mongodb url을 수정해주시면 됩니다. 
+//기존 url은 주석처리 부탁드려요!
 mongoose.connect
 (
   config.mongo_url,
@@ -77,7 +86,7 @@ app.post('/signin', (req, res) => {
     if(!userInfo){
       return res.json({
         loginSuccess: false,
-        message: '이메일을 확인해주d세요'
+        message: '이메일을 확인해주세요'
       })
     }
     console.log('이메일 확인 성공!');
@@ -89,7 +98,7 @@ app.post('/signin', (req, res) => {
 
       userInfo.generateToken((err, userInfo) => {
         if(err) return res.status(400).send(err); 
-        console.log('토큰 생성 성공!')
+        console.log('로그인 완료!')
         //토큰을 쿠키에 저장함. 여러가지 방식으로 저장이 가능하지만, 쿠키에 저장할 것임
         res.cookie('x_auth', userInfo.token)
         .status(200).send({success : true, userId : userInfo._id})
@@ -98,7 +107,7 @@ app.post('/signin', (req, res) => {
   });
 });
 
-
+//사용자 인증 API 이후 다양한 페이지에서 사용예정임.
 app.post('/auth', auth, (req, res) => {
   // auth 함수 실행을 통과한 이후 실행될 코드
   // auth를 통과했다는 얘기는 authentication이 true라는 말

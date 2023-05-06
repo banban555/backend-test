@@ -99,6 +99,7 @@ app.post('/signin', (req, res) => {
       userInfo.generateToken((err, userInfo) => {
         if(err) return res.status(400).send(err); 
         console.log('로그인 완료!')
+
         //토큰을 쿠키에 저장함. 여러가지 방식으로 저장이 가능하지만, 쿠키에 저장할 것임
         res.cookie('x_auth', userInfo.token)
         .status(200).send({success : true, userId : userInfo._id})
@@ -114,9 +115,9 @@ app.post('/auth', auth, (req, res) => {
   res.status(200).json({
     _id : req.user._id,
     isAuth : true,
-    eamil: req.user.eamail,
-    firstName : req.user.firstName,
-    lastName: req.user.lastName
+    email: req.user.email,
+    name : req.user.name,
+    studentNum: req.user.studentNum
   })
 });
 

@@ -32,7 +32,21 @@ const Home = () => {
         console.error(err);
         // 로그인 실패 시 실행될 코드
       });
-  };
+
+      // $.ajax({
+      //   url: "/signin",
+      //   type: "POST",
+      //   data: userInfo,
+      //   success: function(data) {
+      //     console.log(data);
+      //     // 로그인 성공 시 실행될 코드
+      //   },
+      //   error: function(err) {
+      //     console.error(err);
+      //     // 로그인 실패 시 실행될 코드
+      //   }
+      // });
+  }
 
   return (
     <>
@@ -87,7 +101,7 @@ const Home = () => {
           </Grid>
           <Grid item>
             <nav>
-              <Link to="/signup">Sign Up</Link>
+              <Link to="/signup">회원가입</Link>
             </nav>
           </Grid>
         </Grid>

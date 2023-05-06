@@ -6,12 +6,12 @@ const jwt = require('jsonwebtoken');
 const userSchema = mongoose.Schema
 (
     {
-        firstName :
+        name :
         {
             type:String,
             maxlength:50
         },
-        lastName :
+        studentNum :
         {
             type:String,
             maxlength:50
@@ -40,6 +40,7 @@ const userSchema = mongoose.Schema
 //비밀번호 암호와 function
 userSchema.pre('save', function(next)
 {
+    console.log('함수 실행')
     var user = this;
 
     //유저가 비밀번호를 새로 만들거나 변경하면
@@ -114,6 +115,6 @@ userSchema.statics.findByToken = function(token, callBack)
 
 
 
-const user = mongoose.model('user', userSchema);
+const user = mongoose.model('user', userSchema, 'user');
 
 module.exports = { user }

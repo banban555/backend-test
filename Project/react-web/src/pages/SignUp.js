@@ -3,16 +3,19 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+// import FormControlLabel from "@mui/material/FormControlLabel";
+// import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 //import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from 'axios';
+
+//npm install react-router-dom 필요
 
 function Copyright(props) {
   return (
@@ -35,23 +38,25 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignUp() {
+
   const handleSubmit = (event) => {
-    console.log('함수 실행')
+    console.log('함수 실행');
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
+      name: data.get('name'),
+      studentNum: data.get('studentNum'),
       email: data.get('email'),
       password: data.get('password'),
     });
     const userInfo = {
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
+      name: data.get('name'),
+      studentNum: data.get('studentNum'),
       email: data.get('email'),
       password: data.get('password'),
     };
     console.log(userInfo);
+
     axios.post('/signup', userInfo)
       .then(res => {
         console.log(res.data);
@@ -60,7 +65,9 @@ export default function SignUp() {
         console.error(err);
       });
     };
-     
+
+    const movePage = useNavigate();
+
     return (
       <ThemeProvider theme={theme}>
         <Container component="main" maxWidth="xs">
@@ -86,24 +93,24 @@ export default function SignUp() {
               sx={{ mt: 3 }}
             >
               <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <TextField
                     autoComplete="given-name"
-                    name="firstName"
+                    name="name"
                     required
                     fullWidth
-                    id="firstName"
-                    label="First Name"
+                    id="name"
+                    label="성명"
                     autoFocus
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12}>
                   <TextField
                     required
                     fullWidth
-                    id="lastName"
-                    label="Last Name"
-                    name="lastName"
+                    id="studentNum"
+                    label="학번"
+                    name="studentNum"
                     autoComplete="family-name"
                   />
                 </Grid>
@@ -112,7 +119,7 @@ export default function SignUp() {
                     required
                     fullWidth
                     id="email"
-                    label="Email Address"
+                    label="이메일"
                     name="email"
                     autoComplete="email"
                   />
@@ -122,20 +129,20 @@ export default function SignUp() {
                     required
                     fullWidth
                     name="password"
-                    label="Password"
+                    label="비밀번호"
                     type="password"
                     id="password"
                     autoComplete="new-password"
                   />
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <FormControlLabel
                     control={
                       <Checkbox value="allowExtraEmails" color="primary" />
                     }
                     label="I want to receive inspiration, marketing promotions and updates via email."
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
               <Button
                 type="submit"
@@ -143,18 +150,18 @@ export default function SignUp() {
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Sign Up
+                회원가입
               </Button>
               <Grid container justifyContent="flex-end">
                 <Grid item>
-                  <Link href="#" variant="body2">
-                    Already have an account? Sign in
+                  <Link href="#" variant="body2" onClick={() => {movePage('/')}}>
+                    이미 계정이 있으신가요? 로그인
                   </Link>
                 </Grid>
               </Grid>
             </Box>
           </Box>
-          <Copyright sx={{ mt: 5 }} />
+          {/* <Copyright sx={{ mt: 5 }} /> */}
         </Container>
       </ThemeProvider>
     );

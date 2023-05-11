@@ -81,15 +81,15 @@ app.post('/signup', (req, res) =>
 //로그인 API
 app.post('/signin', (req, res) => {
   //요청한 이메일이 데이터베이스 있는지 확인
-  user.findOne({ email : req.body.email }, (err, userInfo) => 
+  user.findOne({ studentNum : req.body.studentNum }, (err, userInfo) => 
   {
     if(!userInfo){
       return res.json({
         loginSuccess: false,
-        message: '이메일을 확인해주세요'
+        message: '학번을 확인해주세요'
       })
     }
-    console.log('이메일 확인 성공!');
+    console.log('학번 확인 성공!');
 
     //요청한 이메일이 db에 있다면 비밀번호도 똑같은지 확인
     userInfo.comparePassword(req.body.password, (err, isMatched) => {

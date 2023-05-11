@@ -51,7 +51,7 @@ const Application = () => {
         <div className="logo" />
       </Header>
       <Layout>
-        <Sider
+        {/* <Sider
           width={200}
           style={{
             background: colorBgContainer,
@@ -68,13 +68,13 @@ const Application = () => {
             }}
             items={items2}
           />
-        </Sider>
+        </Sider> */}
         <Layout
           style={{
             padding: "0 24px 24px",
           }}
         >
-          <Breadcrumb
+          {/* <Breadcrumb
             style={{
               margin: "16px 0",
             }}
@@ -82,7 +82,7 @@ const Application = () => {
             <Breadcrumb.Item>SignIn</Breadcrumb.Item>
             <Breadcrumb.Item>List</Breadcrumb.Item>
             <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb>
+          </Breadcrumb> */}
           <Content
             style={{
               padding: 24,
@@ -122,6 +122,7 @@ const Application = () => {
                   <span>교원명</span>
                   <input type="text" />
                   <span>희망강의 신청가능학점</span>
+                  <input type="text" />
                 </div>
               </div>
             </div>

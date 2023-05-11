@@ -1,4 +1,4 @@
 module.exports = 
 {
-    mongo_url : 'mongodb+srv://root:1234@3plus.bnxjpfd.mongodb.net/?retryWrites=true&w=majority'
+    mongo_url : 'mongodb+srv://3PLUS:qwerty0987@registration.xobbpvb.mongodb.net/?retryWrites=true&w=majority'
 }

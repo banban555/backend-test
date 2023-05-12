@@ -3,27 +3,27 @@ import {
   NotificationOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme, Select, Tabs } from "antd";
+import { Layout, theme, Select, Tabs, Button, Tag } from "antd";
 import React from "react";
 const { Header, Content, Sider } = Layout;
 
-const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-  (icon, index) => {
-    const key = String(index + 1);
-    return {
-      key: `sub${key}`,
-      icon: React.createElement(icon),
-      label: `subnav ${key}`,
-      children: new Array(4).fill(null).map((_, j) => {
-        const subKey = index * 4 + j + 1;
-        return {
-          key: subKey,
-          label: `option${subKey}`,
-        };
-      }),
-    };
-  }
-);
+// const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
+//   (icon, index) => {
+//     const key = String(index + 1);
+//     return {
+//       key: `sub${key}`,
+//       icon: React.createElement(icon),
+//       label: `subnav ${key}`,
+//       children: new Array(4).fill(null).map((_, j) => {
+//         const subKey = index * 4 + j + 1;
+//         return {
+//           key: subKey,
+//           label: `option${subKey}`,
+//         };
+//       }),
+//     };
+//   }
+// );
 const handleChange = (value) => {
   console.log(`selected ${value}`);
 };
@@ -71,7 +71,7 @@ const Application = () => {
         </Sider> */}
         <Layout
           style={{
-            padding: "0 24px 24px",
+            padding: "0",
           }}
         >
           {/* <Breadcrumb
@@ -91,24 +91,40 @@ const Application = () => {
               background: colorBgContainer,
             }}
           >
-            <h1 style={{ color: "#D54728" }}>희망강의신청</h1>
+            <h1 style={{ color: "#D54728", fontSize: "25px" }}>희망강의신청</h1>
             <div style={{ background: "#FAFAFA" }}>
               <div id="search">
-                <span>학번/성명</span>
-                <input type="text" />
-                <input type="text" />
-                <div>
-                  <span>소속</span>
+                <div style={{ padding: 5 }}>
+                  <label>학번/성명</label>
+                  &nbsp;&nbsp;
                   <input type="text" />
-                  <span>학년/가진급학년</span>
-                  <input type="text" />
-                  <span>강의년도</span>
-                  <input type="text" />
-                  <span>강의학기</span>
+                  &nbsp;&nbsp;
                   <input type="text" />
                 </div>
-                <div>
-                  <span>교과목</span>
+                <div
+                  style={{
+                    padding: 5,
+                  }}
+                >
+                  <label>소속</label>
+                  &nbsp;&nbsp;
+                  <input type="text" />
+                  &emsp; &emsp;
+                  <label>학년/가진급학년</label>
+                  &nbsp;&nbsp;
+                  <input type="text" />
+                  &emsp; &emsp;
+                  <label>강의년도</label>
+                  &nbsp;&nbsp;
+                  <input type="text" />
+                  &emsp; &emsp;
+                  <label>강의학기</label>
+                  &nbsp;&nbsp;
+                  <input type="text" />
+                </div>
+                <div style={{ padding: 5 }}>
+                  <label>교과목</label>
+                  &nbsp;&nbsp;
                   <Select
                     defaultValue="교과목명"
                     style={{ width: 120 }}
@@ -118,11 +134,22 @@ const Application = () => {
                       { value: "학수번호", label: "학수번호" },
                     ]}
                   />
+                  &nbsp;&nbsp;
                   <input type="text" />
-                  <span>교원명</span>
+                  &emsp; &emsp;
+                  <label>교원명</label>
+                  &nbsp;&nbsp;
                   <input type="text" />
-                  <span>희망강의 신청가능학점</span>
-                  <input type="text" />
+                  &emsp; &emsp;
+                  <label>희망강의 신청가능학점</label>
+                  &nbsp;&nbsp;
+                  <Tag>24</Tag>
+                  &emsp; &emsp;&emsp; &emsp;
+                  <Button style={{ background: "#D54728" }}>조회</Button>
+                  &nbsp;&nbsp;
+                  <Button style={{ background: "white", color: "#D54728" }}>
+                    화면초기화
+                  </Button>
                 </div>
               </div>
             </div>
@@ -140,8 +167,20 @@ const Application = () => {
                   background: "#FAFAFA",
                 }}
               >
-                종합강의시간표목록
-                <table style={{ width: "100%", border: "1px solid" }}>
+                <h3
+                  sytle={{
+                    fontSize: "15px",
+                    padding: "10px",
+                  }}
+                >
+                  종합강의시간표목록
+                </h3>
+                <table
+                  style={{
+                    width: "100%",
+                    border: "1px solid",
+                  }}
+                >
                   <tr>
                     <th>교과목명</th>
                     <th>교원명</th>

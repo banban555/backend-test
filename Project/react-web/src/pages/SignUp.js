@@ -1,168 +1,159 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-//import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import React from "react";
+import { Form, Input, Select, Checkbox, Button, Typography, Row, Col } from "antd";
+import { Link } from "react-router-dom";
+import "../css/SignUp.css";
 import { useNavigate } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import axios from 'axios';
+import axios from "axios";
 
-//npm install react-router-dom 필요
 
-function Copyright(props) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+const { Option } = Select;
+const { Title } = Typography;
 
-const theme = createTheme();
 
-export default function SignUp() {
+function SignUp()
+{
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    console.log('함수 실행');
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      name: data.get('name'),
-      studentNum: data.get('studentNum'),
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const onFinish = (values) => {
+    console.log("함수 실행");
+    console.log(values);
     const userInfo = {
-      name: data.get('name'),
-      studentNum: data.get('studentNum'),
-      email: data.get('email'),
-      password: data.get('password'),
+      name: values.name,
+      studentNum: values.studentNum,
+      email: values.email,
+      password: values.password,
     };
     console.log(userInfo);
 
-    axios.post('/signup', userInfo)
-      .then(res => {
+    axios
+      .post("/signup", userInfo)
+      .then((res) => {
         console.log(res.data);
+        navigate("/signin"); // 회원가입 완료 후 이동할 페이지
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
       });
-    };
+  };
 
-    const movePage = useNavigate();
-
-    return (
-      <ThemeProvider theme={theme}>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 8,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
-          >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              {/* <LockOutlinedIcon /> */}
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign up
-            </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
-              sx={{ mt: 3 }}
+  return (
+    <div className="signup-container">
+      <Title level={2}>Sign Up</Title>
+      <Form
+        name="signup"
+        className="signup-form"
+        initialValues={{
+          remember: true,
+        }}
+        onFinish={onFinish}
+      >
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item
+              name="firstName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your First Name!",
+                },
+              ]}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <TextField
-                    autoComplete="given-name"
-                    name="name"
-                    required
-                    fullWidth
-                    id="name"
-                    label="성명"
-                    autoFocus
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="studentNum"
-                    label="학번"
-                    name="studentNum"
-                    autoComplete="family-name"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="이메일"
-                    name="email"
-                    autoComplete="email"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="비밀번호"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                  />
-                </Grid>
-                {/* <Grid item xs={12}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox value="allowExtraEmails" color="primary" />
-                    }
-                    label="I want to receive inspiration, marketing promotions and updates via email."
-                  />
-                </Grid> */}
-              </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
-                회원가입
-              </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link href="#" variant="body2" onClick={() => {movePage('/')}}>
-                    이미 계정이 있으신가요? 로그인
-                  </Link>
-                </Grid>
-              </Grid>
-            </Box>
-          </Box>
-          {/* <Copyright sx={{ mt: 5 }} /> */}
-        </Container>
-      </ThemeProvider>
-    );
-  }
+              <Input placeholder="First Name" />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item
+              name="lastName"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your Last Name!",
+                },
+              ]}
+            >
+              <Input placeholder="Last Name" />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Form.Item
+          name="email"
+          rules={[
+            {
+              required: true,
+              message: "Please input your Email!",
+            },
+          ]}
+        >
+          <Input placeholder="Email" />
+        </Form.Item>
+
+        <Form.Item
+          name="password"
+          rules={[
+            {
+              required: true,
+              message: "Please input your Password!",
+            },
+          ]}
+        >
+          <Input.Password placeholder="Password" />
+        </Form.Item>
+
+        <Form.Item
+          name="confirm"
+          dependencies={['password']}
+          rules={[
+            {
+              required: true,
+              message: "Please confirm your Password!",
+            },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error('The two passwords do not match!'));
+              },
+            }),
+          ]}
+        >
+          <Input.Password placeholder="Confirm Password" />
+        </Form.Item>
+
+        <Form.Item
+          name="gender"
+          rules={[
+            {
+              required: true,
+              message: "Please select your Gender!",
+            },
+          ]}
+        >
+          <Select placeholder="Select your gender">
+            <Option value="male">Male</Option>
+            <Option value="female">Female</Option>
+            <Option value="other">Other</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item name="remember" valuePropName="checked">
+          <Checkbox>I agree with terms and conditions.</Checkbox>
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="signup-form-button">
+            Sign Up
+          </Button>
+        </Form.Item>
+        <Form.Item>
+          Already have an account? <Link to="/signin">Sign In</Link>
+        </Form.Item>
+      </Form>
+    </div>
+  );
+};
+
+
+
+export default SignUp;

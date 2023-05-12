@@ -1,6 +1,6 @@
 import React from "react";
 import { Typography, Input, Button } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, KeyOutlined } from "@ant-design/icons";
 import "../css/SignIn.css"; // CSS 파일 경로
 
@@ -9,6 +9,7 @@ import axios from "axios";
 const { Title } = Typography;
 
 const SignIn = () => {
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -21,6 +22,7 @@ const SignIn = () => {
       .post("/signin", userInfo)
       .then((res) => {
         console.log(res.data);
+        navigate("/application"); 
       })
       .catch((err) => {
         console.error(err);

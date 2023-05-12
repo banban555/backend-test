@@ -34,34 +34,37 @@ const SignIn = () => {
       <img src="/loginLogo.png" alt="loginLogo" className="loginLogo" />
       </div>
       {/* 로그인 폼 */}
-      <form onSubmit={handleSubmit} className="form">
-        {/* 학번 입력 필드 */}
-        <Input
-          required
-          className="full-width-input"
-          placeholder="학번"
-          prefix={<UserOutlined />}
-          name="studentNum"
-        />
-        {/* 비밀번호 입력 필드 */}
-        <Input.Password
-          required
-          className="full-width-input"
-          placeholder="비밀번호"
-          prefix={<KeyOutlined />}
-          name="password"
-        />
-        {/* 로그인 버튼 */}
-        <Button type="primary" htmlType="submit" className="submit-button">
-          LOGIN
-        </Button>
-      </form>
-      {/* 회원가입 링크 */}
-      <nav>
-        <Link to="/signup" className="signup-link">
-          회원가입
-        </Link>
-      </nav>
+      <div className="form-container">
+        <form onSubmit={handleSubmit} className="form">
+          {/* 학번 입력 필드 */}
+          <Input
+            required
+            className="full-width-input"
+            placeholder="학번"
+            prefix={<UserOutlined />}
+            name="studentNum"
+          />
+          {/* 비밀번호 입력 필드 */}
+          <Input.Password
+            required
+            className="full-width-input"
+            placeholder="비밀번호"
+            prefix={<KeyOutlined />}
+            name="password"
+          />
+          {/* 로그인 버튼 */}
+          <Button type="primary" htmlType="submit" className="submit-button">
+            LOGIN
+          </Button>
+          {/* 회원가입 링크 */}
+          <div className="signup-container">
+              <p className="signup-text">아직 계정이 없으신가요?</p>
+              <Link to="/signup" className="signup-link">
+                회원가입
+              </Link>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

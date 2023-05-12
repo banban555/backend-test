@@ -8,36 +8,66 @@
   .text-center {
     text-align: center;
   }
-  
-  .form {
-    margin-top: 3rem;
-  }
-  
+
   .full-width-input {
     width: 100%;
     margin-bottom: 1rem;
   }
+    
+  .form {
+      max-width: 400px; /* 폼의 최대 너비를 지정하세요 */
+      margin: 0 auto;
+      overflow: hidden;
+    }
   
   .submit-button {
-    margin-top: 3rem;
+    background-color:#E79E2F;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     width: 100%
   }
 
-  /* 로고 이미지 스타일링 */
-.loginLogo {
-    width: 100%;
-    max-width: 100%;
-    display: block;
-    margin-bottom: 1rem;
+  .submit-button:hover {
+    background-color: #D8722A;
   }
   
+  
+  .form-container {
+    position: relative; /* 회원가입 링크를 로그인 폼에 상대적으로 위치시키기 위해 설정합니다 */
+    max-width: 400px;
+  }
+
+/* 로고 이미지 크기를 폼의 크기에 맞춤 */
+.loginLogo {
+  width: 100%;
+  max-width: 200px; /* 로고의 최대 너비를 폼의 최대 너비와 동일하게 설정하세요 */
+  display: block;
+  margin-bottom: 1rem;
+  float: left; /* 로고를 폼의 왼쪽에 정렬 */
+}
+
+.signup-container {
+  text-align: right; /* 오른쪽 정렬 */
+  margin-top: 0.4rem; /* 로그인 버튼과 회원가입 링크 사이의 여백 */
+}  
+
   /* 회원가입 링크 스타일 변경 */
-  .signup-link {
+  .signup-text {
     color: gray;
+    font-size: 0.6rem;
+    display: inline;
+    margin-right: 0.3rem;
+  }
+
+  .signup-link {
+    color: #E79E2F;
     text-decoration: none;
+    font-size: 0.8rem;
+    display: inline;
   }
   
   .signup-link:hover {
     text-decoration: none;
-    color: darkgray;
+    color: #D8722A
   }
+

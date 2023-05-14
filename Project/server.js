@@ -49,6 +49,7 @@ app.post('/signup', (req, res) =>
 
 //로그인 API
 app.post('/signin', (req, res) => {
+  console.log('로그인 함수 실행');
   //요청한 이메일이 데이터베이스 있는지 확인
   user.findOne({ studentNum : req.body.studentNum }, (err, userInfo) => 
   {

@@ -1,10 +1,9 @@
-import React from "react";
-import { Form, Input, Select, Checkbox, Button, Typography, Row, Col } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Select, Checkbox, Button, Typography, Row, Col, Modal } from "antd";
 import { Link } from "react-router-dom";
 import "../css/SignUp.css";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
 
 const { Option } = Select;
 const { Title } = Typography;
@@ -13,6 +12,7 @@ const { Title } = Typography;
 function SignUp()
 {
   const navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = useState(false) // 모달 창의 상태를 관리하는 state
 
   const onFinish = (values) => {
     console.log("함수 실행");
@@ -29,16 +29,21 @@ function SignUp()
       .post("/signup", userInfo)
       .then((res) => {
         console.log(res.data);
-        navigate("/signin"); // 회원가입 완료 후 이동할 페이지
+        setIsModalVisible(true); // 회원가입 완료 후 모달 창을 보여줍니다.
       })
       .catch((err) => {
         console.error(err);
       });
   };
 
+  const handleOk = () => {
+    setIsModalVisible(false); // 확인 버튼을 누르면 모달 창을 닫습니다.
+    navigate("/signin"); // 모달 창이 닫힌 후 로그인 페이지로 이동합니다.
+  };
+
   return (
     <div className="signup-container">
-      <Title level={2}>Sign Up</Title>
+      <img src="/loginLogo.png" alt="loginLogo" className="loginLogo" />
       <Form
         name="signup"
         className="signup-form"
@@ -47,34 +52,29 @@ function SignUp()
         }}
         onFinish={onFinish}
       >
-        <Row gutter={16}>
-          <Col span={12}>
-            <Form.Item
-              name="firstName"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your First Name!",
-                },
-              ]}
-            >
-              <Input placeholder="First Name" />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item
-              name="lastName"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Last Name!",
-                },
-              ]}
-            >
-              <Input placeholder="Last Name" />
-            </Form.Item>
-          </Col>
-        </Row>
+        <Form.Item
+          name="name"
+          rules={[
+            {
+              required: true,
+              message: "성명을 입력해주세요",
+            },
+          ]}
+        >
+          <Input placeholder="성명" />
+        </Form.Item>
+
+        <Form.Item
+          name="studentNum"
+          rules={[
+            {
+              required: true,
+              message: "학번을 입력해주세요.",
+            },
+          ]}
+        >
+          <Input placeholder="학번" />
+        </Form.Item>
 
         <Form.Item
           name="email"
@@ -85,7 +85,7 @@ function SignUp()
             },
           ]}
         >
-          <Input placeholder="Email" />
+          <Input placeholder="이메일" />
         </Form.Item>
 
         <Form.Item
@@ -93,11 +93,11 @@ function SignUp()
           rules={[
             {
               required: true,
-              message: "Please input your Password!",
+              message: "비밀번호를 입력해주세요",
             },
           ]}
         >
-          <Input.Password placeholder="Password" />
+          <Input.Password placeholder="비밀번호" />
         </Form.Item>
 
         <Form.Item
@@ -106,50 +106,82 @@ function SignUp()
           rules={[
             {
               required: true,
-              message: "Please confirm your Password!",
+              message: "비밀번호를 다시 확인해주세요",
             },
             ({ getFieldValue }) => ({
               validator(_, value) {
                 if (!value || getFieldValue('password') === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error('The two passwords do not match!'));
+                return Promise.reject(new Error('비밀번호가 일치하지 않습니다.'));
               },
             }),
           ]}
         >
-          <Input.Password placeholder="Confirm Password" />
+          <Input.Password placeholder="비밀번호 확인" />
         </Form.Item>
 
-        <Form.Item
-          name="gender"
+      
+        {/* <Form.Item
+          name="major"
           rules={[
             {
               required: true,
-              message: "Please select your Gender!",
+              message: "전공을 선택해주세요",
             },
           ]}
         >
-          <Select placeholder="Select your gender">
-            <Option value="male">Male</Option>
-            <Option value="female">Female</Option>
-            <Option value="other">Other</Option>
+          <Select placeholder="전공">
+            <Option value="consturction">건설공학과</Option>
+            <Option value="education">교육학과</Option>
+            <Option value="statistic">통계학과</Option>
+            <Option value="software">융합소프트웨어</Option>
+            <Option value="data">데이터사이언스</Option>
           </Select>
-        </Form.Item>
+        </Form.Item> */}
 
+
+        {/* <Form.Item
+          name="grade"
+          rules={[
+            {
+              required: true,
+              message: "학년을 선택해주세요!",
+            },
+          ]}
+        >
+          <Select placeholder="학년">
+            <Option value="1">1</Option>
+            <Option value="2">2</Option>
+            <Option value="3">3</Option>
+            <Option value="4">4</Option>
+          </Select>
+        </Form.Item> */}
+{/* 
         <Form.Item name="remember" valuePropName="checked">
           <Checkbox>I agree with terms and conditions.</Checkbox>
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item>
           <Button type="primary" htmlType="submit" className="signup-form-button">
-            Sign Up
+            회원가입
           </Button>
         </Form.Item>
+        
         <Form.Item>
-          Already have an account? <Link to="/signin">Sign In</Link>
+         <p className="signin-text"> 이미 계정이 있으신가요? </p>
+         <Link to="/signin" className="signin-link">로그인</Link>
         </Form.Item>
       </Form>
+
+      <Modal
+        title="회원가입 완료"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+      >
+        <p>회원가입이 완료되었습니다!</p>
+      </Modal>
     </div>
   );
 };

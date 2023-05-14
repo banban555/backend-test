@@ -16,3 +16,35 @@
   .signup-form-button {
     width: 100%;
   }
+
+  .signin-text {
+    color: gray;
+    font-size: 0.6rem;
+    display: inline;
+    margin-right: 0.3rem;
+  }
+
+  .signin-link {
+    color: #E79E2F;
+    text-decoration: none;
+    font-size: 0.8rem;
+    display: inline;
+  }
+
+  .signin-link:hover {
+    text-decoration: none;
+    color: #D8722A
+  }
+
+  .signup-form-button
+  {
+    background-color:#E79E2F;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    width: 100%
+  }
+
+  .signup-form-button:horver
+  {
+    background-color: #D8722A;
+  }

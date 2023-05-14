@@ -46,28 +46,26 @@
   float: left; /* 로고를 폼의 왼쪽에 정렬 */
 }
 
-.signup-container {
-  text-align: right; /* 오른쪽 정렬 */
-  margin-top: 0.4rem; /* 로그인 버튼과 회원가입 링크 사이의 여백 */
-}  
-
   /* 회원가입 링크 스타일 변경 */
-  .signup-text {
-    color: gray;
-    font-size: 0.6rem;
-    display: inline;
-    margin-right: 0.3rem;
-  }
+.signup-text {
+  color: gray;
+  font-size: 0.6rem;
+  display: inline;
+  margin-right: 0.3rem;
+}
 
-  .signup-link {
-    color: #E79E2F;
-    text-decoration: none;
-    font-size: 0.8rem;
-    display: inline;
-  }
+.signup-link {
+  color: #E79E2F;
+  text-decoration: none;
+  font-size: 0.8rem;
+  display: inline;
+}
   
-  .signup-link:hover {
-    text-decoration: none;
-    color: #D8722A
-  }
+.signup-link:hover {
+  text-decoration: none;
+  color: #D8722A
+}
 
+.signin-form-button {
+  width: 100%;
+}

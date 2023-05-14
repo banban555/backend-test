@@ -26,6 +26,14 @@ const userSchema = mongoose.Schema
         {
             type:String
         },
+        major :
+        {
+            type:String
+        },
+        grade :
+        {
+            type:String
+        },
         token:
         {
             type:String

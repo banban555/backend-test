@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const config = require('./config/key.js');
 const {user} = require('./models/user');
 const { auth } = require('./middleware/auth.js');
+const { send } = require('process');
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
@@ -90,6 +91,15 @@ app.post('/auth', auth, (req, res) => {
     studentNum: req.user.studentNum
   })
 });
+
+//필터링 serach API
+app.get('/api/courses', async (req, res) => {
+  const major = req.query.major;
+  console.log(major);
+  // const courses = await getCoursesByMajor(major);
+  // res.json(courses);
+});
+
 
 //react 파일 불러오기
 app.use(express.static(__dirname + "/react-web/build/"));

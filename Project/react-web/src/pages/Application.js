@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Layout, Select, Button, Tag, Form, Input, Row, Col, Table, Tabs } from 'antd';
+import { Layout, Select, Button, Form, Input, Row, Col, Table, Tabs } from 'antd';
 import styles from '../css/Application.module.css';
-import { PlusOutlined } from '@ant-design/icons';
+import axios from 'axios';
+import { SearchOutlined } from '@ant-design/icons';
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
@@ -17,16 +18,25 @@ const columns = [
 ];
 
 const Application = () => {
-  const handleChange = (value) => console.log(`selected ${value}`);
+
+  //필터링관련 기능 및 변수
+  const [courses, setCourses] = useState([]);
+  const [selectedMajor, setSelectedMajor] = useState('');
+  //필터 선택 시 변수에 필터를 저장하는 함수
+  
+  const handleChange = async (value) => {
+    setSelectedMajor(value);
+    try {
+      const response = await axios.get(`/api/courses?major=${value}`); // 수정
+      setCourses(response.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  //뷰 변경하기
   const onChange = (key) => console.log(`tab changed to ${key}`);
   
-  const [cousrses, setCourses] = useState([]);
-
-  const handleFilter = async () => {
-    const response = await fetch('/api/application?major=건설공학과'); // 여기에 적절한 주소를 입력해 주세요
-    const data = await response.json();
-    setCourses(data);
-  };
 
   return (
     <Layout>
@@ -69,14 +79,10 @@ const Application = () => {
                   </Col>
                   <Col span={4}>
                     <Form.Item>
-                      <Input />
-                    </Form.Item>
-                  </Col>
-                  <Col span={4}>
-                    <Form.Item>
-                      <Button type="primary" className={styles.queryButton}>
-                        조회
-                      </Button>
+                      <Input 
+                        placeholder="검색어를 입력해주세요"
+                        suffix={<SearchOutlined />} 
+                      />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -113,4 +119,17 @@ const Application = () => {
   );
 };
 
+// eslint-disable-next-line no-lone-blocks
+{/* <Col span={4}>
+      <Form.Item>
+        <Button type="primary" className={styles.queryButton} onClick={handleSearch}>
+          조회
+        </Button>
+        <Button type="primary" className={styles.queryButton}>
+          초기화
+        </Button>
+      </Form.Item>
+    </Col> */}
+
 export default Application;
+

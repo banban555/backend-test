@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const config = require('./config/key.js');
 const {user} = require('./models/user');
+const Lecture = require('./models/lecture');
 const { auth } = require('./middleware/auth.js');
 const { send } = require('process');
 app.use(express.urlencoded({ extended: true }));
@@ -95,9 +96,17 @@ app.get('/application', async (req, res) => {
   const { major = '', keyword = '' } = req.query;
   console.log("major: " + major);
   console.log("keyword: " + keyword);
-  // const result = await pseudoQuery(major, keyword);
-  // res.json(result);
+  const result = await Lecture.findLectures(major, keyword);
+  try {
+    const lectures = await Lecture.findLectures(major, keyword);
+    console.log(lectures);
+    res.json(lectures);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
+
 
 
 //react 파일 불러오기

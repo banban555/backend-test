@@ -7,16 +7,9 @@
   align-items: center;
 }
 
-.content {
-  padding: 24px;
-  margin: 0;
-  min-height: 280px;
-  background: #F0F2F5;
-}
-
 .title {
     color: #D54728;
-    fontSize: 25px;
+    font-size: 32px;
   }
   
   .formBackground {
@@ -30,35 +23,35 @@
   
   .flexWrapper {
     display: flex;
-    justifyContent: space-between;
+    justify-content: space-between;
   }
   
   .contentWrapper {
     width: 48%;
-    minHeight: 500px;
+    min-height: 500px;
     background: #FFFFFF;
     padding: 20px;
   }
   
   .smallTitle {
-    fontSize: 15px;
-    marginBottom: 20px;
+    font-size: 15px;
+    margin-bottom: 20px;
   }
   
   .queryButton {
     background: #D54728;
-    borderColor: #D54728;
-    marginRight: 10px;
+    border-color: #D54728;
+    margin-right: 10px;
   }
   
   .resetButton {
     color: #D54728;
-    borderColor: #D54728;
+    border-color: #D54728;
   }
   
   .contentStyle {
     padding: 24px;
     margin: 0;
-    minHeight: 280;
+    min-height: 280;
     background: #F0F2F5;
   } 

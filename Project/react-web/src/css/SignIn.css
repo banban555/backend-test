@@ -26,11 +26,6 @@
     margin-bottom: 1rem;
     width: 100%
   }
-
-  .submit-button:hover {
-    background-color: #D8722A;
-  }
-  
   
   .form-container {
     position: relative; /* 회원가입 링크를 로그인 폼에 상대적으로 위치시키기 위해 설정합니다 */
@@ -64,8 +59,4 @@
 .signup-link:hover {
   text-decoration: none;
   color: #D8722A
-}
-
-.signin-form-button {
-  width: 100%;
 }

@@ -8,7 +8,6 @@ import axios from "axios";
 const { Option } = Select;
 const { Title } = Typography;
 
-
 function SignUp()
 {
   const navigate = useNavigate();
@@ -22,6 +21,8 @@ function SignUp()
       studentNum: values.studentNum,
       email: values.email,
       password: values.password,
+      grade: values.grade,
+      major: values.major
     };
     console.log(userInfo);
 
@@ -122,7 +123,7 @@ function SignUp()
         </Form.Item>
 
       
-        {/* <Form.Item
+        <Form.Item
           name="major"
           rules={[
             {
@@ -138,10 +139,9 @@ function SignUp()
             <Option value="software">융합소프트웨어</Option>
             <Option value="data">데이터사이언스</Option>
           </Select>
-        </Form.Item> */}
+        </Form.Item>
 
-
-        {/* <Form.Item
+        <Form.Item
           name="grade"
           rules={[
             {
@@ -156,12 +156,8 @@ function SignUp()
             <Option value="3">3</Option>
             <Option value="4">4</Option>
           </Select>
-        </Form.Item> */}
-{/* 
-        <Form.Item name="remember" valuePropName="checked">
-          <Checkbox>I agree with terms and conditions.</Checkbox>
-        </Form.Item> */}
-
+        </Form.Item>
+        
         <Form.Item>
           <Button type="primary" htmlType="submit" className="signup-form-button">
             회원가입

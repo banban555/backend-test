@@ -1,4 +1,5 @@
 import React from 'react';
+import React, { useState } from 'react';
 import { Layout, Select, Button, Tag, Form, Input, Row, Col, Table, Tabs } from 'antd';
 import styles from '../css/Application.module.css';
 import { PlusOutlined } from '@ant-design/icons';
@@ -19,6 +20,15 @@ const columns = [
 const Application = () => {
   const handleChange = (value) => console.log(`selected ${value}`);
   const onChange = (key) => console.log(`tab changed to ${key}`);
+  
+  const [cousrses, setCourses] = useState([]);
+
+
+  const handleFilter = async () => {
+    const response = await fetch('/api/application?major=건설공학과'); // 여기에 적절한 주소를 입력해 주세요
+    const data = await response.json();
+    setCourses(data);
+  };
 
   return (
     <Layout>
@@ -82,12 +92,6 @@ const Application = () => {
                 <h3 className={styles.smallTitle}>종합강의시간표목록</h3>
                 <Table dataSource={[]} columns={columns} />
               </div>
-
-              {/* 플러스 버튼 추가 */}
-              <div className={styles.plusButtonWrapper}>
-                <Button className='registerButton' type="primary" shape="circle" icon={<PlusOutlined />} />
-              </div>
-
               <div className={styles.contentWrapper}>
                 <Tabs onChange={onChange} type="card">
                   <TabPane tab="테이블뷰" key="1">희망강의 수강신청 확인 뷰 1</TabPane>

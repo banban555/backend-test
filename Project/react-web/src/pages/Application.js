@@ -85,7 +85,7 @@ const Application = () => {
                 <Row gutter={16}>
                   <Col span={4}>
                     <Form.Item>
-                      <Select defaultValue="전공" onChange={handleSelectChange}>
+                      <Select defaultValue="전공" onChange={handleSelectChange} allowClear={true}>
                         <Option value="건설공학과">건설공학과</Option>
                         <Option value="교육학과">교육학과</Option>
                         <Option value="통계학과">통계학과</Option>

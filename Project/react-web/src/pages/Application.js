@@ -45,9 +45,10 @@ const Application = () => {
       setAddedData((prevData) => [...prevData, selectedData]);
     }
   };
+
   const getCourses = async (major = "", keyword = "") => {
     try {
-      const response = await axios.get(`/application`, {
+      const response = await axios.get(`/application/search`, {
         params: {
           major,
           keyword,

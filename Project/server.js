@@ -91,7 +91,7 @@ app.post('/auth', auth, (req, res) => {
 app.use(express.static(__dirname + "/react-web/build/"));
 
 //serach API
-app.get('/application', async (req, res) => {
+app.get('/application/search', async (req, res) => {
   const { major = '', keyword = '' } = req.query;
   const result = await Lecture.findLectures(major, keyword);
   try {

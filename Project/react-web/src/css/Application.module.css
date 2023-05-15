@@ -1,0 +1,64 @@
+/* Application.module.css */
+.header {
+  height: 100px;
+  background: #D54728;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.content {
+  padding: 24px;
+  margin: 0;
+  min-height: 280px;
+  background: #F0F2F5;
+}
+
+.title {
+    color: #D54728;
+    fontSize: 25px;
+  }
+  
+  .formBackground {
+    background: #FFFFFF;
+    padding: 20px;
+  }
+  
+  .gutter16 {
+    padding: 10px 0px;
+  }
+  
+  .flexWrapper {
+    display: flex;
+    justifyContent: space-between;
+  }
+  
+  .contentWrapper {
+    width: 48%;
+    minHeight: 500px;
+    background: #FFFFFF;
+    padding: 20px;
+  }
+  
+  .smallTitle {
+    fontSize: 15px;
+    marginBottom: 20px;
+  }
+  
+  .queryButton {
+    background: #D54728;
+    borderColor: #D54728;
+    marginRight: 10px;
+  }
+  
+  .resetButton {
+    color: #D54728;
+    borderColor: #D54728;
+  }
+  
+  .contentStyle {
+    padding: 24px;
+    margin: 0;
+    minHeight: 280;
+    background: #F0F2F5;
+  } 

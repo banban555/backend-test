@@ -1,234 +1,148 @@
+import React from 'react';
 import {
-  LaptopOutlined,
-  NotificationOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Layout, theme, Select, Tabs, Button, Tag } from "antd";
-import React from "react";
-const { Header, Content, Sider } = Layout;
+  Layout,
+  Select,
+  Button,
+  Tag,
+  Form,
+  Input,
+  Row,
+  Col,
+  Table,
+  Tabs,
+} from 'antd';
+import styles from '../css/Application.module.css'
 
-// const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-//   (icon, index) => {
-//     const key = String(index + 1);
-//     return {
-//       key: `sub${key}`,
-//       icon: React.createElement(icon),
-//       label: `subnav ${key}`,
-//       children: new Array(4).fill(null).map((_, j) => {
-//         const subKey = index * 4 + j + 1;
-//         return {
-//           key: subKey,
-//           label: `option${subKey}`,
-//         };
-//       }),
-//     };
-//   }
-// );
-const handleChange = (value) => {
-  console.log(`selected ${value}`);
-};
-const onChange = (key) => {
-  console.log(key);
-};
+const { Option } = Select;
+const { TabPane } = Tabs;
+const { Header, Content } = Layout;
 
 const Application = () => {
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  const handleChange = (value) => {
+    console.log(`selected ${value}`);
+  };
+
+  const onChange = (key) => {
+    console.log(`tab changed to ${key}`);
+  };
+
   return (
     <Layout>
-      <Header
-        className="header"
-        style={{
-          height: "100px",
-          background: "#D54728",
-          display: "flex",
-          justifyContent: "flex-start",
-          alignItems: "center",
-        }}
-      >
+      <Header className={styles.header}>
         <img src="logo.png" alt="logo" />
         <div className="logo" />
       </Header>
       <Layout>
-        {/* <Sider
-          width={200}
-          style={{
-            background: colorBgContainer,
-          }}
-        >
-          <Menu
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-            defaultOpenKeys={["sub1"]}
-            style={{
-              height: "100%",
-              borderRight: 0,
-              background: "#D54728",
-            }}
-            items={items2}
-          />
-        </Sider> */}
-        <Layout
-          style={{
-            padding: "0",
-          }}
-        >
-          {/* <Breadcrumb
-            style={{
-              margin: "16px 0",
-            }}
-          >
-            <Breadcrumb.Item>SignIn</Breadcrumb.Item>
-            <Breadcrumb.Item>List</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item>
-          </Breadcrumb> */}
-          <Content
-            style={{
-              padding: 24,
-              margin: 0,
-              minHeight: 280,
-              background: colorBgContainer,
-            }}
-          >
-            <h1 style={{ color: "#D54728", fontSize: "25px" }}>희망강의신청</h1>
-            <div style={{ background: "#FAFAFA" }}>
-              <div id="search">
-                <div style={{ padding: 5 }}>
-                  <label>학번/성명</label>
-                  &nbsp;&nbsp;
-                  <input type="text" />
-                  &nbsp;&nbsp;
-                  <input type="text" />
-                </div>
-                <div
-                  style={{
-                    padding: 5,
-                  }}
-                >
-                  <label>소속</label>
-                  &nbsp;&nbsp;
-                  <input type="text" />
-                  &emsp; &emsp;
-                  <label>학년/가진급학년</label>
-                  &nbsp;&nbsp;
-                  <input type="text" />
-                  &emsp; &emsp;
-                  <label>강의년도</label>
-                  &nbsp;&nbsp;
-                  <input type="text" />
-                  &emsp; &emsp;
-                  <label>강의학기</label>
-                  &nbsp;&nbsp;
-                  <input type="text" />
-                </div>
-                <div style={{ padding: 5 }}>
-                  <label>교과목</label>
-                  &nbsp;&nbsp;
-                  <Select
-                    defaultValue="교과목명"
-                    style={{ width: 120 }}
-                    onChange={handleChange}
-                    options={[
-                      { value: "교과목명", label: "교과목명" },
-                      { value: "학수번호", label: "학수번호" },
+        <Layout style={{ padding: '0' }}>
+          <Content className={styles.contentStyle}>
+            <h1 className={styles.title}>희망강의신청</h1>
+            <div className={styles.formBackground}>
+              <Form layout="vertical">
+                <Row gutter={16}>
+                  <Col span={6}>
+                    <Form.Item label="학번">
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="성명">
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={6}>
+                    <Form.Item label="소속">
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="학년/가진급학년">
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="강의년도">
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="강의학기">
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={6}>
+                    <Form.Item label="교과목">
+                    <Select
+                        defaultValue="교과목명"
+                        style={{ width: 120 }}
+                        onChange={handleChange}
+                      >
+                        <Option value="교과목명">교과목명</Option>
+                        <Option value="학수번호">학수번호</Option>
+                      </Select>
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="교과목 검색">
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="교원명">
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item label="희망강록 신청가능학점">
+                      <Tag>24</Tag>
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={16}>
+                  <Col span={24}>
+                    <Form.Item>
+                      <Button type="primary" className={styles.queryButton}>
+                        조회
+                      </Button>
+                      <Button type="default" className={styles.resetButton}>
+                        화면초기화
+                      </Button>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </div>
+            <div className={styles.gutter16}>
+              <div className={styles.flexWrapper}>
+                <div className={styles.contentWrapper}>
+                  <h3 className={styles.smallTitle}>종합강의시간표목록</h3>
+                  <Table
+                    dataSource={[]}
+                    columns={[
+                      { title: '교과목명', dataIndex: 'courseName', key: 'courseName' },
+                      { title: '교원명', dataIndex: 'instructorName', key: 'instructorName' },
+                      { title: '요일/시간', dataIndex: 'dayTime', key: 'dayTime' },
+                      { title: '강의실', dataIndex: 'classRoom', key: 'classRoom' },
+                      { title: '학수강좌번호', dataIndex: 'courseNumber', key: 'courseNumber' },
+                      { title: '수강정원', dataIndex: 'quota', key: 'quota' },
+                      { title: '신청인원', dataIndex: 'applications', key: 'applications' },
                     ]}
                   />
-                  &nbsp;&nbsp;
-                  <input type="text" />
-                  &emsp; &emsp;
-                  <label>교원명</label>
-                  &nbsp;&nbsp;
-                  <input type="text" />
-                  &emsp; &emsp;
-                  <label>희망강의 신청가능학점</label>
-                  &nbsp;&nbsp;
-                  <Tag>24</Tag>
-                  &emsp; &emsp;&emsp; &emsp;
-                  <Button style={{ background: "#D54728" }}>조회</Button>
-                  &nbsp;&nbsp;
-                  <Button style={{ background: "white", color: "#D54728" }}>
-                    화면초기화
-                  </Button>
+                </div>
+                <div className={styles.contentWrapper}>
+                  <Tabs onChange={onChange} type="card">
+                    <TabPane tab="테이블뷰" key="1">
+                      희망강의 수강신청 확인 뷰 1
+                    </TabPane>
+                    <TabPane tab="시간표뷰" key="2">
+                      희망강의 수강신청 확인 뷰 2
+                    </TabPane>
+                  </Tabs>
                 </div>
               </div>
-            </div>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "10px 0px",
-              }}
-            >
-              <span
-                style={{
-                  width: "48%",
-                  height: "500px",
-                  background: "#FAFAFA",
-                }}
-              >
-                <h3
-                  sytle={{
-                    fontSize: "15px",
-                    padding: "10px",
-                  }}
-                >
-                  종합강의시간표목록
-                </h3>
-                <table
-                  style={{
-                    width: "100%",
-                    border: "1px solid",
-                  }}
-                >
-                  <tr>
-                    <th>교과목명</th>
-                    <th>교원명</th>
-                    <th>요일/시간</th>
-                    <th>강의실</th>
-                    <th>학수강좌번호</th>
-                    <th>수강정원</th>
-                    <th>신청인원</th>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </table>
-              </span>
-              <Tabs
-                style={{
-                  width: "48%",
-                  height: "500px",
-                  background: "#FAFAFA",
-                }}
-                onChange={onChange}
-                type="card"
-                const
-                items={new Array(2).fill(null).map((_, i) => {
-                  const id = String(i + 1);
-                  const views = ["테이블뷰", "시간표뷰"];
-                  return {
-                    label: views[i],
-                    key: id,
-                    children: `희망강의 수강신청 확인 뷰 ${id}`,
-                  };
-                })}
-              />
-              {/* <span
-                style={{
-                  width: "48%",
-                  height: "300px",
-                  background: "#FAFAFA",
-                }}
-              >
-                테이블뷰/시간표뷰
-              </span> */}
             </div>
           </Content>
         </Layout>
@@ -236,4 +150,5 @@ const Application = () => {
     </Layout>
   );
 };
+
 export default Application;

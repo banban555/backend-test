@@ -1,4 +1,5 @@
 /* Application.module.css */
+
 .header {
   height: 100px;
   background: #d54728;
@@ -8,7 +9,6 @@
 }
 
 .title {
-<<<<<<< HEAD
     color: #D54728;
     font-size: 32px;
   }
@@ -68,10 +68,6 @@
     background-color: #D54728;
     border-color: #D54728; 
   }
-=======
-  color: #d54728;
-  font-size: 32px;
-}
 
 .formBackground {
   background: #ffffff;
@@ -129,4 +125,3 @@
 .button_space {
   height: 10px;
 }
->>>>>>> 570eec34aacba36bfda1e5deb4b411d04c37e81c

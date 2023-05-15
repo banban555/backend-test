@@ -98,7 +98,7 @@ const Application = () => {
                     <Form.Item>
                       <Input 
                         placeholder="검색어를 입력해주세요"
-                        suffix={<SearchOutlined />}
+                        suffix={<SearchOutlined className={styles.searchIcon} onClick={handleEnter}/>}
                         value={keyword}
                         onChange={handleKeywordChange}
                         onPressEnter={handleEnter}

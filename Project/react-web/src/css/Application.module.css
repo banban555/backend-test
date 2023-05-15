@@ -118,3 +118,11 @@
 .button_space {
   height: 10px;
 }
+
+.searchIcon:hover {
+  color: #D54728; 
+}
+
+.searchIcon:active {
+  color: #D54728; 
+}

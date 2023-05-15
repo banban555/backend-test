@@ -14,8 +14,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 //mongoose로 DB연결
-//각자 생성하신 local db에 연결하고 싶으신 경우에는 config > dev.js 파일에서 mongodb url을 수정해주시면 됩니다. 
-//기존 url은 주석처리 부탁드려요!
 mongoose.connect
 (
   config.mongo_url,
@@ -92,12 +90,13 @@ app.post('/auth', auth, (req, res) => {
   })
 });
 
-//필터링 serach API
-app.get('/api/courses', async (req, res) => {
-  const major = req.query.major;
-  console.log(major);
-  // const courses = await getCoursesByMajor(major);
-  // res.json(courses);
+//serach API
+app.get('/application', async (req, res) => {
+  const { major = '', keyword = '' } = req.query;
+  console.log("major: " + major);
+  console.log("keyword: " + keyword);
+  // const result = await pseudoQuery(major, keyword);
+  // res.json(result);
 });
 
 

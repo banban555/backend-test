@@ -19,19 +19,36 @@ const columns = [
 
 const Application = () => {
 
-  //필터링관련 기능 및 변수
+  //검색 기능 관련 변수
   const [courses, setCourses] = useState([]);
-  const [selectedMajor, setSelectedMajor] = useState('');
-  //필터 선택 시 변수에 필터를 저장하는 함수
-  
-  const handleChange = async (value) => {
-    setSelectedMajor(value);
+  const [selectMajor, setSelectMajor] = useState('');
+  const [keyword, setKeyword] = useState('');
+
+  const getCourses = async (major = '', keyword = '') => {
     try {
-      const response = await axios.get(`/api/courses?major=${value}`); // 수정
+      const response = await axios.get(`/application`, {
+        params: {
+          major,
+          keyword,
+        },
+      });
       setCourses(response.data);
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const handleSelectChange = async (value) => {
+    setSelectMajor(value);
+    getCourses(value, keyword);
+  };
+
+  const handleKeywordChange = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const handleEnter = () => {
+    getCourses(selectMajor, keyword);
   };
 
   //뷰 변경하기
@@ -68,12 +85,12 @@ const Application = () => {
                 <Row gutter={16}>
                   <Col span={4}>
                     <Form.Item>
-                      <Select defaultValue="전공" onChange={handleChange}>
-                        <Option value="consturction">건설공학과</Option>
-                        <Option value="education">교육학과</Option>
-                        <Option value="statistic">통계학과</Option>
-                        <Option value="software">융합소프트웨어</Option>
-                        <Option value="data">데이터사이언스</Option>
+                      <Select defaultValue="전공" onChange={handleSelectChange}>
+                        <Option value="건설공학과">건설공학과</Option>
+                        <Option value="교육학과">교육학과</Option>
+                        <Option value="통계학과">통계학과</Option>
+                        <Option value="융합소프트웨에학과">융합소프트웨어학과</Option>
+                        <Option value="데이터사이언스학과">데이터사이언스학과</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -81,7 +98,10 @@ const Application = () => {
                     <Form.Item>
                       <Input 
                         placeholder="검색어를 입력해주세요"
-                        suffix={<SearchOutlined />} 
+                        suffix={<SearchOutlined />}
+                        value={keyword}
+                        onChange={handleKeywordChange}
+                        onPressEnter={handleEnter}
                       />
                     </Form.Item>
                   </Col>

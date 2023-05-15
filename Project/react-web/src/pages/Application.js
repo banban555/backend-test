@@ -8,13 +8,12 @@ const { TabPane } = Tabs;
 const { Header, Content } = Layout;
 
 const columns = [
-  { title: "교과목명", dataIndex: "courseName", key: "courseName" },
-  { title: "교원명", dataIndex: "instructorName", key: "instructorName" },
-  { title: "요일/시간", dataIndex: "dayTime", key: "dayTime" },
-  { title: "강의실", dataIndex: "classRoom", key: "classRoom" },
-  { title: "학수강좌번호", dataIndex: "courseNumber", key: "courseNumber" },
-  { title: "수강정원", dataIndex: "quota", key: "quota" },
-  { title: "신청인원", dataIndex: "applications", key: "applications" },
+  { title: "교과목명", dataIndex: "교과목명", key: "교과목명"},
+  { title: "교원명", dataIndex: "교원명", key: "교원명"},
+  { title: "요일/시간", dataIndex: "요일/시간", key: "요일/시간" },
+  { title: "강의실", dataIndex: "강의실", key: "강의실" },
+  { title: "수강정원", dataIndex: "수강정원", key: "수강정원" },
+  // { title: "신청인원", dataIndex: "applications", key: "applications" },
 ];
 
 const Application = () => {
@@ -58,7 +57,7 @@ const Application = () => {
   return (
     <Layout>
       <Header className={styles.header}>
-        <img src="logo.png" alt="logo" />
+        <img src="logo.png" alt="logo" className={styles.logo} />
       </Header>
 
       <Layout>
@@ -86,11 +85,10 @@ const Application = () => {
                   <Col span={4}>
                     <Form.Item>
                       <Select defaultValue="전공" onChange={handleSelectChange} allowClear={true}>
-                        <Option value="건설공학과">건설공학과</Option>
+                        <Option value="건설환경공학과">건설환경공학과</Option>
                         <Option value="교육학과">교육학과</Option>
                         <Option value="통계학과">통계학과</Option>
-                        <Option value="융합소프트웨에학과">융합소프트웨어학과</Option>
-                        <Option value="데이터사이언스학과">데이터사이언스학과</Option>
+                        <Option value="융합소프트웨어">융합소프트웨어</Option>
                       </Select>
                     </Form.Item>
                   </Col>
@@ -114,13 +112,15 @@ const Application = () => {
             <div className={styles.flexWrapper}>
               <div className={styles.contentWrapper}>
                 <h3 className={styles.smallTitle}>종합강의시간표목록</h3>
-                <Table dataSource={[]} columns={columns} />
+                <Table dataSource={courses} columns={columns} />
               </div>
+
               <div className={styles.button_wrapper}>
                 <Button shape="circle">+</Button>
                 <div className={styles.button_space}></div>
                 <Button shape="circle">-</Button>
               </div>
+
               <div className={styles.contentWrapper}>
                 <Tabs onChange={onChange} type="card">
                   <TabPane tab="테이블뷰" key="1">

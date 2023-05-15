@@ -58,17 +58,13 @@ app.post('/signin', (req, res) => {
         loginSuccess: false,
         message: '학번을 확인해주세요'
       })
-    }
-    console.log('학번 확인 성공!');
-
+    } 
     //요청한 이메일이 db에 있다면 비밀번호도 똑같은지 확인
     userInfo.comparePassword(req.body.password, (err, isMatched) => {
       if(!isMatched) return res.json({loginSuccess: false, message: '비밀번호를 확인해주세요'})
-      console.log('비밀번호 확인 성공');
 
       userInfo.generateToken((err, userInfo) => {
         if(err) return res.status(400).send(err); 
-        console.log('로그인 완료!')
 
         //토큰을 쿠키에 저장함. 여러가지 방식으로 저장이 가능하지만, 쿠키에 저장할 것임
         res.cookie('x_auth', userInfo.token)
@@ -91,26 +87,21 @@ app.post('/auth', auth, (req, res) => {
   })
 });
 
+//react 파일 불러오기
+app.use(express.static(__dirname + "/react-web/build/"));
+
 //serach API
 app.get('/application', async (req, res) => {
   const { major = '', keyword = '' } = req.query;
-  console.log("major: " + major);
-  console.log("keyword: " + keyword);
   const result = await Lecture.findLectures(major, keyword);
   try {
     const lectures = await Lecture.findLectures(major, keyword);
-    console.log(lectures);
-    res.json(lectures);
+    res.status(200).json(lectures)
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
-
-
-//react 파일 불러오기
-app.use(express.static(__dirname + "/react-web/build/"));
 
 app.get("*", function (요청, 응답) {
   응답.sendFile(__dirname + "/react-web/build/index.html");

@@ -1,16 +1,30 @@
 /* Application.module.css */
+html, body {
+  margin: 0;
+  padding: 0;
+}
 
 .header {
   height: 100px;
+  width: 100%;
   background: #d54728;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  padding-left: 10px;
+}
+
+.logo
+{
+  padding : 0px;
+  margin : 0px;
 }
 
 .title {
     color: #D54728;
     font-size: 32px;
+    margin: 10px 0px;
+    
   }
   
   .gutter16 {
@@ -66,10 +80,7 @@
 
 .formBackground {
   background: #ffffff;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 10;
-  padding-top: 10px;
+  padding: 20px;
 }
 
 .gutter16 {

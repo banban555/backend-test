@@ -55,3 +55,15 @@
     min-height: 280;
     background: #F0F2F5;
   } 
+
+  .plusButtonWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+  }
+
+  .registerButton {
+    background-color: #D54728;
+    border-color: #D54728; 
+  }

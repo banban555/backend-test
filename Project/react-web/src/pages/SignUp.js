@@ -164,10 +164,12 @@ function SignUp()
           </Button>
         </Form.Item>
         
-        <Form.Item>
-         <p className="signin-text"> 이미 계정이 있으신가요? </p>
-         <Link to="/signin" className="signin-link">로그인</Link>
-        </Form.Item>
+        <Form.Item className='signin-container'>
+          <div className="signin-text-container">
+            <p className="signin-text"> 이미 계정이 있으신가요? </p>
+            <Link to="/signin" className="signin-link">로그인</Link>
+          </div>
+      </Form.Item>
       </Form>
 
       <Modal

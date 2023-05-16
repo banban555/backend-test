@@ -44,7 +44,10 @@
     width: 100%
   }
 
-  .signup-form-button:hover
+  .signup-form-button.ant-btn:hover, 
+  .submit-button.ant-btn:focus
   {
-    background-color: #D8722A;
+     background-color: #D8722A;
+  color: white;
+  border-color: #D8722A;
   }

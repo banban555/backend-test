@@ -35,15 +35,32 @@ const Application = () => {
   const [addedData, setAddedData] = useState([]);
 
   // 데이터 클릭 이벤트 핸들러
+  // 데이터 클릭 이벤트 핸들러
   const handleDataClick = (record) => {
     setSelectedData(record);
   };
 
   // 플러스 버튼 클릭 이벤트 핸들러
   const handleAddButtonClick = () => {
-    if (selectedData) {
+    if (
+      selectedData &&
+      !addedData.some(
+        (item) =>
+          item.교과목명 === selectedData.교과목명 &&
+          item.강의실 === selectedData.강의실
+      )
+    ) {
       setAddedData((prevData) => [...prevData, selectedData]);
     }
+  };
+
+  // 마이너스 버튼 클릭 이벤트 핸들러
+  const handleDelete = () => {
+    const updatedData = addedData.filter(
+      (e) =>
+        e.교과목명 !== selectedData.교과목명 && e.강의실 !== selectedData.강의실
+    );
+    setAddedData(updatedData);
   };
 
   const getCourses = async (major = "", keyword = "") => {
@@ -181,14 +198,25 @@ const Application = () => {
                   +
                 </Button>
                 <div className={styles.button_space}></div>
-                <Button shape="circle">-</Button>
+                <Button
+                  shape="circle"
+                  onClick={() => handleDelete(addedData.title)}
+                >
+                  -
+                </Button>
               </div>
 
               <div className={styles.contentWrapper}>
                 <Tabs onChange={onChange} type="card">
                   <TabPane tab="테이블뷰" key="1">
                     {addedData.length > 0 ? (
-                      <Table dataSource={addedData} columns={columns} />
+                      <Table
+                        dataSource={addedData}
+                        columns={columns}
+                        onRow={(record) => ({
+                          onClick: () => handleDataClick(record),
+                        })}
+                      />
                     ) : (
                       <p>추가된 데이터가 없습니다.</p>
                     )}

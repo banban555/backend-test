@@ -42,7 +42,6 @@ const Application = () => {
 
   // 데이터 클릭 이벤트 핸들러
   const handleDataClick = (record) => {
-    console.log('클릭한 record' + record);
     setSelectedData(record);
   };
 
@@ -57,7 +56,6 @@ const Application = () => {
       )
     ) {
       setAddedData((prevData) => [...prevData, selectedData]);
-      console.log('신청 항목 리스트' + setAddedData);
     }
     else
     {

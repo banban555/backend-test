@@ -55,7 +55,16 @@ const Application = () => {
           item.강의실 === selectedData.강의실
       )
     ) {
-      setAddedData((prevData) => [...prevData, selectedData]);
+        setAddedData((prevData) => [...prevData, selectedData]);
+
+        // axios를 이용해 신청한 강의 목록을 서버에 POST 요청을 보냅니다.
+        axios.post('/application/add', selectedData)
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.error(err);
+        });
     }
     else
     {
@@ -82,6 +91,15 @@ const Application = () => {
         e.교과목명 !== selectedData.교과목명 && e.강의실 !== selectedData.강의실
     );
     setAddedData(updatedData);
+
+    //delete요청
+    axios.delete('/application/delete', { data: selectedData })
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => {
+      console.error(err);
+    });
   };
 
   //서버에서 코스 가져오는 코드

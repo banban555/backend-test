@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDrop } from 'react-dnd';
 import { Table, Modal } from 'antd';
+import axios from 'axios';
 
 const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -9,7 +10,15 @@ const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
     accept: 'COURSE',
     drop: (item, monitor) => {
       setAddedData(prevData => {
-        if (!prevData.some(data => data.교과목명 === item.course.교과목명 && data.강의실 === item.course.강의실)) {  // 만약 prevData에 item.course가 없다면,
+        if (!prevData.some(data => data.교과목명 === item.course.교과목명 && data.강의실 === item.course.강의실)) {  // 만약 prevData에 item.course가 없다면,  
+          //서버 포스트 요청
+          axios.post('/application/add', item.course)
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {
+            console.error(err);
+          });
           return [...prevData, item.course];  // item.course를 추가합니다.
         }
         else {

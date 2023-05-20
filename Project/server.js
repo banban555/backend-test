@@ -103,6 +103,21 @@ app.get('/application/search', async (req, res) => {
   }
 });
 
+
+//강의 신청하는 서버 코드
+app.post('/application/add', (req, res) => {
+  console.log('사용자가 신청한 강의는: ')
+  console.log(req.body);
+  res.status(200).send('Successfully added application');
+});
+
+app.delete('/application/delete', (req, res) => {
+  console.log('사용자가 삭제한 강의는: ')
+  console.log(req.body);
+  res.status(200).send('Successfully added application');
+});
+
+
 app.get("*", function (요청, 응답) {
   응답.sendFile(__dirname + "/react-web/build/index.html");
 });

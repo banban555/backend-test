@@ -13,7 +13,10 @@ const lectureSchema = new mongoose.Schema({
   교원명:{ 
     type:String
    },
-  '요일/시간':{ 
+  요일:{ 
+    type:String
+   },
+  시간:{ 
     type:String
    },
   강의실:{ 

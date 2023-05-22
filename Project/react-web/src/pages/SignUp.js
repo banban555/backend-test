@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Form, Input, Select, Checkbox, Button, Typography, Row, Col, Modal } from "antd";
+import {
+  Form,
+  Input,
+  Select,
+  Checkbox,
+  Button,
+  Typography,
+  Row,
+  Col,
+  Modal,
+} from "antd";
 import { Link } from "react-router-dom";
 import "../css/SignUp.css";
 import { useNavigate } from "react-router-dom";
@@ -8,23 +18,19 @@ import axios from "axios";
 const { Option } = Select;
 const { Title } = Typography;
 
-function SignUp()
-{
+function SignUp() {
   const navigate = useNavigate();
-  const [isModalVisible, setIsModalVisible] = useState(false) // 모달 창의 상태를 관리하는 state
+  const [isModalVisible, setIsModalVisible] = useState(false); // 모달 창의 상태를 관리하는 state
 
   const onFinish = (values) => {
-    console.log("함수 실행");
-    console.log(values);
     const userInfo = {
       name: values.name,
       studentNum: values.studentNum,
       email: values.email,
       password: values.password,
       grade: values.grade,
-      major: values.major
+      major: values.major,
     };
-    console.log(userInfo);
 
     axios
       .post("/signup", userInfo)
@@ -103,7 +109,7 @@ function SignUp()
 
         <Form.Item
           name="confirm"
-          dependencies={['password']}
+          dependencies={["password"]}
           rules={[
             {
               required: true,
@@ -111,10 +117,12 @@ function SignUp()
             },
             ({ getFieldValue }) => ({
               validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
+                if (!value || getFieldValue("password") === value) {
                   return Promise.resolve();
                 }
-                return Promise.reject(new Error('비밀번호가 일치하지 않습니다.'));
+                return Promise.reject(
+                  new Error("비밀번호가 일치하지 않습니다.")
+                );
               },
             }),
           ]}
@@ -122,7 +130,6 @@ function SignUp()
           <Input.Password placeholder="비밀번호 확인" />
         </Form.Item>
 
-      
         <Form.Item
           name="major"
           rules={[
@@ -157,19 +164,25 @@ function SignUp()
             <Option value="4">4</Option>
           </Select>
         </Form.Item>
-        
+
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="signup-form-button">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="signup-form-button"
+          >
             회원가입
           </Button>
         </Form.Item>
-        
-        <Form.Item className='signin-container'>
+
+        <Form.Item className="signin-container">
           <div className="signin-text-container">
             <p className="signin-text"> 이미 계정이 있으신가요? </p>
-            <Link to="/signin" className="signin-link">로그인</Link>
+            <Link to="/signin" className="signin-link">
+              로그인
+            </Link>
           </div>
-      </Form.Item>
+        </Form.Item>
       </Form>
 
       <Modal
@@ -182,8 +195,6 @@ function SignUp()
       </Modal>
     </div>
   );
-};
-
-
+}
 
 export default SignUp;

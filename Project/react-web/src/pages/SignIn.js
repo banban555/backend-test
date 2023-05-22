@@ -16,12 +16,10 @@ const SignIn = () => {
       studentNum: data.get("studentNum"),
       password: data.get("password"),
     };
-    console.log(userInfo);
     axios
       .post("/signin", userInfo)
       .then((res) => {
         console.log(res.data);
-        navigate("/application"); 
       })
       .catch((err) => {
         console.error(err);
@@ -32,7 +30,7 @@ const SignIn = () => {
     <div className="sign-in-container">
       {/* 로고 이미지 */}
       <div className="text-center">
-      <img src="/loginLogo.png" alt="loginLogo" className="loginLogo" />
+        <img src="/loginLogo.png" alt="loginLogo" className="loginLogo" />
       </div>
       {/* 로그인 폼 */}
       <div className="form-container">
@@ -59,10 +57,10 @@ const SignIn = () => {
           </Button>
           {/* 회원가입 링크 */}
           <div className="signup-container">
-              <p className="signup-text">아직 계정이 없으신가요?</p>
-              <Link to="/signup" className="signup-link">
-                회원가입
-              </Link>
+            <p className="signup-text">아직 계정이 없으신가요?</p>
+            <Link to="/signup" className="signup-link">
+              회원가입
+            </Link>
           </div>
         </form>
       </div>

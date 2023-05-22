@@ -1,5 +1,5 @@
-import React from "react";
-import { Typography, Input, Button } from "antd";
+import React, { useState } from "react";
+import { Modal, Typography, Input, Button } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { UserOutlined, KeyOutlined } from "@ant-design/icons";
 import "../css/SignIn.css"; // CSS 파일 경로
@@ -8,6 +8,9 @@ import axios from "axios";
 const { Title } = Typography;
 
 const SignIn = () => {
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -20,10 +23,19 @@ const SignIn = () => {
       .post("/signin", userInfo)
       .then((res) => {
         console.log(res.data);
+        if (res.data.loginSuccess === false) {
+          setErrorModalVisible(true);
+          setErrorMessage(res.data.message);
+        }
       })
       .catch((err) => {
         console.error(err);
       });
+  };
+
+  const handleCloseErrorModal = () => {
+    setErrorModalVisible(false);
+    setErrorMessage("");
   };
 
   return (
@@ -64,6 +76,17 @@ const SignIn = () => {
           </div>
         </form>
       </div>
+      <Modal
+        visible={errorModalVisible}
+        onCancel={handleCloseErrorModal}
+        footer={[
+          <Button key="close" onClick={handleCloseErrorModal}>
+            닫기
+          </Button>,
+        ]}
+      >
+        <p>{errorMessage}</p>
+      </Modal>
     </div>
   );
 };

@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import theme from "../style/theme";
+import theme from "../styles/theme";
+import Button from "../components/common/Button";
+import TextComponent from "../components/common/TextComponent";
 
 const SignIn = () => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
@@ -47,10 +49,11 @@ const SignIn = () => {
         <Input required placeholder="학번" name="studentNum" />
         <PasswordInput required placeholder="비밀번호" name="password" />
         <Button type="submit">LOGIN</Button>
-        <TextContainer>
-          <StyledText>아직 계정이 없으신가요?</StyledText>
-          <StyledLink to="/signup">회원가입</StyledLink>
-        </TextContainer>
+        <TextComponent
+          text="아직 계정이 없으신가요?"
+          linkText="회원가입"
+          linkTo="/signup"
+        />
       </Form>
 
       <ModalContainer open={errorModalVisible}>
@@ -92,34 +95,6 @@ const Input = styled.input`
 
 const PasswordInput = styled(Input).attrs({ type: "password" })``;
 
-const Button = styled.button`
-  background-color: ${theme.colors.LightOrange};
-  color: white;
-  padding: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font: ${theme.fonts.body4};
-  &:hover,
-  &:focus {
-    background-color: ${theme.colors.semiDarkOrange};
-  }
-`;
-
-const StyledLink = styled(Link)`
-  color: ${theme.colors.LightOrange};
-  font: ${theme.fonts.caption3};
-  text-decoration: none;
-  font-size: 1.2rem;
-  margin: 10px 10px;
-  &:hover {
-    text-decoration: none;
-    color: ${theme.colors.semiDarkOrange};
-  }
-`;
-
 const ModalContainer = styled.div`
   display: ${(props) => (props.open ? "block" : "none")};
   position: fixed;
@@ -160,16 +135,6 @@ const StyledImage = styled.img`
   display: block;
   margin-bottom: 1rem;
   float: left;
-`;
-
-const TextContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const StyledText = styled.p`
-  font: ${theme.fonts.caption3};
-  color: ${theme.colors.gray800};
 `;
 
 export default SignIn;

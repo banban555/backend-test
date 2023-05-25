@@ -1,6 +1,6 @@
 // components/Button.js
 import styled from "styled-components";
-import theme from "../styles/theme";
+import theme from "../../styles/theme";
 
 const Button = styled.button`
   background-color: ${theme.colors.LightOrange};

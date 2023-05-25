@@ -13,15 +13,9 @@ const colors = {
   gray100: "#FFFFFF",
   border: "#E5E8EB",
   system: "#F04452",
-} as const;
+};
 
-interface Font {
-  weight: number;
-  size: number;
-  lineHeight: number;
-}
-
-function FONT({ weight, size, lineHeight }: Font): string {
+function FONT({ weight, size, lineHeight }) {
   return `
       font-family: 'Pretendard-Regular';
       font-weight: ${weight};
@@ -44,12 +38,12 @@ const fonts = {
 
   caption1: FONT({ weight: 700, size: 1.2, lineHeight: 18 }),
   caption2: FONT({ weight: 400, size: 1.2, lineHeight: 18 }),
-  caption3: FONT({ weight: 400, size: 0.7, lineHeight: 16 }),
-} as const;
+  caption3: FONT({ weight: 400, size: 1.0, lineHeight: 16 }),
+};
 
 const theme = {
   colors,
   fonts,
-} as const;
+};
 
 export default theme;

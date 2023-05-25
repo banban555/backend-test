@@ -27,6 +27,10 @@ const SignIn = () => {
           setErrorModalVisible(true);
           setErrorMessage(res.data.message);
         }
+        if (res.data.loginSuccess === true) {
+          console.log("로그인 성공");
+          navigate("/application");
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -77,7 +81,7 @@ const SignIn = () => {
         </form>
       </div>
       <Modal
-        visible={errorModalVisible}
+        open={errorModalVisible}
         onCancel={handleCloseErrorModal}
         footer={[
           <Button key="close" onClick={handleCloseErrorModal}>

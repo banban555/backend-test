@@ -27,7 +27,7 @@ mongoose
   .catch((err) => console.log(err));
 
 // Port 연결 및 server 오픈
-app.listen(3000, function () {
+app.listen(8080, function () {
   console.log("listening on 8080");
 });
 

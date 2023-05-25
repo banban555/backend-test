@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import theme from "../style/theme";
+import theme from "../styles/theme";
 
 const SignIn = () => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);

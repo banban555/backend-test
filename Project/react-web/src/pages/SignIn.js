@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import theme from "../styles/theme";
+import theme from "../style/theme";
 
 const SignIn = () => {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -154,7 +155,8 @@ const CloseButton = styled.span`
 `;
 
 const StyledImage = styled.img`
-  width: 20rem;
+  width: 32rem;
+  max-width: 250px;
   display: block;
   margin-bottom: 1rem;
   float: left;

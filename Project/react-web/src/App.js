@@ -1,8 +1,8 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import GlobalStyle from "./styles/GlobalStyle";
-import theme from "./styles/theme";
+import GlobalStyle from "./style/GlobalStyle";
+import theme from "./style/theme";
 
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";

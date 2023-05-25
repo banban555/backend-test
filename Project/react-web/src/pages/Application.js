@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Layout,
   Select,
@@ -9,13 +9,13 @@ import {
   Col,
   Table,
   Tabs,
-  Modal
+  Modal,
 } from "antd";
 
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import DroppableTable from '../components/DroppableTable.js';
-import CourseRow from '../components/CourseRow.js';
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import DroppableTable from "../components/DroppableTable.js";
+import CourseRow from "../components/CourseRow.js";
 import styles from "../css/Application.module.css";
 import axios from "axios";
 import { SearchOutlined } from "@ant-design/icons";
@@ -26,7 +26,8 @@ const { Header, Content } = Layout;
 const columns = [
   { title: "교과목명", dataIndex: "교과목명", key: "교과목명" },
   { title: "교원명", dataIndex: "교원명", key: "교원명" },
-  { title: "요일/시간", dataIndex: "요일/시간", key: "요일/시간" },
+  { title: "요일", dataIndex: "요일", key: "요일" },
+  { title: "시간", dataIndex: "시간", key: "시간" },
   { title: "강의실", dataIndex: "강의실", key: "강의실" },
   { title: "수강정원", dataIndex: "수강정원", key: "수강정원" },
   // { title: "신청인원", dataIndex: "applications", key: "applications" },
@@ -37,8 +38,12 @@ const Application = () => {
   const [courses, setCourses] = useState([]);
   const [selectMajor, setSelectMajor] = useState("");
   const [keyword, setKeyword] = useState("");
-  const [selectedData, setSelectedData] = useState(null);
+  const [selectedData, setSelectedData] = useState("");
   const [addedData, setAddedData] = useState([]);
+
+  console.log(courses);
+  console.log(selectMajor);
+  console.log(keyword);
 
   // 데이터 클릭 이벤트 핸들러
   const handleDataClick = (record) => {
@@ -50,30 +55,29 @@ const Application = () => {
     if (
       selectedData &&
       !addedData.some(
-        (item) =>
-          item.교과목명 === selectedData.교과목명 &&
-          item.강의실 === selectedData.강의실
+        (item) => item._id === selectedData._id
+        // item.교과목명 === selectedData.교과목명 &&
+        // item.강의실 === selectedData.강의실
       )
     ) {
-        setAddedData((prevData) => [...prevData, selectedData]);
+      setAddedData((prevData) => [...prevData, selectedData]);
 
-        // axios를 이용해 신청한 강의 목록을 서버에 POST 요청을 보냅니다.
-        axios.post('/application/add', selectedData)
-        .then(res => {
+      // axios를 이용해 신청한 강의 목록을 서버에 POST 요청을 보냅니다.
+      axios
+        .post("/application/add", selectedData)
+        .then((res) => {
           console.log(res);
         })
-        .catch(err => {
+        .catch((err) => {
           console.error(err);
         });
-    }
-    else
-    {
+    } else {
       setIsModalVisible(true);
     }
   };
 
   //이미 신청된 강의는 모달 띄우는 핸들러
-  const [isModalVisible, setIsModalVisible] = useState(false);  // 모달 visible state
+  const [isModalVisible, setIsModalVisible] = useState(false); // 모달 visible state
 
   const handleOk = () => {
     setIsModalVisible(false);
@@ -83,23 +87,20 @@ const Application = () => {
     setIsModalVisible(false);
   };
 
-
   // 마이너스 버튼 클릭 이벤트 핸들러
   const handleDelete = () => {
-    const updatedData = addedData.filter(
-      (e) =>
-        e.교과목명 !== selectedData.교과목명 && e.강의실 !== selectedData.강의실
-    );
+    const updatedData = addedData.filter((e) => e._id !== selectedData._id);
     setAddedData(updatedData);
-
+    setSelectedData(null);
     //delete요청
-    axios.delete('/application/delete', { data: selectedData })
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.error(err);
-    });
+    axios
+      .delete("/application/delete", { data: selectedData })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   //서버에서 코스 가져오는 코드
@@ -137,12 +138,12 @@ const Application = () => {
     <DndProvider backend={HTML5Backend}>
       <Layout>
         <Header className={styles.header}>
-          <img src="logo.png" alt="logo" className={styles.logo} />
+          {/* <img src="logo.png" alt="logo" className={styles.logo} /> */}
         </Header>
 
         <Layout>
           <Content className={styles.contentStyle}>
-            <h1 className={styles.title}>희망강의신청</h1>
+            {/* <h1 className={styles.title}>희망강의신청</h1> */}
             <div className={styles.formBackground}>
               <h3 className={styles.smallTitle}>학생정보</h3>
               <Form layout="vertical">
@@ -244,10 +245,7 @@ const Application = () => {
                     +
                   </Button>
                   <div className={styles.button_space}></div>
-                  <Button
-                    shape="circle"
-                    onClick={() => handleDelete(addedData.title)}
-                  >
+                  <Button shape="circle" onClick={() => handleDelete()}>
                     -
                   </Button>
                 </div>
@@ -255,12 +253,12 @@ const Application = () => {
                 <div className={styles.contentWrapper}>
                   <Tabs onChange={onChange} type="card">
                     <TabPane tab="테이블뷰" key="1">
-                        <DroppableTable
-                          dataSource={addedData}
-                          columns={columns}
-                          setAddedData={setAddedData}
-                          onRowClick={handleDataClick}
-                        />
+                      <DroppableTable
+                        dataSource={addedData}
+                        columns={columns}
+                        setAddedData={setAddedData}
+                        onRowClick={handleDataClick}
+                      />
                     </TabPane>
                     <TabPane tab="시간표뷰" key="2">
                       희망강의 수강신청 확인 뷰 2
@@ -274,13 +272,13 @@ const Application = () => {
       </Layout>
       <Modal
         title="경고"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        >
+      >
         <p>이미 수강 신청된 강의입니다.</p>
       </Modal>
-      </DndProvider> 
+    </DndProvider>
   );
 };
 

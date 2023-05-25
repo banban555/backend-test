@@ -27,7 +27,7 @@ mongoose
   .catch((err) => console.log(err));
 
 // Port 연결 및 server 오픈
-app.listen(8080, function () {
+app.listen(3000, function () {
   console.log("listening on 8080");
 });
 
@@ -96,8 +96,8 @@ app.post("/signin", async (req, res) => {
         }
 
         // 토큰을 쿠키에 저장
-        res.cookie("x_auth", userInfoWithToken.token).status(200).send({
-          success: true,
+        res.cookie("x_auth", userInfoWithToken.token).status(200).json({
+          loginSuccess: true,
           userId: userInfoWithToken._id,
         });
       });
@@ -137,35 +137,39 @@ app.get("/application/search", auth, async (req, res) => {
 });
 
 // 강의 신청하는 서버 코드
-app.post("/application/add", auth, async (req, res) => {
-  try {
-    console.log("사용자가 신청한 강의는: ");
-    console.log(req.body);
+// app.post("/application/add", auth, async (req, res) => {
+//   try {
+//     console.log("사용자가 신청한 강의는: ");
+//     console.log(req.body);
 
-    const { userId, lectureId } = req.body;
-    const userCollectionName = "user_" + userId;
-    const userCollection =
-      mongoose.connection.db.collection(userCollectionName);
+//     const { userId, lectureId } = req.body;
+//     const userCollectionName = "user_" + userId;
+//     const userCollection =
+//       mongoose.connection.db.collection(userCollectionName);
 
-    // 유저의 개인 콜렉션에 강의 추가
-    const result = await userCollection.updateOne(
-      { _id: mongoose.Types.ObjectId(userId) },
-      { $push: { lectureId: lectureId } }
-    );
+//     // 유저의 개인 콜렉션에 강의 추가
+//     const result = await userCollection.updateOne(
+//       { _id: mongoose.Types.ObjectId(userId) },
+//       { $push: { lectureId: lectureId } }
+//     );
 
-    if (result.modifiedCount === 0) {
-      return res
-        .status(400)
-        .json({ success: false, message: "강의 추가에 실패했습니다." });
-    }
+//     if (result.modifiedCount === 0) {
+//       return res
+//         .status(400)
+//         .json({ success: false, message: "강의 추가에 실패했습니다." });
+//     }
 
-    res
-      .status(200)
-      .json({ success: true, message: "강의 추가에 성공했습니다." });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: "Internal server error" });
-  }
+//     res
+//       .status(200)
+//       .json({ success: true, message: "강의 추가에 성공했습니다." });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ success: false, error: "Internal server error" });
+//   }
+// });
+app.post("/application/add", async (req, res) => {
+  console.log("사용자가 신청한 강의는: ");
+  console.log(req.body);
 });
 
 app.delete("/application/delete", auth, async (req, res) => {

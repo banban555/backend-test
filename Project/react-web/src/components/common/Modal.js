@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import Modal from "antd";
 
 const StyledModal = ({ isOpen, handleClose, message }) => {

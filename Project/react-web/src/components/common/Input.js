@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import theme from "../../styles/theme";
 
-const Input = styled.input`
+export const Input = styled.input`
   width: 100%;
   height: 3.2rem;
   margin-bottom: 1rem;
@@ -12,4 +12,4 @@ const Input = styled.input`
   font-size: 1rem;
 `;
 
-export default Input;
+export const PasswordInput = styled(Input).attrs({ type: "password" })``;

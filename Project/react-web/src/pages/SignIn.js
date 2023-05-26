@@ -8,6 +8,7 @@ import Input from "../components/common/Input";
 import CustomModal from "../components/common/Modal";
 import Button from "../components/common/Button";
 import TextComponent from "../components/common/TextComponent";
+import PasswordInput from "../components/common/Input";
 
 const SignIn = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -81,8 +82,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
 `;
-
-const PasswordInput = styled(Input).attrs({ type: "password" })``;
 
 const StyledImage = styled.img`
   width: 32rem;

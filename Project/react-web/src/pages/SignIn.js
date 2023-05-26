@@ -5,7 +5,9 @@ import axios from "axios";
 import styled from "styled-components";
 
 import { Input, PasswordInput } from "../components/common/Input";
-import CustomModal from "../components/common/Modal";
+import Form from "../components/common/Form";
+import Logo from "../components/common/Logo";
+import StyledModal from "../components/common/Modal";
 import Button from "../components/common/Button";
 import TextComponent from "../components/common/TextComponent";
 
@@ -41,7 +43,7 @@ const SignIn = () => {
 
   return (
     <SignInContainer>
-      <StyledImage src="/loginLogo.png" alt="loginLogo" />
+      <Logo src="/loginLogo.png" alt="loginLogo" />
 
       <Form onSubmit={handleSubmit}>
         <Input required placeholder="학번" name="studentNum" />
@@ -54,7 +56,7 @@ const SignIn = () => {
         />
       </Form>
 
-      <CustomModal
+      <StyledModal
         isOpen={modalVisible}
         handleClose={handleCloseModal}
         message="아이디와 비밀번호를 확인해주세요"
@@ -68,24 +70,6 @@ const SignInContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
-
-const Form = styled.form`
-  max-width: 32rem;
-  max-height: 100rem;
-  margin: 0 auto;
-  overflow: hidden;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const StyledImage = styled.img`
-  width: 32rem;
-  max-width: 250px;
-  display: block;
-  margin-bottom: 1rem;
-  float: left;
 `;
 
 export default SignIn;

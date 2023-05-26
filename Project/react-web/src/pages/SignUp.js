@@ -1,200 +1,123 @@
 import React, { useState } from "react";
-import {
-  Form,
-  Input,
-  Select,
-  Checkbox,
-  Button,
-  Typography,
-  Row,
-  Col,
-  Modal,
-} from "antd";
-import { Link } from "react-router-dom";
-import "../css/SignUp.css";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import styled from "styled-components";
 
-const { Option } = Select;
-const { Title } = Typography;
+import Logo from "../components/common/Logo";
+import Form from "../components/common/Form";
+import { Input, PasswordInput } from "../components/common/Input";
+import SelectInput from "../components/signup/Select";
+import Button from "../components/common/Button";
+import TextComponent from "../components/common/TextComponent";
+import StyledModal from "../components/common/Modal";
 
 function SignUp() {
-  const navigate = useNavigate();
-  const [isModalVisible, setIsModalVisible] = useState(false); // 모달 창의 상태를 관리하는 state
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    studentNum: "",
+    email: "",
+    password: "",
+    major: "",
+    grade: "",
+  });
 
-  const onFinish = (values) => {
-    const userInfo = {
-      name: values.name,
-      studentNum: values.studentNum,
-      email: values.email,
-      password: values.password,
-      grade: values.grade,
-      major: values.major,
-    };
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUserInfo({ ...userInfo, [name]: value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setModalVisible(true);
+    console.log(userInfo);
 
     axios
       .post("/signup", userInfo)
-      .then((res) => {
-        console.log(res.data);
-        setIsModalVisible(true); // 회원가입 완료 후 모달 창을 보여줍니다.
-      })
+      .then((res) => {})
       .catch((err) => {
         console.error(err);
       });
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false); // 확인 버튼을 누르면 모달 창을 닫습니다.
-    navigate("/signin"); // 모달 창이 닫힌 후 로그인 페이지로 이동합니다.
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
 
   return (
-    <div className="signup-container">
-      <img src="/loginLogo.png" alt="loginLogo" className="loginLogo" />
-      <Form
-        name="signup"
-        className="signup-form"
-        initialValues={{
-          remember: true,
-        }}
-        onFinish={onFinish}
-      >
-        <Form.Item
+    <SignUpContainer>
+      <Logo src="/loginLogo.png" alt="loginLogo" />
+      <Form onSubmit={handleSubmit}>
+        <Input
           name="name"
-          rules={[
-            {
-              required: true,
-              message: "성명을 입력해주세요",
-            },
-          ]}
-        >
-          <Input placeholder="성명" />
-        </Form.Item>
-
-        <Form.Item
+          placeholder="성명"
+          onChange={handleChange}
+          required
+        />
+        <Input
           name="studentNum"
-          rules={[
-            {
-              required: true,
-              message: "학번을 입력해주세요.",
-            },
-          ]}
-        >
-          <Input placeholder="학번" />
-        </Form.Item>
-
-        <Form.Item
+          placeholder="학번"
+          onChange={handleChange}
+          required
+        />
+        <Input
           name="email"
-          rules={[
-            {
-              required: true,
-              message: "Please input your Email!",
-            },
-          ]}
-        >
-          <Input placeholder="이메일" />
-        </Form.Item>
-
-        <Form.Item
+          type="email"
+          placeholder="이메일"
+          onChange={handleChange}
+          required
+        />
+        <PasswordInput
           name="password"
-          rules={[
-            {
-              required: true,
-              message: "비밀번호를 입력해주세요",
-            },
-          ]}
-        >
-          <Input.Password placeholder="비밀번호" />
-        </Form.Item>
-
-        <Form.Item
-          name="confirm"
-          dependencies={["password"]}
-          rules={[
-            {
-              required: true,
-              message: "비밀번호를 다시 확인해주세요",
-            },
-            ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue("password") === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(
-                  new Error("비밀번호가 일치하지 않습니다.")
-                );
-              },
-            }),
-          ]}
-        >
-          <Input.Password placeholder="비밀번호 확인" />
-        </Form.Item>
-
-        <Form.Item
+          type="password"
+          placeholder="비밀번호"
+          onChange={handleChange}
+          required
+        />
+        <SelectInput
           name="major"
-          rules={[
-            {
-              required: true,
-              message: "전공을 선택해주세요",
-            },
+          handleChange={handleChange}
+          options={[
+            { value: "null", label: "전공" },
+            { value: "consturction", label: "건설공학과" },
+            { value: "education", label: "교육학과" },
+            { value: "statistic", label: "통계학과" },
+            { value: "software", label: "융합소프트웨어" },
+            { value: "data", label: "데이터사이언스" },
           ]}
-        >
-          <Select placeholder="전공">
-            <Option value="consturction">건설공학과</Option>
-            <Option value="education">교육학과</Option>
-            <Option value="statistic">통계학과</Option>
-            <Option value="software">융합소프트웨어</Option>
-            <Option value="data">데이터사이언스</Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item
+        />
+        <SelectInput
           name="grade"
-          rules={[
-            {
-              required: true,
-              message: "학년을 선택해주세요!",
-            },
+          handleChange={handleChange}
+          options={[
+            { value: "null", label: "학년" },
+            { value: "1", label: "1" },
+            { value: "2", label: "2" },
+            { value: "3", label: "3" },
+            { value: "4", label: "4" },
           ]}
-        >
-          <Select placeholder="학년">
-            <Option value="1">1</Option>
-            <Option value="2">2</Option>
-            <Option value="3">3</Option>
-            <Option value="4">4</Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="signup-form-button"
-          >
-            회원가입
-          </Button>
-        </Form.Item>
-
-        <Form.Item className="signin-container">
-          <div className="signin-text-container">
-            <p className="signin-text"> 이미 계정이 있으신가요? </p>
-            <Link to="/signin" className="signin-link">
-              로그인
-            </Link>
-          </div>
-        </Form.Item>
+        />
+        <Button type="submit">회원가입</Button>
       </Form>
-
-      <Modal
-        title="회원가입 완료"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleOk}
-      >
-        <p>회원가입이 완료되었습니다!</p>
-      </Modal>
-    </div>
+      <TextComponent
+        text="이미 계정이 있으신가요?"
+        linkText="로그인"
+        linkTo="/signin"
+      />
+      <StyledModal
+        isOpen={modalVisible}
+        handleClose={handleCloseModal}
+        message="회원가입이 완료되었습니다."
+      />
+    </SignUpContainer>
   );
 }
+
+const SignUpContainer = styled.div`
+  margin-top: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 export default SignUp;

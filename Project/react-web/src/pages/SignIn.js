@@ -4,11 +4,10 @@ import axios from "axios";
 
 import styled from "styled-components";
 
-import Input from "../components/common/Input";
+import { Input, PasswordInput } from "../components/common/Input";
 import CustomModal from "../components/common/Modal";
 import Button from "../components/common/Button";
 import TextComponent from "../components/common/TextComponent";
-import PasswordInput from "../components/common/Input";
 
 const SignIn = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -24,12 +23,10 @@ const SignIn = () => {
     axios
       .post("/signin", userInfo)
       .then((res) => {
-        console.log(res.data);
         if (res.data.loginSuccess === false) {
           setModalVisible(true);
         }
         if (res.data.loginSuccess === true) {
-          console.log("로그인 성공");
           navigate("/application");
         }
       })
@@ -60,7 +57,7 @@ const SignIn = () => {
       <CustomModal
         isOpen={modalVisible}
         handleClose={handleCloseModal}
-        errorMessage="아이디와 비밀번호를 확인해주세요"
+        message="아이디와 비밀번호를 확인해주세요"
       />
     </SignInContainer>
   );

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import theme from "../styles/theme";
 
-import Modal from "../components/common/Modal";
+import styled from "styled-components";
+
+import Input from "../components/common/Input";
+import CustomModal from "../components/common/Modal";
 import Button from "../components/common/Button";
 import TextComponent from "../components/common/TextComponent";
 
@@ -55,7 +56,7 @@ const SignIn = () => {
         />
       </Form>
 
-      <Modal
+      <CustomModal
         isOpen={modalVisible}
         handleClose={handleCloseModal}
         errorMessage="아이디와 비밀번호를 확인해주세요"
@@ -79,16 +80,6 @@ const Form = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  height: 3.2rem;
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  border: 1px solid ${theme.colors.border};
-  border-radius: 4px;
-  font-size: 1rem;
 `;
 
 const PasswordInput = styled(Input).attrs({ type: "password" })``;

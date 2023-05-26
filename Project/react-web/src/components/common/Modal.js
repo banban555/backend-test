@@ -1,49 +1,13 @@
 import React from "react";
-import styled from "styled-components";
 
-const ModalContainer = styled.div`
-  display: ${(props) => (props.open ? "block" : "none")};
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
-`;
+import { Modal } from "antd";
 
-const ModalContent = styled.div`
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 30%;
-`;
-
-const CloseButton = styled.span`
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-
-  &:hover,
-  &:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-`;
-
-const Modal = ({ isOpen, handleClose, errorMessage }) => {
+const CustomModal = ({ isOpen, handleClose, message }) => {
   return (
-    <ModalContainer open={isOpen}>
-      <ModalContent>
-        <CloseButton onClick={handleClose}>&times;</CloseButton>
-        <p>{errorMessage}</p>
-      </ModalContent>
-    </ModalContainer>
+    <Modal title="Error" open={isOpen} onCancel={handleClose} footer={null}>
+      <p>{message}</p>
+    </Modal>
   );
 };
 
-export default Modal;
+export default CustomModal;

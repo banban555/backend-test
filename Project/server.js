@@ -155,6 +155,25 @@ app.get("/application", auth, function (req, res) {
     // 유저 정보에 접근할 수 있습니다.
     console.log(userInfo);
 
+    const userId = req.user._id;
+
+    // 콜렉션에 접근하여 원하는 작업을 수행합니다.
+    const userCollection = mongoose.connection.db.collection("user_collection");
+    // 예시: 콜렉션에서 해당 사용자의 문서를 가져옵니다.
+    userCollection.findOne({ userId: userId }, function (err, document) {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ success: false, error: "Internal server error" });
+      }
+
+      if (!document) {
+        return res.status(404).json({ success: false, error: "User collection not found" });
+      }
+
+      // 작업 결과를 반환합니다.
+      return res.status(200).json({ success: true, data: document });
+
+    });
   });
 });
 

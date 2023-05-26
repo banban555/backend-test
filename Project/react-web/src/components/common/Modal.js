@@ -1,4 +1,4 @@
-import Modal from "antd";
+import { Modal } from "antd";
 
 const StyledModal = ({ isOpen, handleClose, message }) => {
   return (

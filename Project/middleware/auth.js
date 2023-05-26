@@ -8,7 +8,7 @@ let auth = (req, res, next) =>
     //토큰 생성시 사용했던 문자열로 토큰을 복호하면 유저 아이디가 나온다
     user.findByToken(token, (err, userInfo) => {
         if(err) throw err;
-        if(!user)
+        if(!userInfo)
         {
             return res.json({isAuth : false, error : true})
         }

@@ -136,6 +136,29 @@ app.get("/application/search", auth, async (req, res) => {
   }
 });
 
+
+app.get("/application", auth, function (req, res) {
+  // 쿠키에 저장된 토큰 가져오기
+  let token = req.cookies.x_auth;
+
+  // 토큰을 디코드하여 유저 정보 가져오기
+  user.findByToken(token, (err, userInfo) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ success: false, error: "Internal server error" });
+    }
+
+    if (!userInfo) {
+      return res.json({ isAuth: false, error: true });
+    }
+
+    // 유저 정보에 접근할 수 있습니다.
+    console.log(userInfo);
+
+  });
+});
+
+
 // 강의 신청하는 서버 코드
 // app.post("/application/add", auth, async (req, res) => {
 //   try {

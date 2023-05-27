@@ -41,9 +41,8 @@ const Application = () => {
   const [selectedData, setSelectedData] = useState("");
   const [addedData, setAddedData] = useState([]);
 
-  console.log(courses);
-  console.log(selectMajor);
-  console.log(keyword);
+  // for (let i = 0; i < courses.length; i++)
+  //   console.log("사용자가 선택한 코스는: " + courses[i].교과목명);
 
   // 데이터 클릭 이벤트 핸들러
   const handleDataClick = (record) => {
@@ -54,11 +53,7 @@ const Application = () => {
   const handleAddButtonClick = () => {
     if (
       selectedData &&
-      !addedData.some(
-        (item) => item._id === selectedData._id
-        // item.교과목명 === selectedData.교과목명 &&
-        // item.강의실 === selectedData.강의실
-      )
+      !addedData.some((item) => item._id === selectedData._id)
     ) {
       setAddedData((prevData) => [...prevData, selectedData]);
 

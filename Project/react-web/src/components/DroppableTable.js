@@ -9,16 +9,9 @@ const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
   const [, dropRef] = useDrop(() => ({
     accept: "COURSE",
     drop: (item, monitor) => {
+      console.log("사용자가 드롭한 항목: " + item.course.교과목명);
       setAddedData((prevData) => {
-        if (
-          !prevData.some(
-            (data) =>
-              data.교과목명 === item.course.교과목명 &&
-              data.강의실 === item.course.강의실
-          )
-        ) {
-          // 만약 prevData에 item.course가 없다면,
-          //서버 포스트 요청
+        if (!prevData.some((data) => data._id === item.course._id)) {
           axios
             .post("/application/add", item.course)
             .then((res) => {

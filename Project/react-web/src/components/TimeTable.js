@@ -1,16 +1,38 @@
 import React from "react";
-import { Table } from "antd";
+import { Table as AntTable } from "antd";
+import styled from "styled-components";
+import theme from "../styles/theme";
 
 const days = ["월", "화", "수", "목", "금"];
 const timeSlots = [];
 for (let i = 9; i < 22; i++) {
   timeSlots.push({
-    time: `${i.toString().padStart(2, "0")}:00 - ${(i + 1)
+    time: `${i.toString().padStart(2, "0")}:00 - ${i
+      .toString()
+      .padStart(2, "0")}:30`,
+  });
+  timeSlots.push({
+    time: `${i.toString().padStart(2, "0")}:30 - ${(i + 1)
       .toString()
       .padStart(2, "0")}:00`,
   });
 }
-timeSlots.push({ time: "22:00 - 22:30" }); // last half-hour
+
+const Table = styled(AntTable)`
+  .has-data {
+    background-color: ${theme.colors.LightOrange};
+    font: ${theme.fonts.body4};
+    color: white;
+  }
+  .ant-table-cell {
+    text-align: center;
+  }
+  .ant-table-row:hover .has-data,
+  .has-data:hover,
+  .ant-table-cell.ant-table-row-hover {
+    background: ${theme.colors.LightOrange} !important;
+  }
+`;
 
 const StyledTimeTable = ({ dataSource }) => {
   const transformedData = transformDataToEvents(dataSource);
@@ -20,20 +42,26 @@ const StyledTimeTable = ({ dataSource }) => {
       title: "",
       dataIndex: "time",
       key: "time",
-      render: (text, record, index) => {
-        const rowSpan = timeSlots[index].rowSpan;
-        return {
-          children: text,
-          props: {
-            rowSpan: rowSpan,
-          },
-        };
-      },
+      width: "10%",
     },
     ...days.map((day) => ({
       title: day,
       dataIndex: day,
       key: day,
+      align: "center",
+      width: "18%",
+      render: (text, record, index) => {
+        const customProps = {};
+
+        if (text) {
+          customProps.className = "has-data";
+        }
+
+        return {
+          children: <div>{text}</div>,
+          props: customProps,
+        };
+      },
     })),
   ];
 
@@ -45,27 +73,12 @@ const StyledTimeTable = ({ dataSource }) => {
           (course) =>
             course.startTime <= timeSlot.time && course.endTime > timeSlot.time
         )
-        .map((course) => course.name);
-
-      row[day] = courses.length > 0 ? courses.join(", ") : "";
+        .map((course) => course.name)
+        .join(", ");
+      row[day] = courses ? courses : "";
     });
     return row;
   });
-
-  // Merge cells vertically
-  let previousData = null;
-  let rowSpan = 0;
-  for (let i = 0; i < data.length; i++) {
-    const currentData = data[i];
-    if (currentData.time === previousData?.time) {
-      rowSpan++;
-      previousData.time = null;
-    } else {
-      previousData = currentData;
-      previousData.rowSpan = rowSpan + 1; // Add 1 for the merged cell
-      rowSpan = 0;
-    }
-  }
 
   return <Table columns={columns} dataSource={data} pagination={false} />;
 };
@@ -101,6 +114,7 @@ function transformDataToEvents(data) {
         events[day].push({
           id: course["_id"],
           name: course["교과목명"],
+          professor: course["교원명"],
           startTime: start,
           endTime: end,
         });

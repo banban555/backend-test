@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { React, useState } from "react";
 import {
   Layout,
   Select,
@@ -19,6 +19,8 @@ import CourseRow from "../components/CourseRow.js";
 import styles from "../css/Application.module.css";
 import axios from "axios";
 import { SearchOutlined } from "@ant-design/icons";
+import StyledTimeTable from "../components/TimeTable.js";
+
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
@@ -253,7 +255,7 @@ const Application = () => {
                       />
                     </TabPane>
                     <TabPane tab="시간표뷰" key="2">
-                      희망강의 수강신청 확인 뷰 2
+                      <StyledTimeTable dataSource={addedData} />
                     </TabPane>
                   </Tabs>
                 </div>

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Lecture = require('./lecture');
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const jwt = require("jsonwebtoken");
@@ -90,6 +91,12 @@ userSchema.statics.findByToken = function (token, callBack) {
   });
 };
 
+userSchema.add({
+  lectureId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'lecture' }]
+});
+
+
+
 const user = mongoose.model("user", userSchema, "user");
 
-module.exports = { user };
+module.exports = { user, Lecture };

@@ -5,8 +5,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const config = require("./config/key.js");
-const { user } = require("./models/user");
-const Lecture = require("./models/lecture");
+const { user, Lecture } = require("./models/user"); // Lecture 모델 추가
 const { auth } = require("./middleware/auth.js");
 const { send } = require("process");
 
@@ -37,17 +36,28 @@ app.post("/signup", (req, res) => {
   // 회원가입 시 유저의 컬렉션 생성
   const collectionName = "user_" + userInfo._id; // 회원의 고유 ID를 사용하여 컬렉션 이름 생성
 
-  // MongoDB에 컬렉션 생성
-  const userCollection = mongoose.connection.db.collection(collectionName);
+  // 유저 콜렉션에 대한 스키마 정의
+  const userCollectionSchema = new mongoose.Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    lectureId: { type: mongoose.Schema.Types.ObjectId, ref: "Lecture" },
+  });
 
-  userCollection.createIndex({ lectureId: 1 }, { unique: true }, (err) => {
+  // UserCollection 모델 생성
+  const UserCollection = mongoose.model(
+    collectionName,
+    userCollectionSchema,
+    collectionName
+  );
+
+  // userInfo 저장
+  userInfo.save((err, userInfo) => {
     if (err) {
       console.log(err);
       return res.json({ success: false, err });
     }
 
-    // userInfo 저장
-    userInfo.save((err, userInfo) => {
+    // MongoDB에 컬렉션 생성
+    mongoose.connection.db.createCollection(collectionName, (err) => {
       if (err) {
         console.log(err);
         return res.json({ success: false, err });
@@ -57,6 +67,7 @@ app.post("/signup", (req, res) => {
     });
   });
 });
+
 
 /// 로그인 API
 app.post("/signin", async (req, res) => {
@@ -155,7 +166,7 @@ app.get("/application", auth, function (req, res) {
     // 유저 정보에 접근할 수 있습니다.
     console.log(userInfo);
 
-    const userId = req.user._id;
+    const userId = userInfo._id; // 수정된 부분
 
     // 콜렉션에 접근하여 원하는 작업을 수행합니다.
     const userCollection = mongoose.connection.db.collection("user_collection");
@@ -178,41 +189,35 @@ app.get("/application", auth, function (req, res) {
 });
 
 
-// 강의 신청하는 서버 코드
-// app.post("/application/add", auth, async (req, res) => {
-//   try {
-//     console.log("사용자가 신청한 강의는: ");
-//     console.log(req.body);
+app.post('/application/add', auth, async (req, res) => {
+  try {
+    const { userId, lectureId } = req.body;
+    const userCollectionName = 'user_' + userId;
 
-//     const { userId, lectureId } = req.body;
-//     const userCollectionName = "user_" + userId;
-//     const userCollection =
-//       mongoose.connection.db.collection(userCollectionName);
+    const userCollection = mongoose.connection.db.collection(userCollectionName);
 
-//     // 유저의 개인 콜렉션에 강의 추가
-//     const result = await userCollection.updateOne(
-//       { _id: mongoose.Types.ObjectId(userId) },
-//       { $push: { lectureId: lectureId } }
-//     );
+    // 유저의 개인 콜렉션에 강의 추가
+    const result = await userCollection.updateOne(
+      { _id: mongoose.Types.ObjectId(userId) },
+      { $push: { lectureId: lectureId } }
+    );
 
-//     if (result.modifiedCount === 0) {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "강의 추가에 실패했습니다." });
-//     }
+    if (result.modifiedCount === 0) {
+      return res
+        .status(400)
+        .json({ success: false, message: '강의 추가에 실패했습니다.' });
+    }
 
-//     res
-//       .status(200)
-//       .json({ success: true, message: "강의 추가에 성공했습니다." });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ success: false, error: "Internal server error" });
-//   }
-// });
-app.post("/application/add", async (req, res) => {
-  console.log("사용자가 신청한 강의는: ");
-  console.log(req.body);
+    res
+      .status(200)
+      .json({ success: true, message: '강의 추가에 성공했습니다.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: 'Internal server error' });
+  }
 });
+
+
 
 app.delete("/application/delete", auth, async (req, res) => {
   try {

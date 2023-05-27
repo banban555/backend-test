@@ -3,8 +3,12 @@ import { useDrop } from "react-dnd";
 import { Table } from "antd";
 import StyledModal from "../components/common/Modal";
 import axios from "axios";
+import { useCookies } from "react-cookie";
 
 const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
+  const [cookies] = useCookies(["x_auth"]);
+  const token = cookies.x_auth;
+
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [, dropRef] = useDrop(() => ({
@@ -12,8 +16,12 @@ const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
     drop: (item, monitor) => {
       setAddedData((prevData) => {
         if (!prevData.some((data) => data._id === item.course._id)) {
+          const data = {
+            userId: token,
+            lectureId: item.course._id,
+          };
           axios
-            .post("/application/add", item.course)
+            .post("/application/add", data)
             .then((res) => {
               console.log(res);
             })

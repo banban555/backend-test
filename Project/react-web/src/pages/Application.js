@@ -20,6 +20,7 @@ import styles from "../css/Application.module.css";
 import axios from "axios";
 import { SearchOutlined } from "@ant-design/icons";
 import StyledTimeTable from "../components/TimeTable.js";
+import { useCookies } from "react-cookie";
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -43,6 +44,9 @@ const Application = () => {
   const [selectedData, setSelectedData] = useState("");
   const [addedData, setAddedData] = useState([]);
 
+  const [cookies] = useCookies(["x_auth"]);
+  const token = cookies.x_auth;
+
   // 데이터 클릭 이벤트 핸들러
   const handleDataClick = (record) => {
     setSelectedData(record);
@@ -55,10 +59,12 @@ const Application = () => {
       !addedData.some((item) => item._id === selectedData._id)
     ) {
       setAddedData((prevData) => [...prevData, selectedData]);
-
-      // axios를 이용해 신청한 강의 목록을 서버에 POST 요청을 보냅니다.
+      const data = {
+        userId: token,
+        lectureId: selectedData._id,
+      };
       axios
-        .post("/application/add", selectedData)
+        .post("/application/add", data)
         .then((res) => {
           console.log(res);
         })

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDrop } from "react-dnd";
-import { Table, Modal } from "antd";
+import { Table } from "antd";
+import StyledModal from "../components/common/Modal";
 import axios from "axios";
 
 const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
@@ -30,12 +31,10 @@ const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
   }));
 
   const handleOk = () => {
-    // OK 버튼을 클릭했을 때의 처리
     setIsModalVisible(false);
   };
 
   const handleCancel = () => {
-    // 취소 버튼을 클릭했을 때의 처리
     setIsModalVisible(false);
   };
 
@@ -49,14 +48,13 @@ const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
           onClick: () => onRowClick(record),
         })}
       />
-      <Modal
+      <StyledModal
         title="경고"
-        visible={isModalVisible}
-        onOk={handleOk}
+        open={isModalVisible}
         onCancel={handleCancel}
-      >
-        <p>이미 수강 신청된 강의입니다.</p>
-      </Modal>
+        onOk={handleOk}
+        message="이미 수강 신청된 강의입니다"
+      />
     </>
   );
 };

@@ -41,9 +41,6 @@ const Application = () => {
   const [selectedData, setSelectedData] = useState("");
   const [addedData, setAddedData] = useState([]);
 
-  // for (let i = 0; i < courses.length; i++)
-  //   console.log("사용자가 선택한 코스는: " + courses[i].교과목명);
-
   // 데이터 클릭 이벤트 핸들러
   const handleDataClick = (record) => {
     setSelectedData(record);
@@ -133,7 +130,7 @@ const Application = () => {
     <DndProvider backend={HTML5Backend}>
       <Layout>
         <Header className={styles.header}>
-          {/* <img src="logo.png" alt="logo" className={styles.logo} /> */}
+          <img src="logo.png" alt="logo" className={styles.logo} />
         </Header>
 
         <Layout>

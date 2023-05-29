@@ -146,46 +146,10 @@ app.get("/application/search", auth, async (req, res) => {
   }
 });
 
-app.get("/application/applicationLecture", function (req, res) {
-  try {
-    // 쿠키에 저장된 토큰 가져오기
-    const token = req.cookies.x_auth;
+// app.get("/application/applicationLecture", function (req, res)
+// {
 
-    // 토큰을 디코드하여 유저 정보 가져오기
-    user.findByToken(token, async (err, userInfo) => {
-      if (err) {
-        console.error(err);
-        return res
-          .status(500)
-          .json({ success: false, error: "Internal server error" });
-      }
-
-      if (!userInfo) {
-        return res.json({ isAuth: false, error: true });
-      }
-
-      // 유저 정보에 접근할 수 있습니다.
-      console.log(userInfo);
-
-      // 유저의 개인 콜렉션에서 강의 정보 가져오기
-      const userCollectionName = "user_" + userInfo._id;
-      const userCollection = mongoose.connection.db.collection(userCollectionName);
-
-      // userCollection에서 강의 정보 조회
-      const lectures = await userCollection.aggregate([
-        { $match: { _id: userInfo._id } },
-        { $lookup: { from: "lectures", localField: "lectureId", foreignField: "_id", as: "lectureInfo" } },
-        { $unwind: "$lectureInfo" },
-        { $project: { _id: 0, lectureInfo: 1 } }
-      ]).toArray();
-
-      res.status(200).json(lectures);
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: "Internal server error" });
-  }
-});
+// }
 
 app.get("/application/userInfo", auth, function (req, res) {
   // 쿠키에 저장된 토큰 가져오기
@@ -206,33 +170,19 @@ app.get("/application/userInfo", auth, function (req, res) {
 
     // 유저 정보에 접근할 수 있습니다.
     console.log(userInfo); //이 userInfo만 보내주시면 됩니다:)
-    const userId = userInfo._id; // 수정된 부분
+    return res.status(200).json({ success: true, data: userInfo });
   });
 });
 
-
 app.post("/application/add", auth, async (req, res) => {
   try {
-    const { userToken, lectureId } = req.body;
-    const token = userToken;
-    // 토큰을 디코드하여 유저 정보 가져오기
-    user.findByToken(token, async (err, userInfo) => {
-      if (err) {
-        console.error(err);
-        return res
-          .status(500)
-          .json({ success: false, error: "Internal server error" });
-      }
-
-      if (!userInfo) {
-        return res.json({ isAuth: false, error: true });
-      }
-    const userCollectionName = "user_" + userInfo._id;
+    const { userId, lectureId } = req.body;
+    const userCollectionName = "user_" + userId;
     const userCollection =
       mongoose.connection.db.collection(userCollectionName);
     // 유저의 개인 콜렉션에 강의 추가
     const result = await userCollection.updateOne(
-      { _id: mongoose.Types.ObjectId(userInfo._id) },
+      { _id: mongoose.Types.ObjectId(userId) },
       { $push: { lectureId: lectureId } }
     );
     if (result.modifiedCount === 0) {
@@ -243,7 +193,6 @@ app.post("/application/add", auth, async (req, res) => {
     res
       .status(200)
       .json({ success: true, message: "강의 추가에 성공했습니다." });
-  });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: "Internal server error" });

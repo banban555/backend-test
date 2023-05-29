@@ -68,7 +68,6 @@ app.post("/signup", (req, res) => {
   });
 });
 
-
 /// 로그인 API
 app.post("/signin", async (req, res) => {
   try {
@@ -147,8 +146,12 @@ app.get("/application/search", auth, async (req, res) => {
   }
 });
 
+// app.get("/application/applicationLecture", function (req, res)
+// {
+  
+// }
 
-app.get("/application", auth, function (req, res) {
+app.get("/application/userInfo", auth, function (req, res) {
   // 쿠키에 저장된 토큰 가져오기
   let token = req.cookies.x_auth;
 
@@ -156,7 +159,9 @@ app.get("/application", auth, function (req, res) {
   user.findByToken(token, (err, userInfo) => {
     if (err) {
       console.error(err);
-      return res.status(500).json({ success: false, error: "Internal server error" });
+      return res
+        .status(500)
+        .json({ success: false, error: "Internal server error" });
     }
 
     if (!userInfo) {
@@ -164,60 +169,55 @@ app.get("/application", auth, function (req, res) {
     }
 
     // 유저 정보에 접근할 수 있습니다.
-    console.log(userInfo);
-
+    console.log(userInfo); //이 userInfo만 보내주시면 됩니다:)
     const userId = userInfo._id; // 수정된 부분
 
-    // 콜렉션에 접근하여 원하는 작업을 수행합니다.
-    const userCollection = mongoose.connection.db.collection("user_collection");
-    // 예시: 콜렉션에서 해당 사용자의 문서를 가져옵니다.
-    userCollection.findOne({ userId: userId }, function (err, document) {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ success: false, error: "Internal server error" });
-      }
+    // // 콜렉션에 접근하여 원하는 작업을 수행합니다.
+    // const userCollection = mongoose.connection.db.collection("user_collection");
+    // // 예시: 콜렉션에서 해당 사용자의 문서를 가져옵니다.
+    // userCollection.findOne({ userId: userId }, function (err, document) {
+    //   if (err) {
+    //     console.error(err);
+    //     return res
+    //       .status(500)
+    //       .json({ success: false, error: "Internal server error" });
+    //   }
+    //   if (!document) {
+    //     return res
+    //       .status(500)
+    //       .json({ success: false, error: "User collection not found" });
+    //   }
 
-      if (!document) {
-        return res.status(404).json({ success: false, error: "User collection not found" });
-      }
-
-      // 작업 결과를 반환합니다.
-      return res.status(200).json({ success: true, data: document });
-
+    //   // 작업 결과를 반환합니다.
+    //   return res.status(200).json({ success: true, data: document });
     });
   });
 });
 
-
-app.post('/application/add', auth, async (req, res) => {
+app.post("/application/add", auth, async (req, res) => {
   try {
     const { userId, lectureId } = req.body;
-    const userCollectionName = 'user_' + userId;
-
-    const userCollection = mongoose.connection.db.collection(userCollectionName);
-
+    const userCollectionName = "user_" + userId;
+    const userCollection =
+      mongoose.connection.db.collection(userCollectionName);
     // 유저의 개인 콜렉션에 강의 추가
     const result = await userCollection.updateOne(
       { _id: mongoose.Types.ObjectId(userId) },
       { $push: { lectureId: lectureId } }
     );
-
     if (result.modifiedCount === 0) {
       return res
         .status(400)
-        .json({ success: false, message: '강의 추가에 실패했습니다.' });
+        .json({ success: false, message: "강의 추가에 실패했습니다." });
     }
-
     res
       .status(200)
-      .json({ success: true, message: '강의 추가에 성공했습니다.' });
+      .json({ success: true, message: "강의 추가에 성공했습니다." });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, error: 'Internal server error' });
+    res.status(500).json({ success: false, error: "Internal server error" });
   }
 });
-
-
 
 app.delete("/application/delete", auth, async (req, res) => {
   try {

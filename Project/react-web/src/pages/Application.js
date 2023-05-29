@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import {
   Layout,
   Select,
@@ -46,6 +46,24 @@ const Application = () => {
 
   const [cookies] = useCookies(["x_auth"]);
   const token = cookies.x_auth;
+
+  const [userInfo, setUserInfo] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("/application/userInfo")
+      .then((response) => {
+        if (response.data.success) {
+          console.log(response.data);
+          //setUserInfo(response.data.data);
+        } else {
+          console.log("error");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []); // []은 의존성 배열입니다. 이 배열이 비어있으면 컴포넌트가 처음 마운트될 때 한 번만 실행됩니다.
 
   // 데이터 클릭 이벤트 핸들러
   const handleDataClick = (record) => {

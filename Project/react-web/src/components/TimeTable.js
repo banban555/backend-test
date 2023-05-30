@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table as AntTable } from "antd";
 import styled from "styled-components";
 import theme from "../styles/theme";
 import { useDrop } from "react-dnd";
 import { useCookies } from "react-cookie";
+import { Modal } from "antd";
+import axios from "axios";
 
 const days = ["월", "화", "수", "목", "금"];
 const timeSlots = [];
@@ -40,6 +42,42 @@ const StyledTimeTable = ({ dataSource, setAddedData }) => {
   const transformedData = transformDataToEvents(dataSource);
   const [cookies] = useCookies(["x_auth"]);
   const token = cookies.x_auth;
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [, drop] = useDrop(() => ({
+    accept: "COURSE",
+    drop: (item, monitor) => {
+      setAddedData((prevData) => {
+        if (!prevData.some((data) => data._id === item.course._id)) {
+          const data = {
+            userToken: token,
+            lectureId: item.course._id,
+          };
+          axios
+            .post("/application/add", data)
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+          return [...prevData, item.course];
+        } else {
+          setIsModalVisible(true);
+        }
+        return prevData;
+      });
+    },
+  }));
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const columns = [
     {
@@ -84,7 +122,21 @@ const StyledTimeTable = ({ dataSource, setAddedData }) => {
     return row;
   });
 
-  return <Table columns={columns} dataSource={data} pagination={false} />;
+  return (
+    <>
+      <div ref={drop}>
+        <Table columns={columns} dataSource={data} pagination={false} />
+      </div>
+      <Modal
+        title="경고"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        이미 수강 신청된 강의입니다
+      </Modal>
+    </>
+  );
 };
 
 export default StyledTimeTable;

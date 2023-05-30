@@ -56,7 +56,7 @@ const Application = () => {
   const [addedData, setAddedData] = useState([]);
 
   const [cookies, setcookie, removecookie] = useCookies(["x_auth"]);
-  const token = cookies.x_auth;
+  const token = cookies;
 
   const [userInfo, setUserInfo] = useState(null);
 
@@ -164,16 +164,12 @@ const Application = () => {
   //뷰 변경하기
   const onChange = (key) => console.log(`tab changed to ${key}`);
 
-  const COOKIE_KEY = window.LOGIN_KEY; // 상수화시킨 쿠키 값을 넣어줬다.
-
   const logoutURL = "/signin"; // 리다이렉트할 URL 을 상수화시켜서 넣어주었다.
-
-  const [, , removeCookie] = useCookies([COOKIE_KEY]); // 쓰지 않는 변수는 (공백),처리해주고 removeCookie 옵션만 사용한다
 
   //로그아웃
   const handleLogout = () => {
     // 로그아웃 버튼을 누르면 실행되는 함수
-    removeCookie(COOKIE_KEY, { path: "/signin" }); // 쿠키삭제후
+    removecookie("x_auth"); // 쿠키삭제후
     window.location.href = logoutURL; // 현재url을 변경해준다.
   };
 

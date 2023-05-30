@@ -253,8 +253,6 @@ app.delete("/application/delete", auth, async (req, res) => {
       { $pull: { lectureIds: selectLectureId } }
     );
 
-    console.log("변경횟수: ", result.modifiedCount);
-
     if (result.modifiedCount === 0) {
       return res
         .status(400)

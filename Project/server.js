@@ -224,48 +224,32 @@ app.post("/application/add", auth, async (req, res) => {
   }
 });
 
-// 윤형님 코드
-// app.post("/application/add", auth, async (req, res) => {
-//   try {
-//     const { userId, lectureId } = req.body;
-//     const userCollectionName = "user_" + userId;
-//     const userCollection =
-//       mongoose.connection.db.collection(userCollectionName);
-//     // 유저의 개인 콜렉션에 강의 추가
-//     const result = await userCollection.updateOne(
-//       { _id: mongoose.Types.ObjectId(userId) },
-//       { $push: { lectureId: lectureId } }
-//     );
-//     if (result.modifiedCount === 0) {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "강의 추가에 실패했습니다." });
-//     }
-//     res
-//       .status(200)
-//       .json({ success: true, message: "강의 추가에 성공했습니다." });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ success: false, error: "Internal server error" });
-//   }
-// });
-
 app.delete("/application/delete", auth, async (req, res) => {
   try {
-    console.log("사용자가 삭제한 강의는: ");
-    console.log(req.body);
+    const selectLectureId = req.body.lectureId;
+    const userToken = req.body.userToken;
 
-    const { userId, lectureId } = req.body;
+    const userInfo = await new Promise((resolve, reject) => {
+      user.findByToken(userToken, (err, userInfo) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(userInfo);
+        }
+      });
+    });
+
+    const userId = userInfo._id;
+
     const userCollectionName = "user_" + userId;
-    const userCollection =
-      mongoose.connection.db.collection(userCollectionName);
+    const userCollection = mongoose.connection.db.collection(userCollectionName);
 
-    // 유저의 개인 콜렉션에서 강의 삭제
     const result = await userCollection.updateOne(
       { _id: mongoose.Types.ObjectId(userId) },
-      { $pull: { lectureId: lectureId } }
+      { $pull: { lectureIds: selectLectureId } }
     );
 
+    console.log(result.modifiedCount);
     if (result.modifiedCount === 0) {
       return res
         .status(400)
@@ -280,6 +264,7 @@ app.delete("/application/delete", auth, async (req, res) => {
     res.status(500).json({ success: false, error: "Internal server error" });
   }
 });
+
 
 app.get("*", function (req, res) {
   res.sendFile(__dirname + "/react-web/build/index.html");

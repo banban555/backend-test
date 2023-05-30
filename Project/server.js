@@ -39,7 +39,7 @@ app.post("/signup", (req, res) => {
   // 유저 콜렉션에 대한 스키마 정의
   const userCollectionSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    lectureId: { type: mongoose.Schema.Types.ObjectId, ref: "Lecture" },
+    lectureIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lecture" }], // 여러 강의 ID를 저장하기 위해 배열로 변경
   });
 
   // UserCollection 모델 생성
@@ -63,7 +63,21 @@ app.post("/signup", (req, res) => {
         return res.json({ success: false, err });
       }
 
-      return res.status(200).json({ success: true });
+      // 새로 만든 컬렉션에 문서 삽입
+      const userCollection = mongoose.connection.db.collection(collectionName);
+      userCollection.insertOne(
+        {
+          _id: mongoose.Types.ObjectId(userInfo._id),
+          lectureIds: [],
+        },
+        (err) => {
+          if (err) {
+            console.log(err);
+            return res.json({ success: false, err });
+          }
+          return res.status(200).json({ success: true });
+        }
+      );
     });
   });
 });
@@ -167,23 +181,36 @@ app.get("/application/userInfo", auth, function (req, res) {
     if (!userInfo) {
       return res.json({ isAuth: false, error: true });
     }
-
-    console.log(userInfo);
+    // console.log(userInfo);
     return res.status(200).json({ success: true, data: userInfo });
   });
 });
 
 app.post("/application/add", auth, async (req, res) => {
   try {
-    const { userId, lectureId } = req.body;
+    const selectLectureId = req.body.lectureId;
+    const userToken = req.body.userToken;
+
+    const userInfo = await new Promise((resolve, reject) => {
+      user.findByToken(userToken, (err, userInfo) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(userInfo);
+        }
+      });
+    });
+
+    const userId = userInfo._id;
+
     const userCollectionName = "user_" + userId;
     const userCollection =
       mongoose.connection.db.collection(userCollectionName);
-    // 유저의 개인 콜렉션에 강의 추가
     const result = await userCollection.updateOne(
       { _id: mongoose.Types.ObjectId(userId) },
-      { $push: { lectureId: lectureId } }
+      { $push: { lectureIds: selectLectureId } }
     );
+    console.log(result.modifiedCount);
     if (result.modifiedCount === 0) {
       return res
         .status(400)
@@ -197,6 +224,46 @@ app.post("/application/add", auth, async (req, res) => {
     res.status(500).json({ success: false, error: "Internal server error" });
   }
 });
+
+// app.post("/application/add", auth, async (req, res) => {
+//   // try {
+//   let userId;
+//   const lectureId = req.lectureId;
+//   console.log(req.body.userToken);
+//   user.findByToken(req.body.userToken, (err, userInfo) => {
+//     if (err) {
+//       console.error(err);
+//       return res
+//         .status(500)
+//         .json({ success: false, error: "Internal server error" });
+//     } else {
+//       userId = userInfo._id;
+//     }
+//   });
+
+//   console.log(userId);
+
+//   //   const userCollectionName = "user_" + userId;
+//   //   const userCollection =
+//   //     mongoose.connection.db.collection(userCollectionName);
+//   //   // 유저의 개인 콜렉션에 강의 추가
+//   //   const result = await userCollection.updateOne(
+//   //     { _id: mongoose.Types.ObjectId(userId) },
+//   //     { $push: { lectureId: lectureId } }
+//   //   );
+//   //   if (result.modifiedCount === 0) {
+//   //     return res
+//   //       .status(400)
+//   //       .json({ success: false, message: "강의 추가에 실패했습니다." });
+//   //   }
+//   //   res
+//   //     .status(200)
+//   //     .json({ success: true, message: "강의 추가에 성공했습니다." });
+//   // } catch (error) {
+//   //   console.error(error);
+//   //   res.status(500).json({ success: false, error: "Internal server error" });
+//   // }
+// });
 
 app.delete("/application/delete", auth, async (req, res) => {
   try {

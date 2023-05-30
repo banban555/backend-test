@@ -89,7 +89,7 @@ const Application = () => {
     ) {
       setAddedData((prevData) => [...prevData, selectedData]);
       const data = {
-        userId: token,
+        userToken: token,
         lectureId: selectedData._id,
       };
       axios

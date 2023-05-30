@@ -17,7 +17,7 @@ const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
       setAddedData((prevData) => {
         if (!prevData.some((data) => data._id === item.course._id)) {
           const data = {
-            userId: token,
+            userToken: token,
             lectureId: item.course._id,
           };
           axios

@@ -2,6 +2,8 @@ import React from "react";
 import { Table as AntTable } from "antd";
 import styled from "styled-components";
 import theme from "../styles/theme";
+import { useDrop } from "react-dnd";
+import { useCookies } from "react-cookie";
 
 const days = ["월", "화", "수", "목", "금"];
 const timeSlots = [];
@@ -34,8 +36,10 @@ const Table = styled(AntTable)`
   }
 `;
 
-const StyledTimeTable = ({ dataSource }) => {
+const StyledTimeTable = ({ dataSource, setAddedData }) => {
   const transformedData = transformDataToEvents(dataSource);
+  const [cookies] = useCookies(["x_auth"]);
+  const token = cookies.x_auth;
 
   const columns = [
     {

@@ -344,7 +344,10 @@ const Application = () => {
                       />
                     </TabPane>
                     <TabPane tab="시간표뷰" key="2">
-                      <StyledTimeTable dataSource={addedData} />
+                      <StyledTimeTable
+                        dataSource={addedData}
+                        setAddedData={setAddedData}
+                      />
                     </TabPane>
                   </Tabs>
                 </div>

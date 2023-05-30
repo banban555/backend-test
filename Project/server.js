@@ -120,10 +120,13 @@ app.post("/signin", async (req, res) => {
         }
 
         // 토큰을 쿠키에 저장하고, 유효기간을 30분으로 설정
-        res.cookie("x_auth", userInfoWithToken.token, { maxAge: 1800000 }).status(200).json({
-          loginSuccess: true,
-          userId: userInfoWithToken._id,
-        });
+        res
+          .cookie("x_auth", userInfoWithToken.token, { maxAge: 1800000 })
+          .status(200)
+          .json({
+            loginSuccess: true,
+            userId: userInfoWithToken._id,
+          });
       });
     });
   } catch (error) {
@@ -131,7 +134,6 @@ app.post("/signin", async (req, res) => {
     res.status(500).json({ success: false, error: "Internal server error" });
   }
 });
-
 
 // 사용자 인증 API 이후 다양한 페이지에서 사용예정임.
 app.post("/auth", auth, (req, res) => {
@@ -243,14 +245,16 @@ app.delete("/application/delete", auth, async (req, res) => {
     const userId = userInfo._id;
 
     const userCollectionName = "user_" + userId;
-    const userCollection = mongoose.connection.db.collection(userCollectionName);
+    const userCollection =
+      mongoose.connection.db.collection(userCollectionName);
 
     const result = await userCollection.updateOne(
       { _id: mongoose.Types.ObjectId(userId) },
       { $pull: { lectureIds: selectLectureId } }
     );
 
-    console.log(result.modifiedCount);
+    console.log("변경횟수: ", result.modifiedCount);
+
     if (result.modifiedCount === 0) {
       return res
         .status(400)
@@ -265,7 +269,6 @@ app.delete("/application/delete", auth, async (req, res) => {
     res.status(500).json({ success: false, error: "Internal server error" });
   }
 });
-
 
 app.get("*", function (req, res) {
   res.sendFile(__dirname + "/react-web/build/index.html");

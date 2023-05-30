@@ -23,6 +23,7 @@ import axios from "axios";
 import { SearchOutlined } from "@ant-design/icons";
 import StyledTimeTable from "../components/TimeTable.js";
 import { useCookies } from "react-cookie";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -56,7 +57,14 @@ const Application = () => {
   const [addedData, setAddedData] = useState([]);
 
   const [cookies, setcookie, removecookie] = useCookies(["x_auth"]);
-  const token = cookies;
+  const token = cookies?.x_auth;
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!token) {
+      navigate("/signin");
+    }
+  }, [token, navigate]);
 
   const [userInfo, setUserInfo] = useState(null);
 
@@ -65,7 +73,6 @@ const Application = () => {
       .get("/application/userInfo")
       .then((response) => {
         if (response.data.success) {
-          console.log(response.data);
           setUserInfo(response.data.data);
         } else {
           console.log("error");
@@ -121,10 +128,13 @@ const Application = () => {
   const handleDelete = () => {
     const updatedData = addedData.filter((e) => e._id !== selectedData._id);
     setAddedData(updatedData);
-    setSelectedData(null);
-    //delete요청
     axios
-      .delete("/application/delete", { data: selectedData })
+      .delete("/application/delete", {
+        data: {
+          userToken: token,
+          lectureId: selectedData._id,
+        },
+      })
       .then((res) => {
         console.log(res);
       })

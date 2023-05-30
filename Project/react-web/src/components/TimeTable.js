@@ -129,7 +129,7 @@ const StyledTimeTable = ({ dataSource, setAddedData }) => {
       </div>
       <Modal
         title="경고"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
       >

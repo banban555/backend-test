@@ -225,44 +225,30 @@ app.post("/application/add", auth, async (req, res) => {
   }
 });
 
+// 윤형님 코드
 // app.post("/application/add", auth, async (req, res) => {
-//   // try {
-//   let userId;
-//   const lectureId = req.lectureId;
-//   console.log(req.body.userToken);
-//   user.findByToken(req.body.userToken, (err, userInfo) => {
-//     if (err) {
-//       console.error(err);
+//   try {
+//     const { userId, lectureId } = req.body;
+//     const userCollectionName = "user_" + userId;
+//     const userCollection =
+//       mongoose.connection.db.collection(userCollectionName);
+//     // 유저의 개인 콜렉션에 강의 추가
+//     const result = await userCollection.updateOne(
+//       { _id: mongoose.Types.ObjectId(userId) },
+//       { $push: { lectureId: lectureId } }
+//     );
+//     if (result.modifiedCount === 0) {
 //       return res
-//         .status(500)
-//         .json({ success: false, error: "Internal server error" });
-//     } else {
-//       userId = userInfo._id;
+//         .status(400)
+//         .json({ success: false, message: "강의 추가에 실패했습니다." });
 //     }
-//   });
-
-//   console.log(userId);
-
-//   //   const userCollectionName = "user_" + userId;
-//   //   const userCollection =
-//   //     mongoose.connection.db.collection(userCollectionName);
-//   //   // 유저의 개인 콜렉션에 강의 추가
-//   //   const result = await userCollection.updateOne(
-//   //     { _id: mongoose.Types.ObjectId(userId) },
-//   //     { $push: { lectureId: lectureId } }
-//   //   );
-//   //   if (result.modifiedCount === 0) {
-//   //     return res
-//   //       .status(400)
-//   //       .json({ success: false, message: "강의 추가에 실패했습니다." });
-//   //   }
-//   //   res
-//   //     .status(200)
-//   //     .json({ success: true, message: "강의 추가에 성공했습니다." });
-//   // } catch (error) {
-//   //   console.error(error);
-//   //   res.status(500).json({ success: false, error: "Internal server error" });
-//   // }
+//     res
+//       .status(200)
+//       .json({ success: true, message: "강의 추가에 성공했습니다." });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ success: false, error: "Internal server error" });
+//   }
 // });
 
 app.delete("/application/delete", auth, async (req, res) => {

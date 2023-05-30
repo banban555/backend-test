@@ -168,8 +168,7 @@ app.get("/application/userInfo", auth, function (req, res) {
       return res.json({ isAuth: false, error: true });
     }
 
-    // 유저 정보에 접근할 수 있습니다.
-    console.log(userInfo); //이 userInfo만 보내주시면 됩니다:)
+    console.log(userInfo);
     return res.status(200).json({ success: true, data: userInfo });
   });
 });

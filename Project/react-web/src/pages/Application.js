@@ -17,6 +17,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import DroppableTable from "../components/DroppableTable.js";
 import CourseRow from "../components/CourseRow.js";
 import styles from "../css/Application.module.css";
+import theme from "../styles/theme.js";
+import styled from "styled-components";
 import axios from "axios";
 import { SearchOutlined } from "@ant-design/icons";
 import StyledTimeTable from "../components/TimeTable.js";
@@ -25,6 +27,15 @@ import { useCookies } from "react-cookie";
 const { Option } = Select;
 const { TabPane } = Tabs;
 const { Header, Content } = Layout;
+
+const CustomInput = styled(Input)`
+  background-color: ${theme.colors.gray200} !important; // light gray
+  border-color: ${theme.colors.gray200}!important;
+  &:focus {
+    border-color: ${theme.colors.gray200} !important;
+    box-shadow: none !important;
+  }
+`;
 
 const columns = [
   { title: "교과목명", dataIndex: "교과목명", key: "교과목명" },
@@ -55,7 +66,7 @@ const Application = () => {
       .then((response) => {
         if (response.data.success) {
           console.log(response.data);
-          //setUserInfo(response.data.data);
+          setUserInfo(response.data.data);
         } else {
           console.log("error");
         }
@@ -161,39 +172,51 @@ const Application = () => {
 
         <Layout>
           <Content className={styles.contentStyle}>
-            {/* <h1 className={styles.title}>희망강의신청</h1> */}
+            <h1 className={styles.title}>희망강의신청</h1>
             <div className={styles.formBackground}>
-              <h3 className={styles.smallTitle}>학생정보</h3>
+              <h3 className={styles.smllTitle}>학생정보</h3>
               <Form layout="vertical">
                 <Row gutter={16}>
                   <Col span={4}>
                     <Form.Item label="학번">
-                      <Input />
+                      <CustomInput
+                        value={userInfo ? userInfo.studentNum : ""}
+                        readOnly
+                      />
                     </Form.Item>
                   </Col>
                   <Col span={4}>
                     <Form.Item label="성명">
-                      <Input />
+                      <CustomInput
+                        value={userInfo ? userInfo.name : ""}
+                        readOnly
+                      />
                     </Form.Item>
                   </Col>
                   <Col span={4}>
                     <Form.Item label="소속">
-                      <Input />
+                      <CustomInput
+                        value={userInfo ? userInfo.major : ""}
+                        readOnly
+                      />
                     </Form.Item>
                   </Col>
                   <Col span={4}>
                     <Form.Item label="학년/가진급학년">
-                      <Input />
+                      <CustomInput
+                        value={userInfo ? userInfo.grade : ""}
+                        readOnly
+                      />
                     </Form.Item>
                   </Col>
                   <Col span={4}>
                     <Form.Item label="강의년도">
-                      <Input />
+                      <CustomInput value="2023" readOnly />
                     </Form.Item>
                   </Col>
                   <Col span={4}>
                     <Form.Item label="강의학기">
-                      <Input />
+                      <CustomInput value="1학기" readOnly />
                     </Form.Item>
                   </Col>
                 </Row>

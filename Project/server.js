@@ -119,8 +119,8 @@ app.post("/signin", async (req, res) => {
             .json({ loginSuccess: false, message: "Internal server error" });
         }
 
-        // 토큰을 쿠키에 저장
-        res.cookie("x_auth", userInfoWithToken.token).status(200).json({
+        // 토큰을 쿠키에 저장하고, 유효기간을 30분으로 설정
+        res.cookie("x_auth", userInfoWithToken.token, { maxAge: 1800000 }).status(200).json({
           loginSuccess: true,
           userId: userInfoWithToken._id,
         });
@@ -131,6 +131,7 @@ app.post("/signin", async (req, res) => {
     res.status(500).json({ success: false, error: "Internal server error" });
   }
 });
+
 
 // 사용자 인증 API 이후 다양한 페이지에서 사용예정임.
 app.post("/auth", auth, (req, res) => {

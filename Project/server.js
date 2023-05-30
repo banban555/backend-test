@@ -210,7 +210,6 @@ app.post("/application/add", auth, async (req, res) => {
       { _id: mongoose.Types.ObjectId(userId) },
       { $push: { lectureIds: selectLectureId } }
     );
-    console.log(result.modifiedCount);
     if (result.modifiedCount === 0) {
       return res
         .status(400)

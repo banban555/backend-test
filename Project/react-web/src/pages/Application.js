@@ -92,6 +92,7 @@ const Application = () => {
         userToken: token,
         lectureId: selectedData._id,
       };
+      console.log(data.lectureId);
       axios
         .post("/application/add", data)
         .then((res) => {

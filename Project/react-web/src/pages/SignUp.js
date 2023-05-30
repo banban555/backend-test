@@ -79,7 +79,7 @@ function SignUp() {
           handleChange={handleChange}
           options={[
             { value: "null", label: "전공" },
-            { value: "consturction", label: "건설공학과" },
+            { value: "consturction", label: "건설환경공학과" },
             { value: "education", label: "교육학과" },
             { value: "statistic", label: "통계학과" },
             { value: "software", label: "융합소프트웨어" },

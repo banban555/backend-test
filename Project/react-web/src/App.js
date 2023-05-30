@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Application from "./pages/Application";
+import MyPage from "./pages/MyPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="signin/" element={<SignIn />}></Route>
           <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/application" element={<Application />}></Route>
+          <Route path="/mypage" element={<MyPage />}></Route>
         </Routes>
       </ThemeProvider>
     </div>

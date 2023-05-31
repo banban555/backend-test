@@ -30,8 +30,22 @@ app.listen(8080, function () {
   console.log("listening on 8080");
 });
 
-app.post("/signup", (req, res) => {
+app.post("/signup", async (req, res) => {
   const userInfo = new user(req.body);
+
+  const { studentNum } = req.body;
+
+  // 이메일과 학번이 이미 존재하는지 확인
+  const existingUser = await user.findOne().or([
+    { studentNum: studentNum }
+  ]);
+
+  if (existingUser) {
+    return res.status(400).json({
+      success: false,
+      message: "이미 가입된 학번입니다."
+    });
+  }
 
   // 회원가입 시 유저의 컬렉션 생성
   const collectionName = "user_" + userInfo._id; // 회원의 고유 ID를 사용하여 컬렉션 이름 생성

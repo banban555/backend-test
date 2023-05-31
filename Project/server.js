@@ -189,6 +189,42 @@ app.get("/application/userInfo", auth, function (req, res) {
   });
 });
 
+// 클라이언트에서 '/application/seclectedCourse'에 대한 GET 요청 처리
+app.get("/application/seclectedCourse", auth, async (req, res) => {
+  try {
+    const userToken = req.query.token;
+
+    // 토큰을 이용하여 유저 정보 가져오기
+    const userInfo = await new Promise((resolve, reject) => {
+      user.findByToken(userToken, (err, userInfo) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(userInfo);
+        }
+      });
+    });
+
+    const userId = userInfo._id;
+
+    const userCollectionName = "user_" + userId;
+    const userCollection =
+      mongoose.connection.db.collection(userCollectionName);
+
+    // 유저의 컬렉션에서 해당 사용자의 강의 정보 조회
+    const userCourseInfo = await userCollection.findOne({
+      _id: mongoose.Types.ObjectId(userId),
+    });
+
+    // 사용자의 강의 정보 반환
+    res.status(200).json(userCourseInfo.lectureIds);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+});
+
+
 app.put("/mypage/userInfo", auth, async (req, res) => {
   try {
     const { name, studentNum, email, password, major, grade } = req.body;

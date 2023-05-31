@@ -24,6 +24,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import StyledTimeTable from "../components/TimeTable.js";
 import { useCookies } from "react-cookie";
 import { Navigate, useNavigate } from "react-router-dom";
+import StyledModal from "../components/common/Modal.js";
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -55,10 +56,22 @@ const Application = () => {
   const [keyword, setKeyword] = useState("");
   const [selectedData, setSelectedData] = useState("");
   const [addedData, setAddedData] = useState([]);
-
+  const [userCousre, setUserCousre] = useState([]);
   const [cookies, setcookie, removecookie] = useCookies(["x_auth"]);
   const token = cookies?.x_auth;
 
+  // const getSelectedCourses = async () => {
+  //   try {
+  //     const response = await axios.get(`/application/seclectedCourse`, {
+  //       params: {
+  //        token: token;
+  //       },
+  //     });
+  //     setCourses(response.data);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
   const navigate = useNavigate();
   useEffect(() => {
     if (!token) {
@@ -226,7 +239,7 @@ const Application = () => {
           <Content className={styles.contentStyle}>
             <h1 className={styles.title}>희망강의신청</h1>
             <div className={styles.formBackground}>
-              <h3 className={styles.smllTitle}>학생정보</h3>
+              <h3 className={styles.smallTitle}>학생 정보</h3>
               <Form layout="vertical">
                 <Row gutter={16}>
                   <Col span={4}>
@@ -366,14 +379,12 @@ const Application = () => {
           </Content>
         </Layout>
       </Layout>
-      <Modal
-        title="경고"
-        open={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <p>이미 수강 신청된 강의입니다.</p>
-      </Modal>
+      <StyledModal
+        isOpen={isModalVisible}
+        handleClose={handleCancel}
+        message="이미 수강 신청된 강의입니다."
+        handleOk={handleOk}
+      ></StyledModal>
     </DndProvider>
   );
 };

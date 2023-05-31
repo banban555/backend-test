@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 
+import { useNavigate } from "react-router-dom";
 import Logo from "../components/common/Logo";
 import Form from "../components/common/Form";
 import { Input, PasswordInput } from "../components/common/Input";
@@ -42,6 +43,13 @@ function SignUp() {
 
   const handleCloseModal = () => {
     setModalVisible(false);
+  };
+
+  const navigate = useNavigate();
+
+  const handleOk = () => {
+    setModalVisible(false);
+    navigate("/signin");
   };
 
   return (
@@ -108,6 +116,7 @@ function SignUp() {
         isOpen={modalVisible}
         handleClose={handleCloseModal}
         message="회원가입이 완료되었습니다."
+        onOk={handleOk}
       />
     </SignUpContainer>
   );

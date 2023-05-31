@@ -10,7 +10,6 @@ const { Header, Content } = Layout;
 
 const MyPage = () => {
   const [cookies, setcookie, removecookie] = useCookies(["x_auth"]);
-  const token = cookies.x_auth;
 
   const [userInfo, setUserInfo] = useState(null);
 

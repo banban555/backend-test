@@ -35,7 +35,7 @@ app.post("/signup", async (req, res) => {
 
   const { studentNum } = req.body;
 
-  // 이메일과 학번이 이미 존재하는지 확인
+  // 입력한 학번의 유저가 이미 존재하는지 확인
   const existingUser = await user.findOne().or([
     { studentNum: studentNum }
   ]);

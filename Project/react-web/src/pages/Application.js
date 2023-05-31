@@ -72,6 +72,7 @@ const Application = () => {
   //     console.error(err);
   //   }
   // };
+  
   const navigate = useNavigate();
   useEffect(() => {
     if (!token) {

@@ -24,6 +24,9 @@ const lectureSchema = new mongoose.Schema({
    },
   학수강좌번호:{ 
     type:String
+   },
+  학점:{ 
+    type:Number
    }
 });
 

@@ -32,6 +32,22 @@ const ModifyButton = styled.button`
 `;
 
 const ModifyUserInfo = () => {
+  useEffect(() => {
+    axios
+      .get("/application/userInfo")
+      .then((response) => {
+        if (response.data.success) {
+          console.log(response.data);
+          setUserInfo(response.data.data);
+        } else {
+          console.log("error");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   const [userInfo, setUserInfo] = useState({
     name: "",
     studentNum: "",
@@ -58,40 +74,13 @@ const ModifyUserInfo = () => {
       major: userInfo.major,
       grade: userInfo.grade,
     };
-
-    fetch("/mypage", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("회원정보가 수정되었습니다.", result);
-        // 회원정보 수정 성공 시, 필요한 처리를 해줄 수 있습니다.
-      })
-      .catch((error) => {
-        console.error("회원정보 수정에 실패했습니다.", error);
-        // 회원정보 수정 실패 시, 필요한 처리를 해줄 수 있습니다.
+    axios
+      .put("/mypage/userInfo", userInfo)
+      .then((res) => {})
+      .catch((err) => {
+        console.error(err);
       });
   };
-
-  useEffect(() => {
-    axios
-      .get("/application/userInfo")
-      .then((response) => {
-        if (response.data.success) {
-          console.log(response.data);
-          setUserInfo(response.data.data);
-        } else {
-          console.log("error");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
 
   return (
     <ModifyContainer>
@@ -147,7 +136,9 @@ const ModifyUserInfo = () => {
           ]}
         />
 
-        <ModifyButton type="submit">수정</ModifyButton>
+        <ModifyButton type="submit" onClick={handleSubmit}>
+          수정
+        </ModifyButton>
       </ModifyForm>
     </ModifyContainer>
   );

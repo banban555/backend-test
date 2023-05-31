@@ -20,7 +20,7 @@ mongoose
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
-    useFindAndModify: true,
+    useFindAndModify: false,
   })
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
@@ -189,6 +189,42 @@ app.get("/application/userInfo", auth, function (req, res) {
   });
 });
 
+app.put("/mypage/userInfo", auth, async (req, res) => {
+  try {
+    const { name, studentNum, email, password, major, grade } = req.body;
+    const userToken = req.cookies.x_auth;
+
+    const userInfo = await user.findOneAndUpdate(
+      { token: userToken },
+      {
+        $set: {
+          name: name,
+          studentNum: studentNum,
+          email: email,
+          password: password,
+          major: major,
+          grade: grade,
+        },
+      },
+      { new: true }
+    );
+
+    if (!userInfo) {
+      return res.status(400).json({
+        success: false,
+        message: "해당 사용자를 찾을 수 없습니다.",
+      });
+    }
+
+    res
+      .status(200)
+      .json({ success: true, message: "회원정보 수정에 성공했습니다." });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+});
+
 app.post("/application/add", auth, async (req, res) => {
   try {
     const selectLectureId = req.body.lectureId;
@@ -231,7 +267,7 @@ app.delete("/application/delete", auth, async (req, res) => {
   try {
     const selectLectureId = req.body.lectureId;
     const userToken = req.body.userToken;
-
+    console.log(req.body);
     const userInfo = await new Promise((resolve, reject) => {
       user.findByToken(userToken, (err, userInfo) => {
         if (err) {

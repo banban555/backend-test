@@ -295,10 +295,24 @@ app.post("/application/add", auth, async (req, res) => {
     const userCollectionName = "user_" + userId;
     const userCollection =
       mongoose.connection.db.collection(userCollectionName);
+    
+    // 중복 체크
+    const existingLecture = await userCollection.findOne({
+      _id: mongoose.Types.ObjectId(userId),
+      lectureIds: selectLectureId,
+    });
+
+    if (existingLecture) {
+      return res
+        .status(400)
+        .json({ success: false, message: "이미 추가된 강의입니다." });
+    }
+
     const result = await userCollection.updateOne(
       { _id: mongoose.Types.ObjectId(userId) },
       { $push: { lectureIds: selectLectureId } }
     );
+    
     if (result.modifiedCount === 0) {
       return res
         .status(400)

@@ -304,7 +304,7 @@ app.post("/application/add", auth, async (req, res) => {
 
     if (existingLecture) {
       return res
-        .status(400)
+        .status(401)
         .json({ success: false, message: "이미 추가된 강의입니다." });
     }
 

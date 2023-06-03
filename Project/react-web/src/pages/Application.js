@@ -67,7 +67,6 @@ const Application = () => {
           token: token,
         },
       });
-      console.log(res.data);
       const userCourses = res.data;
       setAddedData(userCourses);
     } catch (error) {
@@ -119,10 +118,10 @@ const Application = () => {
         userToken: token,
         lectureId: selectedData._id,
       };
+      console.log("added data", data);
       axios
         .post("/application/add", data)
         .then((res) => {
-          console.log(res);
           getSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
         })
         .catch((err) => {
@@ -145,10 +144,11 @@ const Application = () => {
   };
 
   // 마이너스 버튼 클릭 이벤트 핸들러
-  // 마이너스 버튼 클릭 이벤트 핸들러
   const handleDelete = () => {
-    const updatedData = addedData.filter((e) => e._id !== selectedData._id);
-    setAddedData(updatedData);
+    // const updatedData = addedData.filter((e) => e._id !== selectedData._id);
+    // setAddedData(updatedData);
+    console.log("token: ", token);
+    console.log("selectedData:,", selectedData._id);
     axios
       .delete("/application/delete", {
         data: {
@@ -380,6 +380,7 @@ const Application = () => {
                       <StyledTimeTable
                         dataSource={addedData}
                         setAddedData={setAddedData}
+                        onRowClick={handleDataClick}
                         refreshSelectedCourses={getSelectedCourses}
                       />
                     </TabPane>

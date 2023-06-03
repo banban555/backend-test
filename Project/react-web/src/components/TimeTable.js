@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Table as AntTable } from "antd";
 import styled from "styled-components";
 import theme from "../styles/theme";
+import StyledModal from "../components/common/Modal";
 import { useDrop } from "react-dnd";
 import { useCookies } from "react-cookie";
-import { Modal } from "antd";
 import axios from "axios";
 
 const days = ["월", "화", "수", "목", "금"];
@@ -41,6 +41,7 @@ const Table = styled(AntTable)`
 const StyledTimeTable = ({
   dataSource,
   setAddedData,
+  onRowClick,
   refreshSelectedCourses,
 }) => {
   const transformedData = transformDataToEvents(dataSource);
@@ -129,16 +130,22 @@ const StyledTimeTable = ({
   return (
     <>
       <div ref={drop}>
-        <Table columns={columns} dataSource={data} pagination={false} />
+        <Table
+          columns={columns}
+          dataSource={data}
+          pagination={false}
+          onRow={(record) => ({
+            onClick: () => onRowClick(record),
+          })}
+        />
       </div>
-      <Modal
+      <StyledModal
         title="경고"
         open={isModalVisible}
-        onOk={handleOk}
         onCancel={handleCancel}
-      >
-        이미 수강 신청된 강의입니다
-      </Modal>
+        handleOk={handleOk}
+        message="이미 수강 신청된 강의입니다"
+      />
     </>
   );
 };

@@ -36,14 +36,12 @@ app.post("/signup", async (req, res) => {
   const { studentNum } = req.body;
 
   // 입력한 학번의 유저가 이미 존재하는지 확인
-  const existingUser = await user.findOne().or([
-    { studentNum: studentNum }
-  ]);
+  const existingUser = await user.findOne().or([{ studentNum: studentNum }]);
 
   if (existingUser) {
     return res.status(400).json({
       success: false,
-      message: "이미 가입된 학번입니다."
+      message: "이미 가입된 학번입니다.",
     });
   }
 
@@ -238,7 +236,6 @@ app.get("/application/seclectedCourse", auth, async (req, res) => {
   }
 });
 
-
 app.put("/mypage/userInfo", auth, async (req, res) => {
   try {
     const { name, studentNum, email, password, major, grade } = req.body;
@@ -295,7 +292,7 @@ app.post("/application/add", auth, async (req, res) => {
     const userCollectionName = "user_" + userId;
     const userCollection =
       mongoose.connection.db.collection(userCollectionName);
-    
+
     // 중복 체크
     const existingLecture = await userCollection.findOne({
       _id: mongoose.Types.ObjectId(userId),
@@ -312,7 +309,7 @@ app.post("/application/add", auth, async (req, res) => {
       { _id: mongoose.Types.ObjectId(userId) },
       { $push: { lectureIds: selectLectureId } }
     );
-    
+
     if (result.modifiedCount === 0) {
       return res
         .status(400)
@@ -331,7 +328,6 @@ app.delete("/application/delete", auth, async (req, res) => {
   try {
     const selectLectureId = req.body.lectureId;
     const userToken = req.body.userToken;
-    console.log(req.body);
     const userInfo = await new Promise((resolve, reject) => {
       user.findByToken(userToken, (err, userInfo) => {
         if (err) {

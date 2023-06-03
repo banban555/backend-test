@@ -31,8 +31,6 @@ function SignUp() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setModalVisible(true);
-    console.log(userInfo);
-
     axios
       .post("/signup", userInfo)
       .then((res) => {})

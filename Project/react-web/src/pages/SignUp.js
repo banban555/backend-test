@@ -116,7 +116,7 @@ function SignUp() {
         isOpen={modalVisible}
         handleClose={handleCloseModal}
         message="회원가입이 완료되었습니다."
-        onOk={handleOk}
+        handleOk={handleOk}
       />
     </SignUpContainer>
   );

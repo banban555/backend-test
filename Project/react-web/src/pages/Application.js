@@ -56,23 +56,23 @@ const Application = () => {
   const [keyword, setKeyword] = useState("");
   const [selectedData, setSelectedData] = useState("");
   const [addedData, setAddedData] = useState([]);
-  const [userCousre, setUserCousre] = useState([]);
   const [cookies, setcookie, removecookie] = useCookies(["x_auth"]);
   const token = cookies?.x_auth;
 
-  // const getSelectedCourses = async () => {
-  //   try {
-  //     const response = await axios.get(`/application/seclectedCourse`, {
-  //       params: {
-  //        token: token;
-  //       },
-  //     });
-  //     setCourses(response.data);
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-  
+  const getSelectedCourses = async () => {
+    try {
+      const response = await axios.get(`/application/seclectedCourse`, {
+        params: {
+          token: token,
+        },
+      });
+      console.log(response);
+      // setAddedData(response.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!token) {

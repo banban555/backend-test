@@ -228,8 +228,19 @@ app.get("/application/seclectedCourse", auth, async (req, res) => {
       _id: mongoose.Types.ObjectId(userId),
     });
 
-    // 사용자의 강의 정보 반환
-    res.status(200).json(userCourseInfo.lectureIds);
+    // 강의 ID들을 배열로 받아옴
+    const lectureIds = userCourseInfo.lectureIds;
+
+    // 각각의 강의 정보를 가져오는 비동기 함수들의 배열 생성
+    const getLectureInfoPromises = lectureIds.map((lectureId) =>
+      Lecture.findById(lectureId)
+    );
+
+    // Promise.all을 이용하여 모든 강의 정보를 한 번에 가져옴
+    const lectureInfos = await Promise.all(getLectureInfoPromises);
+
+    // 모든 강의 정보를 반환
+    res.status(200).json(lectureInfos);
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: "Internal server error" });

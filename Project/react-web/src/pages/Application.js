@@ -25,6 +25,7 @@ import StyledTimeTable from "../components/TimeTable.js";
 import { useCookies } from "react-cookie";
 import { Navigate, useNavigate } from "react-router-dom";
 import StyledModal from "../components/common/Modal.js";
+import { genComponentStyleHook } from "antd/es/theme/internal.js";
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -61,17 +62,22 @@ const Application = () => {
 
   const getSelectedCourses = async () => {
     try {
-      const response = await axios.get(`/application/seclectedCourse`, {
+      const res = await axios.get("/application/seclectedCourse", {
         params: {
           token: token,
         },
       });
-      console.log(response);
-      // setAddedData(response.data);
-    } catch (err) {
-      console.error(err);
+      console.log(res.data);
+      const userCourses = res.data;
+      setAddedData(userCourses);
+    } catch (error) {
+      console.error(error);
     }
   };
+
+  useEffect(() => {
+    getSelectedCourses();
+  }, [token]); // token이 변경될 때마다 getSelectedCourses 함수가 실행됩니다.
 
   const navigate = useNavigate();
   useEffect(() => {
@@ -117,6 +123,7 @@ const Application = () => {
         .post("/application/add", data)
         .then((res) => {
           console.log(res);
+          getSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
         })
         .catch((err) => {
           console.error(err);
@@ -138,6 +145,7 @@ const Application = () => {
   };
 
   // 마이너스 버튼 클릭 이벤트 핸들러
+  // 마이너스 버튼 클릭 이벤트 핸들러
   const handleDelete = () => {
     const updatedData = addedData.filter((e) => e._id !== selectedData._id);
     setAddedData(updatedData);
@@ -150,6 +158,7 @@ const Application = () => {
       })
       .then((res) => {
         console.log(res);
+        getSelectedCourses(); // 강의 삭제 후 강의 목록을 다시 불러옴
       })
       .catch((err) => {
         console.error(err);
@@ -364,12 +373,14 @@ const Application = () => {
                         columns={columns}
                         setAddedData={setAddedData}
                         onRowClick={handleDataClick}
+                        refreshSelectedCourses={getSelectedCourses}
                       />
                     </TabPane>
                     <TabPane tab="시간표뷰" key="2">
                       <StyledTimeTable
                         dataSource={addedData}
                         setAddedData={setAddedData}
+                        refreshSelectedCourses={getSelectedCourses}
                       />
                     </TabPane>
                   </Tabs>

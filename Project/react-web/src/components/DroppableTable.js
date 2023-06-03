@@ -5,7 +5,13 @@ import StyledModal from "../components/common/Modal";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 
-const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
+const DroppableTable = ({
+  dataSource,
+  columns,
+  setAddedData,
+  onRowClick,
+  refreshSelectedCourses,
+}) => {
   const [cookies] = useCookies(["x_auth"]);
   const token = cookies.x_auth;
 
@@ -23,7 +29,7 @@ const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
           axios
             .post("/application/add", data)
             .then((res) => {
-              console.log(res);
+              refreshSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
             })
             .catch((err) => {
               console.error(err);
@@ -59,7 +65,7 @@ const DroppableTable = ({ dataSource, columns, setAddedData, onRowClick }) => {
         title="경고"
         open={isModalVisible}
         onCancel={handleCancel}
-        onOk={handleOk}
+        handleOk={handleOk}
         message="이미 수강 신청된 강의입니다"
       />
     </>

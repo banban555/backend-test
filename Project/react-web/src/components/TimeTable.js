@@ -38,7 +38,11 @@ const Table = styled(AntTable)`
   }
 `;
 
-const StyledTimeTable = ({ dataSource, setAddedData }) => {
+const StyledTimeTable = ({
+  dataSource,
+  setAddedData,
+  refreshSelectedCourses,
+}) => {
   const transformedData = transformDataToEvents(dataSource);
   const [cookies] = useCookies(["x_auth"]);
   const token = cookies.x_auth;
@@ -57,7 +61,7 @@ const StyledTimeTable = ({ dataSource, setAddedData }) => {
           axios
             .post("/application/add", data)
             .then((res) => {
-              console.log(res);
+              refreshSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
             })
             .catch((err) => {
               console.error(err);

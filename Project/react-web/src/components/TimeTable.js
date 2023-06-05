@@ -104,25 +104,41 @@ const StyledTimeTable = ({
           customProps.className = "has-data";
         }
 
+        // 각 셀에 들어갈 내용
+        const content = transformedData[day]
+          .filter(
+            (course) =>
+              course.startTime <= record.time && course.endTime > record.time
+          )
+          .map((course) => (
+            <div
+              key={course._id}
+              onClick={(event) => {
+                event.stopPropagation(); // 이벤트 버블링 막기
+                onRowClick(course); // 클릭한 강의 선택
+              }}
+            >
+              {course.name}
+            </div>
+          ));
+
         return {
-          children: <div>{text}</div>,
+          children: content,
           props: customProps,
         };
       },
     })),
   ];
 
+  // 변경 후
   const data = timeSlots.map((timeSlot, index) => {
     const row = { key: index, time: timeSlot.time };
     days.forEach((day) => {
-      const courses = transformedData[day]
-        .filter(
-          (course) =>
-            course.startTime <= timeSlot.time && course.endTime > timeSlot.time
-        )
-        .map((course) => course.name)
-        .join(", ");
-      row[day] = courses ? courses : "";
+      const courses = transformedData[day].filter(
+        (course) =>
+          course.startTime <= timeSlot.time && course.endTime > timeSlot.time
+      );
+      row[day] = courses.length > 0 ? courses[0] : null; // course 객체를 직접 저장
     });
     return row;
   });
@@ -135,7 +151,12 @@ const StyledTimeTable = ({
           dataSource={data}
           pagination={false}
           onRow={(record) => ({
-            onClick: () => onRowClick(record),
+            onClick: (event) => {
+              const day = event.target.getAttribute("data-column-key");
+              if (day && record[day]) {
+                onRowClick(record[day]);
+              }
+            },
           })}
         />
       </div>
@@ -179,7 +200,7 @@ function transformDataToEvents(data) {
       const day = days[i];
       if (events.hasOwnProperty(day)) {
         events[day].push({
-          id: course["_id"],
+          _id: course["_id"],
           name: course["교과목명"],
           professor: course["교원명"],
           startTime: start,

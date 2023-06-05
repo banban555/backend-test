@@ -118,7 +118,6 @@ const Application = () => {
         userToken: token,
         lectureId: selectedData._id,
       };
-      console.log("added data", data);
       axios
         .post("/application/add", data)
         .then((res) => {
@@ -145,10 +144,6 @@ const Application = () => {
 
   // 마이너스 버튼 클릭 이벤트 핸들러
   const handleDelete = () => {
-    // const updatedData = addedData.filter((e) => e._id !== selectedData._id);
-    // setAddedData(updatedData);
-    console.log("token: ", token);
-    console.log("selectedData:,", selectedData._id);
     axios
       .delete("/application/delete", {
         data: {
@@ -157,7 +152,6 @@ const Application = () => {
         },
       })
       .then((res) => {
-        console.log(res);
         getSelectedCourses(); // 강의 삭제 후 강의 목록을 다시 불러옴
       })
       .catch((err) => {
@@ -322,7 +316,7 @@ const Application = () => {
                         placeholder="검색어를 입력해주세요"
                         suffix={
                           <SearchOutlined
-                            className={styles.searchIcon}
+                            className={styles.searchIon}
                             onClick={handleEnter}
                           />
                         }
@@ -366,6 +360,7 @@ const Application = () => {
                 </div>
 
                 <div className={styles.contentWrapper}>
+                  <h3 className={styles.smallTitle}>신청 강의 목록</h3>
                   <Tabs onChange={onChange} type="card">
                     <TabPane tab="테이블뷰" key="1">
                       <DroppableTable

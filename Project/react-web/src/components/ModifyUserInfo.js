@@ -37,7 +37,6 @@ const ModifyUserInfo = () => {
       .get("/application/userInfo")
       .then((response) => {
         if (response.data.success) {
-          console.log(response.data);
           setUserInfo(response.data.data);
         } else {
           console.log("error");

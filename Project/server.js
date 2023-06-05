@@ -364,6 +364,14 @@ app.post("/application/add", auth, async (req, res) => {
     // 신청한 강의의 학점만큼 count 변수에서 차감하여 유저 고유의 컬렉션을 저장한다.
     count -= credit;
 
+    if (count < 0) {
+      return res.status(400).json({
+        success: false,
+        message: "더 이상 강의를 추가할 수 없습니다.",
+        count: count,
+      });
+    }
+
     const result = await userCollection.updateOne(
       { _id: mongoose.Types.ObjectId(userId) },
       { $push: { lectureIds: selectLectureId }, $set: { count: count } }
@@ -418,6 +426,14 @@ app.delete("/application/delete", auth, async (req, res) => {
 
     // 신청한 강의의 학점만큼 count 변수에서 차감하여 유저 고유의 컬렉션을 저장한다.
     count += credit;
+
+    if (count > 24) {
+      return res.status(400).json({
+        success: false,
+        message: "강의를 삭제할 수 없습니다.",
+        count: count,
+      });
+    }
 
     const result = await userCollection.updateOne(
       { _id: mongoose.Types.ObjectId(userId) },

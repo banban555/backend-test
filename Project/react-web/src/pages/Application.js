@@ -47,6 +47,7 @@ const columns = [
   { title: "시간", dataIndex: "시간", key: "시간" },
   { title: "강의실", dataIndex: "강의실", key: "강의실" },
   { title: "수강정원", dataIndex: "수강정원", key: "수강정원" },
+  { tite: "학점", dateIndex: "학점", key: "학점" },
   // { title: "신청인원", dataIndex: "applications", key: "applications" },
 ];
 

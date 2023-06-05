@@ -59,8 +59,37 @@ const Application = () => {
   const [selectedData, setSelectedData] = useState("");
   const [addedData, setAddedData] = useState([]);
   const [cookies, , removecookie] = useCookies(["x_auth"]);
-  const [count, setCount] = useState(24);
+  const [count, setCount] = useState(0);
+  const [isOverCountModalVisible, setIsOverCountModalVisible] = useState(false); // 초과 학점 모달 visible 상태
   const token = cookies?.x_auth;
+
+  useEffect(() => {
+    if (count < 0) {
+      setIsOverCountModalVisible(true);
+      setCount(0);
+    }
+  }, [count]);
+
+  const handleOverCountModalOk = () => {
+    setIsOverCountModalVisible(false);
+  };
+
+  const handleOverCountModalCancel = () => {
+    setIsOverCountModalVisible(false);
+  };
+
+  const getCount = async () => {
+    const response = await axios.get("/application/count", {
+      params: {
+        token: token,
+      },
+    });
+    setCount(response.data.count);
+  };
+
+  useEffect(() => {
+    getCount();
+  }, []);
 
   const getSelectedCourses = async () => {
     try {
@@ -402,7 +431,13 @@ const Application = () => {
         handleClose={handleCancel}
         message="이미 수강 신청된 강의입니다."
         handleOk={handleOk}
-      ></StyledModal>
+      />
+      <StyledModal
+        isOpen={isOverCountModalVisible}
+        handleClose={handleOverCountModalCancel}
+        message="수강신청 가능한 학점을 초과하였습니다."
+        handleOk={handleOverCountModalOk}
+      />
     </DndProvider>
   );
 };

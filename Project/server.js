@@ -44,7 +44,6 @@ app.get("/application/count", auth, async (req, res) => {
     });
 
     const userId = userInfo._id;
-    console.log("userID", userId);
 
     const userCollectionName = "user_" + userId;
     const userCollection =

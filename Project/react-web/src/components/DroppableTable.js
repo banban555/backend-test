@@ -65,7 +65,7 @@ const DroppableTable = ({
       />
       <StyledModal
         title="경고"
-        open={isModalVisible}
+        isOpen={isModalVisible}
         onCancel={handleCancel}
         handleOk={handleOk}
         message="이미 수강 신청된 강의입니다"

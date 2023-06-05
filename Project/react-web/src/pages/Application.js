@@ -67,6 +67,8 @@ const Application = () => {
     if (count < 0) {
       setIsOverCountModalVisible(true);
       setCount(0);
+    } else if (count > 24) {
+      setCount(24);
     }
   }, [count]);
 

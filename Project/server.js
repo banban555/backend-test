@@ -30,6 +30,40 @@ app.listen(8080, function () {
   console.log("listening on 8080");
 });
 
+app.get("/application/count", auth, async (req, res) => {
+  try {
+    const userToken = req.query.token;
+    const userInfo = await new Promise((resolve, reject) => {
+      user.findByToken(userToken, (err, userInfo) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(userInfo);
+        }
+      });
+    });
+
+    const userId = userInfo._id;
+    console.log("userID", userId);
+
+    const userCollectionName = "user_" + userId;
+    const userCollection =
+      mongoose.connection.db.collection(userCollectionName);
+
+    // 유저 고유의 컬렉션 내의 학점 정보 count를 받아오는 변수를 선언한다.
+    const userData = await userCollection.findOne({
+      _id: mongoose.Types.ObjectId(userId),
+    });
+    let count = userData.count;
+    res.status(200).json({
+      count: count,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+});
+
 app.post("/signup", async (req, res) => {
   const userInfo = new user(req.body);
 
@@ -341,13 +375,11 @@ app.post("/application/add", auth, async (req, res) => {
         .status(400)
         .json({ success: false, message: "강의 추가에 실패했습니다." });
     }
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "강의 추가에 성공했습니다.",
-        count: count,
-      });
+    res.status(200).json({
+      success: true,
+      message: "강의 추가에 성공했습니다.",
+      count: count,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: "Internal server error" });
@@ -399,13 +431,11 @@ app.delete("/application/delete", auth, async (req, res) => {
         .json({ success: false, message: "강의 삭제에 실패했습니다." });
     }
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "강의 삭제에 성공했습니다.",
-        count: count,
-      });
+    res.status(200).json({
+      success: true,
+      message: "강의 삭제에 성공했습니다.",
+      count: count,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: "Internal server error" });

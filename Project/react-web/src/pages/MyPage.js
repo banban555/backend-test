@@ -6,7 +6,7 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import ModifyUserInfo from "../components/ModifyUserInfo.js";
 
-const { Header, Content } = Layout;
+const { Header } = Layout;
 
 const MyPage = () => {
   const [cookies, setcookie, removecookie] = useCookies(["x_auth"]);

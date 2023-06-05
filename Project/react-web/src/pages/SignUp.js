@@ -85,11 +85,11 @@ function SignUp() {
           handleChange={handleChange}
           options={[
             { value: "null", label: "전공" },
-            { value: "consturction", label: "건설환경공학과" },
-            { value: "education", label: "교육학과" },
-            { value: "statistic", label: "통계학과" },
-            { value: "software", label: "융합소프트웨어" },
-            { value: "data", label: "데이터사이언스" },
+            { value: "건설환경공학과", label: "건설환경공학과" },
+            { value: "교육학과", label: "교육학과" },
+            { value: "통계학과", label: "통계학과" },
+            { value: "융합소프트웨어", label: "융합소프트웨어" },
+            { value: "데이터사이언스", label: "데이터사이언스" },
           ]}
         />
         <SelectInput

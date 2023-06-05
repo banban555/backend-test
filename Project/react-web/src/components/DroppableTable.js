@@ -11,6 +11,7 @@ const DroppableTable = ({
   setAddedData,
   onRowClick,
   refreshSelectedCourses,
+  setCount,
 }) => {
   const [cookies] = useCookies(["x_auth"]);
   const token = cookies.x_auth;
@@ -30,6 +31,7 @@ const DroppableTable = ({
             .post("/application/add", data)
             .then((res) => {
               refreshSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
+              setCount(res.data.count);
             })
             .catch((err) => {
               console.error(err);

@@ -59,6 +59,7 @@ const Application = () => {
   const [selectedData, setSelectedData] = useState("");
   const [addedData, setAddedData] = useState([]);
   const [cookies, , removecookie] = useCookies(["x_auth"]);
+  const [count, setCount] = useState(24);
   const token = cookies?.x_auth;
 
   const getSelectedCourses = async () => {
@@ -123,6 +124,7 @@ const Application = () => {
         .post("/application/add", data)
         .then((res) => {
           getSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
+          setCount(res.data.count);
         })
         .catch((err) => {
           console.error(err);
@@ -154,6 +156,7 @@ const Application = () => {
       })
       .then((res) => {
         getSelectedCourses(); // 강의 삭제 후 강의 목록을 다시 불러옴
+        setCount(res.data.count); // 서버 응답에 있는 count로 state 업데이트
       })
       .catch((err) => {
         console.error(err);
@@ -335,7 +338,12 @@ const Application = () => {
             <div className={styles.gutter16}>
               <div className={styles.flexWrapper}>
                 <div className={styles.contentWrapper}>
-                  <h3 className={styles.smallTitle}>종합강의시간표목록</h3>
+                  <div className={styles.textWrapper}>
+                    <h3 className={styles.smallTitle}>종합강의시간표목록</h3>
+                    <h3 className={styles.smallTitle}>
+                      신청 가능학점: {count}
+                    </h3>
+                  </div>
                   <Table
                     components={{
                       body: {
@@ -370,6 +378,7 @@ const Application = () => {
                         setAddedData={setAddedData}
                         onRowClick={handleDataClick}
                         refreshSelectedCourses={getSelectedCourses}
+                        setCount={setCount}
                       />
                     </TabPane>
                     <TabPane tab="시간표뷰" key="2">
@@ -378,6 +387,7 @@ const Application = () => {
                         setAddedData={setAddedData}
                         onRowClick={handleDataClick}
                         refreshSelectedCourses={getSelectedCourses}
+                        setCount={setCount}
                       />
                     </TabPane>
                   </Tabs>

@@ -5,6 +5,12 @@ body {
   padding: 0;
 }
 
+.textWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 1rem;
+}
+
 .header {
   height: 100px;
   width: 100%;

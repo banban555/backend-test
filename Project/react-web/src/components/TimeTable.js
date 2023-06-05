@@ -43,6 +43,7 @@ const StyledTimeTable = ({
   setAddedData,
   onRowClick,
   refreshSelectedCourses,
+  setCount,
 }) => {
   const transformedData = transformDataToEvents(dataSource);
   const [cookies] = useCookies(["x_auth"]);
@@ -63,6 +64,7 @@ const StyledTimeTable = ({
             .post("/application/add", data)
             .then((res) => {
               refreshSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
+              setCount(res.data.count);
             })
             .catch((err) => {
               console.error(err);

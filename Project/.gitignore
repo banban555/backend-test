@@ -1,0 +1,3 @@
+node_modules/
+../Project/node_modules/
+node_modules/.cache/.eslintcache

@@ -36,12 +36,14 @@ app.post("/signup", async (req, res) => {
   const { studentNum } = req.body;
 
   // 입력한 학번의 유저가 이미 존재하는지 확인
-  const existingUser = await user.findOne().or([{ studentNum: studentNum }]);
+  const existingUser = await user.findOne().or([
+    { studentNum: studentNum }
+  ]);
 
   if (existingUser) {
     return res.status(400).json({
       success: false,
-      message: "이미 가입된 학번입니다.",
+      message: "이미 가입된 학번입니다."
     });
   }
 
@@ -52,6 +54,7 @@ app.post("/signup", async (req, res) => {
   const userCollectionSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     lectureIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "Lecture" }], // 여러 강의 ID를 저장하기 위해 배열로 변경
+    count: { type: Number, default: 24 }, // count 변수 추가
   });
 
   // UserCollection 모델 생성
@@ -81,6 +84,7 @@ app.post("/signup", async (req, res) => {
         {
           _id: mongoose.Types.ObjectId(userInfo._id),
           lectureIds: [],
+          count: 24, // count 변수 추가 및 기본값 설정
         },
         (err) => {
           if (err) {
@@ -93,6 +97,7 @@ app.post("/signup", async (req, res) => {
     });
   });
 });
+
 
 /// 로그인 API
 app.post("/signin", async (req, res) => {
@@ -228,24 +233,14 @@ app.get("/application/seclectedCourse", auth, async (req, res) => {
       _id: mongoose.Types.ObjectId(userId),
     });
 
-    // 강의 ID들을 배열로 받아옴
-    const lectureIds = userCourseInfo.lectureIds;
-
-    // 각각의 강의 정보를 가져오는 비동기 함수들의 배열 생성
-    const getLectureInfoPromises = lectureIds.map((lectureId) =>
-      Lecture.findById(lectureId)
-    );
-
-    // Promise.all을 이용하여 모든 강의 정보를 한 번에 가져옴
-    const lectureInfos = await Promise.all(getLectureInfoPromises);
-
-    // 모든 강의 정보를 반환
-    res.status(200).json(lectureInfos);
+    // 사용자의 강의 정보 반환
+    res.status(200).json(userCourseInfo.lectureIds);
   } catch (error) {
     console.error(error);
     res.status(500).json({ success: false, error: "Internal server error" });
   }
 });
+
 
 app.put("/mypage/userInfo", auth, async (req, res) => {
   try {
@@ -303,7 +298,7 @@ app.post("/application/add", auth, async (req, res) => {
     const userCollectionName = "user_" + userId;
     const userCollection =
       mongoose.connection.db.collection(userCollectionName);
-
+    
     // 중복 체크
     const existingLecture = await userCollection.findOne({
       _id: mongoose.Types.ObjectId(userId),
@@ -320,7 +315,7 @@ app.post("/application/add", auth, async (req, res) => {
       { _id: mongoose.Types.ObjectId(userId) },
       { $push: { lectureIds: selectLectureId } }
     );
-
+    
     if (result.modifiedCount === 0) {
       return res
         .status(400)
@@ -339,6 +334,7 @@ app.delete("/application/delete", auth, async (req, res) => {
   try {
     const selectLectureId = req.body.lectureId;
     const userToken = req.body.userToken;
+    console.log(req.body);
     const userInfo = await new Promise((resolve, reject) => {
       user.findByToken(userToken, (err, userInfo) => {
         if (err) {

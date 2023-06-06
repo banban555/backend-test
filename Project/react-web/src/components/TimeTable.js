@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useReducer } from "react";
 import { Table as AntTable } from "antd";
 import styled from "styled-components";
 import theme from "../styles/theme";
@@ -6,6 +6,7 @@ import StyledModal from "../components/common/Modal";
 import { useDrop } from "react-dnd";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import "../css/TimeTable.css";
 
 const days = ["월", "화", "수", "목", "금"];
 const timeSlots = [];
@@ -48,9 +49,23 @@ const StyledTimeTable = ({
   const transformedData = transformDataToEvents(dataSource);
   const [cookies] = useCookies(["x_auth"]);
   const token = cookies.x_auth;
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCheckModalVisible, setIsCheckModalVisible] = useState(false);
+  // const [isSelected, setIsSelected] = useState(false); // 강의 선택 상태를 관리하는 상태 변수
+
+  const courseSelectionReducer = (state, action) => {
+    switch (action.type) {
+      case "toggle":
+        const newState = { ...state };
+        newState[action.courseId] = !newState[action.courseId];
+        return newState;
+      case "reset":
+        return {}; // 모든 선택 상태를 초기화합니다.
+      default:
+        throw new Error();
+    }
+  };
+  const [selectedCourses, dispatch] = useReducer(courseSelectionReducer, {});
 
   const [, drop] = useDrop(() => ({
     accept: "COURSE",
@@ -84,18 +99,26 @@ const StyledTimeTable = ({
 
   const handleOk = () => {
     setIsModalVisible(false);
+    dispatch({ type: "reset" });
+    // setIsSelected(!isSelected);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    dispatch({ type: "reset" });
+    // setIsSelected(!isSelected);
   };
 
   const handleCancelcheck = () => {
     setIsCheckModalVisible(false);
+    dispatch({ type: "reset" });
+    // setIsSelected(!isSelected);
   };
 
   const handleOkcheck = () => {
     setIsCheckModalVisible(false);
+    dispatch({ type: "reset" });
+    // setIsSelected(!isSelected);
   };
 
   const columns = [
@@ -127,9 +150,14 @@ const StyledTimeTable = ({
           .map((course) => (
             <div
               key={course._id}
+              className={selectedCourses[course._id] ? "selected" : ""}
+              // className={isSelected ? "selected" : ""} // isSelected 상태에 따라 CSS 클래스를 바꿉니다.
               onClick={(event) => {
-                event.stopPropagation(); // 이벤트 버블링 막기
-                onRowClick(course); // 클릭한 강의 선택
+                event.stopPropagation();
+                onRowClick(course);
+                console.log("클릭된 강의:", course);
+                // 선택 상태를 토글하기 위해 'toggle' 액션을 dispatch합니다.
+                dispatch({ type: "toggle", courseId: course._id });
               }}
             >
               {course.name}
@@ -167,6 +195,7 @@ const StyledTimeTable = ({
           onRow={(record) => ({
             onClick: (event) => {
               const day = event.target.getAttribute("data-column-key");
+              console.log("클릭된 강의:", record[day]);
               if (day && record[day]) {
                 onRowClick(record[day]);
               }

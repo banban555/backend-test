@@ -399,7 +399,6 @@ app.delete("/application/delete", auth, async (req, res) => {
     const selectLectureId = req.body.lectureId;
     const userToken = req.body.userToken;
 
-    console.log("삭제하는 lectureid:", selectLectureId);
     const userInfo = await new Promise((resolve, reject) => {
       user.findByToken(userToken, (err, userInfo) => {
         if (err) {

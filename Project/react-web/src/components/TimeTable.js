@@ -50,6 +50,7 @@ const StyledTimeTable = ({
   const token = cookies.x_auth;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isCheckModalVisible, setIsCheckModalVisible] = useState(false);
 
   const [, drop] = useDrop(() => ({
     accept: "COURSE",
@@ -63,6 +64,7 @@ const StyledTimeTable = ({
           axios
             .post("/application/add", data)
             .then((res) => {
+              setIsCheckModalVisible(true);
               refreshSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
               setCount(res.data.count);
             })
@@ -84,6 +86,14 @@ const StyledTimeTable = ({
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const handleCancelcheck = () => {
+    setIsCheckModalVisible(false);
+  };
+
+  const handleOkcheck = () => {
+    setIsCheckModalVisible(false);
   };
 
   const columns = [
@@ -168,6 +178,13 @@ const StyledTimeTable = ({
         onCancel={handleCancel}
         handleOk={handleOk}
         message="이미 수강 신청된 강의입니다"
+      />
+      <StyledModal
+        title="확인"
+        isOpen={isCheckModalVisible}
+        onCancel={handleCancelcheck}
+        handleOk={handleOkcheck}
+        message={`${data.name} ${data.count} 수강신청이 완료되었습니다`}
       />
     </>
   );

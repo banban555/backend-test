@@ -4,7 +4,7 @@ import classNames from "classnames";
 import styles from "../css/Application.module.css";
 
 const CourseRow = (props) => {
-  const { record, onClick, selectedRowId } = props;
+  const { record, onClick, selectedRow } = props;
 
   const dragItem = useMemo(
     () => ({
@@ -18,7 +18,9 @@ const CourseRow = (props) => {
   const rowClasses = classNames({
     dragging: isDragging,
     [styles.selectedRow]:
-      record && record._id ? record._id === selectedRowId : false,
+      record && record._id && selectedRow.tableId === "table1"
+        ? record._id === selectedRow.rowId
+        : false,
   });
   return (
     <tr ref={dragRef} className={rowClasses} onClick={() => onClick(record)}>

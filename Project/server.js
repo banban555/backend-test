@@ -399,6 +399,7 @@ app.delete("/application/delete", auth, async (req, res) => {
     const selectLectureId = req.body.lectureId;
     const userToken = req.body.userToken;
 
+    console.log("삭제하는 lectureid:", selectLectureId);
     const userInfo = await new Promise((resolve, reject) => {
       user.findByToken(userToken, (err, userInfo) => {
         if (err) {
@@ -423,6 +424,7 @@ app.delete("/application/delete", auth, async (req, res) => {
 
     // 신청한 강의의 lectureID를 기반으로 lecture 컬렉션에서 해당 강의의 학점을 받아온다.
     const lecture = await Lecture.findById(selectLectureId);
+    // console.log("삭제하는 강의는:", lecture);
     const credit = lecture.학점;
 
     // 신청한 강의의 학점만큼 count 변수에서 차감하여 유저 고유의 컬렉션을 저장한다.

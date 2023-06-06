@@ -4,6 +4,8 @@ import { Table } from "antd";
 import StyledModal from "../components/common/Modal";
 import axios from "axios";
 import { useCookies } from "react-cookie";
+import styles from "../css/Application.module.css";
+import classNames from "classnames";
 
 const DroppableTable = ({
   dataSource,
@@ -12,6 +14,7 @@ const DroppableTable = ({
   onRowClick,
   refreshSelectedCourses,
   setCount,
+  selectedRow,
 }) => {
   const [cookies] = useCookies(["x_auth"]);
   const token = cookies.x_auth;
@@ -74,6 +77,12 @@ const DroppableTable = ({
         columns={columns}
         onRow={(record) => ({
           onClick: () => onRowClick(record),
+          className: classNames({
+            [styles.selectedRow]:
+              record && record._id && selectedRow.tableId === "table2"
+                ? record._id === selectedRow.rowId
+                : false,
+          }),
         })}
       />
       <StyledModal

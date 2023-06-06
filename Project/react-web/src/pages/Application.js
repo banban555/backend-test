@@ -59,25 +59,47 @@ const Application = () => {
   const [cookies, , removecookie] = useCookies(["x_auth"]);
   const [count, setCount] = useState();
   const [isOverCountModalVisible, setIsOverCountModalVisible] = useState(false); // 초과 학점 모달 visible 상태
-  // const [selectedRowId, setSelectedRowId] = useState(false);
-
   const token = cookies?.x_auth;
+
+  //테이블 별로 클릭이벤트를 관리하기 위한 변수
+  const [selectedRow, setSelectedRow] = useState({
+    tableId: null,
+    rowId: null,
+  });
+
+  const handleDataClick = (record) => {
+    setSelectedData(record);
+  };
+
+  // 선택된 행의 테이블 ID와 rowId를 설정하는 함수
+  const setSelectedRowWithTableId = (record, tableId) => {
+    setSelectedRow({ tableId: tableId, rowId: record._id });
+  };
 
   useEffect(() => {
     if (count === 0) {
       setIsOverCountModalVisible(true);
-      // setSelectedRowId(false);
+      setSelectedRow({
+        tableId: null,
+        rowId: null,
+      });
     }
   }, [count]);
 
   const handleOverCountModalOk = () => {
     setIsOverCountModalVisible(false);
-    // setSelectedRowId(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   const handleOverCountModalCancel = () => {
     setIsOverCountModalVisible(false);
-    // setSelectedRowId(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   const getCount = async () => {
@@ -135,12 +157,6 @@ const Application = () => {
       });
   }, []); // []은 의존성 배열입니다. 이 배열이 비어있으면 컴포넌트가 처음 마운트될 때 한 번만 실행됩니다.
 
-  // 데이터 클릭 이벤트 핸들러
-  const handleDataClick = (record) => {
-    setSelectedData(record);
-    //setSelectedRowId(true);
-  };
-
   // 플러스 버튼 클릭 이벤트 핸들러
   const handleAddButtonClick = () => {
     if (
@@ -174,12 +190,18 @@ const Application = () => {
 
   const handleOk = () => {
     setIsModalVisible(false);
-    // setSelectedRowId(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    // setSelectedRowId(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   // 마이너스 버튼 클릭 이벤트 핸들러
@@ -242,22 +264,34 @@ const Application = () => {
   };
   const handleCancelcheck = () => {
     setIsCheckModalVisible(false);
-    // setSelectedRowId(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   const handleOkcheck = () => {
     setIsCheckModalVisible(false);
-    // setSelectedRowId(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   const handleCancelDelete = () => {
     setIsDeleteModalVisible(false);
-    // setSelectedRowId(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   const handleOkDelete = () => {
     setIsDeleteModalVisible(false);
-    // setSelectedRowId(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   return (
@@ -411,11 +445,13 @@ const Application = () => {
                     columns={columns}
                     onRow={(record) => ({
                       record,
-                      // selectedRowId,
-                      onClick: () => handleDataClick(record),
+                      selectedRow,
+                      onClick: () => {
+                        handleDataClick(record);
+                        setSelectedRowWithTableId(record, "table1");
+                      },
                     })}
                   />
-                  {/* <TableComponent dataSource={courses} columns={columns} /> */}
                 </div>
                 <div className={styles.button_wrapper}>
                   <Button shape="circle" onClick={handleAddButtonClick}>
@@ -435,9 +471,13 @@ const Application = () => {
                         dataSource={addedData}
                         columns={columns}
                         setAddedData={setAddedData}
-                        onRowClick={handleDataClick}
+                        onRowClick={(record) => {
+                          handleDataClick(record);
+                          setSelectedRowWithTableId(record, "table2");
+                        }}
                         refreshSelectedCourses={getSelectedCourses}
                         setCount={setCount}
+                        selectedRow={selectedRow} // <- 추가
                       />
                     </TabPane>
                     <TabPane tab="시간표뷰" key="2">

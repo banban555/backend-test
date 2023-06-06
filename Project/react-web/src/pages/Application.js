@@ -478,6 +478,7 @@ const Application = () => {
                         refreshSelectedCourses={getSelectedCourses}
                         setCount={setCount}
                         selectedRow={selectedRow} // <- 추가
+                        setSelectedRow={setSelectedRow}
                       />
                     </TabPane>
                     <TabPane tab="시간표뷰" key="2">

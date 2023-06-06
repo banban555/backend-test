@@ -15,6 +15,7 @@ const DroppableTable = ({
   refreshSelectedCourses,
   setCount,
   selectedRow,
+  setSelectedRow,
 }) => {
   const [cookies] = useCookies(["x_auth"]);
   const token = cookies.x_auth;
@@ -55,18 +56,34 @@ const DroppableTable = ({
 
   const handleOk = () => {
     setIsModalVisible(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   const handleCancelcheck = () => {
     setIsCheckModalVisible(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   const handleOkcheck = () => {
     setIsCheckModalVisible(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
   };
 
   return (

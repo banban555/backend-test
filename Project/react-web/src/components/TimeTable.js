@@ -64,7 +64,9 @@ const StyledTimeTable = ({
           axios
             .post("/application/add", data)
             .then((res) => {
-              setIsCheckModalVisible(true);
+              if (res.data.count !== 0) {
+                setIsCheckModalVisible(true);
+              } // count가 0이 아니라면 수강신청 완료 모달을 띄웁니다.
               refreshSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
               setCount(res.data.count);
             })

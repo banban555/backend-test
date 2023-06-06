@@ -9,7 +9,6 @@ import {
   Col,
   Table,
   Tabs,
-  Modal,
 } from "antd";
 
 import { DndProvider } from "react-dnd";
@@ -23,9 +22,9 @@ import axios from "axios";
 import { SearchOutlined } from "@ant-design/icons";
 import StyledTimeTable from "../components/TimeTable.js";
 import { useCookies } from "react-cookie";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import StyledModal from "../components/common/Modal.js";
-import { genComponentStyleHook } from "antd/es/theme/internal.js";
+import TableComponent from "../components/TableComponent.js";
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -48,7 +47,6 @@ const columns = [
   { title: "강의실", dataIndex: "강의실", key: "강의실" },
   { title: "수강정원", dataIndex: "수강정원", key: "수강정원" },
   { title: "학점", dataIndex: "학점", key: "학점" },
-  // { title: "신청인원", dataIndex: "applications", key: "applications" },
 ];
 
 const Application = () => {
@@ -59,25 +57,27 @@ const Application = () => {
   const [selectedData, setSelectedData] = useState("");
   const [addedData, setAddedData] = useState([]);
   const [cookies, , removecookie] = useCookies(["x_auth"]);
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState();
   const [isOverCountModalVisible, setIsOverCountModalVisible] = useState(false); // 초과 학점 모달 visible 상태
+  // const [selectedRowId, setSelectedRowId] = useState(false);
+
   const token = cookies?.x_auth;
 
   useEffect(() => {
-    if (count < 0) {
+    if (count === 0) {
       setIsOverCountModalVisible(true);
-      setCount(0);
-    } else if (count > 24) {
-      setCount(24);
+      // setSelectedRowId(false);
     }
   }, [count]);
 
   const handleOverCountModalOk = () => {
     setIsOverCountModalVisible(false);
+    // setSelectedRowId(false);
   };
 
   const handleOverCountModalCancel = () => {
     setIsOverCountModalVisible(false);
+    // setSelectedRowId(false);
   };
 
   const getCount = async () => {
@@ -138,6 +138,7 @@ const Application = () => {
   // 데이터 클릭 이벤트 핸들러
   const handleDataClick = (record) => {
     setSelectedData(record);
+    //setSelectedRowId(true);
   };
 
   // 플러스 버튼 클릭 이벤트 핸들러
@@ -154,7 +155,7 @@ const Application = () => {
       axios
         .post("/application/add", data)
         .then((res) => {
-          setIsCheckModalVisible(true);
+          if (res.data.count !== 0) setIsCheckModalVisible(true);
           getSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
           setCount(res.data.count);
         })
@@ -173,10 +174,12 @@ const Application = () => {
 
   const handleOk = () => {
     setIsModalVisible(false);
+    // setSelectedRowId(false);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    // setSelectedRowId(false);
   };
 
   // 마이너스 버튼 클릭 이벤트 핸들러
@@ -239,18 +242,22 @@ const Application = () => {
   };
   const handleCancelcheck = () => {
     setIsCheckModalVisible(false);
+    // setSelectedRowId(false);
   };
 
   const handleOkcheck = () => {
     setIsCheckModalVisible(false);
+    // setSelectedRowId(false);
   };
 
   const handleCancelDelete = () => {
     setIsDeleteModalVisible(false);
+    // setSelectedRowId(false);
   };
 
   const handleOkDelete = () => {
     setIsDeleteModalVisible(false);
+    // setSelectedRowId(false);
   };
 
   return (
@@ -404,9 +411,11 @@ const Application = () => {
                     columns={columns}
                     onRow={(record) => ({
                       record,
+                      // selectedRowId,
                       onClick: () => handleDataClick(record),
                     })}
                   />
+                  {/* <TableComponent dataSource={courses} columns={columns} /> */}
                 </div>
                 <div className={styles.button_wrapper}>
                   <Button shape="circle" onClick={handleAddButtonClick}>
@@ -447,7 +456,6 @@ const Application = () => {
           </Content>
         </Layout>
       </Layout>
-
       <StyledModal
         isOpen={isModalVisible}
         handleClose={handleCancel}

@@ -5,6 +5,11 @@ body {
   padding: 0;
 }
 
+.selectedRow {
+  background-color: #e79e2f;
+  color: white;
+}
+
 .textWrapper {
   display: flex;
   justify-content: space-between;

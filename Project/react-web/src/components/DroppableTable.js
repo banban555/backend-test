@@ -18,6 +18,8 @@ const DroppableTable = ({
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const [isCheckModalVisible, setIsCheckModalVisible] = useState(false);
+
   const [, dropRef] = useDrop(() => ({
     accept: "COURSE",
     drop: (item, monitor) => {
@@ -30,6 +32,7 @@ const DroppableTable = ({
           axios
             .post("/application/add", data)
             .then((res) => {
+              setIsCheckModalVisible(true); // 수강신청 완료 모달을 띄웁니다.
               refreshSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
               setCount(res.data.count);
             })
@@ -53,6 +56,14 @@ const DroppableTable = ({
     setIsModalVisible(false);
   };
 
+  const handleCancelcheck = () => {
+    setIsCheckModalVisible(false);
+  };
+
+  const handleOkcheck = () => {
+    setIsCheckModalVisible(false);
+  };
+
   return (
     <>
       <Table
@@ -69,6 +80,13 @@ const DroppableTable = ({
         onCancel={handleCancel}
         handleOk={handleOk}
         message="이미 수강 신청된 강의입니다"
+      />
+      <StyledModal
+        title="확인"
+        isOpen={isCheckModalVisible}
+        onCancel={handleCancelcheck}
+        handleOk={handleOkcheck}
+        message={`${dataSource.name} ${dataSource.count} 수강신청이 완료되었습니다`}
       />
     </>
   );

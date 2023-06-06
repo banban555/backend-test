@@ -154,6 +154,7 @@ const Application = () => {
       axios
         .post("/application/add", data)
         .then((res) => {
+          setIsCheckModalVisible(true);
           getSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
           setCount(res.data.count);
         })
@@ -167,6 +168,8 @@ const Application = () => {
 
   //이미 신청된 강의는 모달 띄우는 핸들러
   const [isModalVisible, setIsModalVisible] = useState(false); // 모달 visible state
+  const [isCheckModalVisible, setIsCheckModalVisible] = useState(false); // 모달 visible state
+  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false); // 모달 visible state
 
   const handleOk = () => {
     setIsModalVisible(false);
@@ -186,6 +189,7 @@ const Application = () => {
         },
       })
       .then((res) => {
+        setIsDeleteModalVisible(true);
         getSelectedCourses(); // 강의 삭제 후 강의 목록을 다시 불러옴
         setCount(res.data.count); // 서버 응답에 있는 count로 state 업데이트
       })
@@ -232,6 +236,21 @@ const Application = () => {
     // 로그아웃 버튼을 누르면 실행되는 함수
     removecookie("x_auth"); // 쿠키삭제후
     window.location.href = logoutURL; // 현재url을 변경해준다.
+  };
+  const handleCancelcheck = () => {
+    setIsCheckModalVisible(false);
+  };
+
+  const handleOkcheck = () => {
+    setIsCheckModalVisible(false);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteModalVisible(false);
+  };
+
+  const handleOkDelete = () => {
+    setIsDeleteModalVisible(false);
   };
 
   return (
@@ -428,6 +447,7 @@ const Application = () => {
           </Content>
         </Layout>
       </Layout>
+
       <StyledModal
         isOpen={isModalVisible}
         handleClose={handleCancel}
@@ -439,6 +459,20 @@ const Application = () => {
         handleClose={handleOverCountModalCancel}
         message="수강신청 가능한 학점을 초과하였습니다."
         handleOk={handleOverCountModalOk}
+      />
+      <StyledModal
+        title="확인"
+        isOpen={isCheckModalVisible}
+        onCancel={handleCancelcheck}
+        handleOk={handleOkcheck}
+        message={`${selectedData.name} ${selectedData.count} 수강신청이 완료되었습니다`}
+      />
+      <StyledModal
+        title="확인"
+        isOpen={isDeleteModalVisible}
+        onCancel={handleCancelDelete}
+        handleOk={handleOkDelete}
+        message="삭제가 완료되었습니다"
       />
     </DndProvider>
   );

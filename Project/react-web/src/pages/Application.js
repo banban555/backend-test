@@ -510,7 +510,7 @@ const Application = () => {
         isOpen={isCheckModalVisible}
         onCancel={handleCancelcheck}
         handleOk={handleOkcheck}
-        message={`${selectedData.name} ${selectedData.count} 수강신청이 완료되었습니다`}
+        message={`${selectedData["교과목명"]} ${selectedData["학점"]}학점 수강신청이 완료되었습니다`}
       />
       <StyledModal
         title="확인"

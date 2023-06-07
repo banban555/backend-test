@@ -366,11 +366,11 @@ app.post("/application/add", auth, async (req, res) => {
 
     if (count < 0) {
       count = 0;
-      // return res.status(400).json({
-      //   success: false,
-      //   message: "더 이상 강의를 추가할 수 없습니다.",
-      //   count: count,
-      // });
+      return res.status(402).json({
+        success: false,
+        message: "더 이상 강의를 추가할 수 없습니다.",
+        count: count,
+      });
     }
 
     const result = await userCollection.updateOne(

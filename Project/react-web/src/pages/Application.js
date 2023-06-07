@@ -76,16 +76,6 @@ const Application = () => {
     setSelectedRow({ tableId: tableId, rowId: record._id });
   };
 
-  useEffect(() => {
-    if (count === 0) {
-      setIsOverCountModalVisible(true);
-      setSelectedRow({
-        tableId: null,
-        rowId: null,
-      });
-    }
-  }, [count]);
-
   const handleOverCountModalOk = () => {
     setIsOverCountModalVisible(false);
     setSelectedRow({
@@ -157,30 +147,36 @@ const Application = () => {
       });
   }, []); // []은 의존성 배열입니다. 이 배열이 비어있으면 컴포넌트가 처음 마운트될 때 한 번만 실행됩니다.
 
-  // 플러스 버튼 클릭 이벤트 핸들러
+  // 플러스 버튼으로 강의를 add하는 클릭 이벤트 핸들러
   const handleAddButtonClick = () => {
-    if (
-      selectedData &&
-      !addedData.some((item) => item._id === selectedData._id)
-    ) {
-      setAddedData((prevData) => [...prevData, selectedData]);
-      const data = {
-        userToken: token,
-        lectureId: selectedData._id,
-      };
-      axios
-        .post("/application/add", data)
-        .then((res) => {
-          if (res.data.count !== 0) setIsCheckModalVisible(true);
+    setAddedData((prevData) => [...prevData, selectedData]);
+    const data = {
+      userToken: token,
+      lectureId: selectedData._id,
+    };
+    axios
+      .post("/application/add", data)
+      .then((res) => {
+        if (res.status === 200) {
+          //강의신청성공모달
+          setIsCheckModalVisible(true);
           getSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
           setCount(res.data.count);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    } else {
-      setIsModalVisible(true);
-    }
+        }
+      })
+      .catch((err) => {
+        if (err.response) {
+          if (err.response.status === 401) {
+            //중복강의 신청 모달
+            setIsModalVisible(true);
+          }
+          if (err.response.status === 402) {
+            //학첨초과모달
+            setIsOverCountModalVisible(true);
+            setCount(err.response.data.count);
+          }
+        }
+      });
   };
 
   //이미 신청된 강의는 모달 띄우는 핸들러

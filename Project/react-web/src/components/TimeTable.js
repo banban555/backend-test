@@ -51,7 +51,7 @@ const StyledTimeTable = ({
   const token = cookies.x_auth;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isCheckModalVisible, setIsCheckModalVisible] = useState(false);
-  // const [isSelected, setIsSelected] = useState(false); // 강의 선택 상태를 관리하는 상태 변수
+  const [isOverCountModalVisible, setIsOverCountModalVisible] = useState(false); // 초과 학점 모달 visible 상태
 
   const courseSelectionReducer = (state, action) => {
     switch (action.type) {
@@ -69,56 +69,62 @@ const StyledTimeTable = ({
 
   const [, drop] = useDrop(() => ({
     accept: "COURSE",
-    drop: (item, monitor) => {
-      setAddedData((prevData) => {
-        if (!prevData.some((data) => data._id === item.course._id)) {
-          const data = {
-            userToken: token,
-            lectureId: item.course._id,
-          };
-          axios
-            .post("/application/add", data)
-            .then((res) => {
-              if (res.data.count !== 0) {
-                setIsCheckModalVisible(true);
-              } // count가 0이 아니라면 수강신청 완료 모달을 띄웁니다.
-              refreshSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
-              setCount(res.data.count);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-          return [...prevData, item.course];
-        } else {
+    drop: async (item, monitor) => {
+      const data = {
+        userToken: token,
+        lectureId: item.course._id,
+      };
+
+      try {
+        const res = await axios.post("/application/add", data);
+
+        if (res.status === 200) {
+          setIsCheckModalVisible(true);
+          refreshSelectedCourses();
+          setCount(res.data.count);
+          setAddedData((prevData) => [...prevData, item.course]);
+        }
+      } catch (err) {
+        if (err.response.status === 401) {
           setIsModalVisible(true);
         }
-        return prevData;
-      });
+        if (err.response.status === 402) {
+          //초과학점 경고 모달
+          setIsOverCountModalVisible(true);
+          setCount(err.response.data.count);
+        }
+      }
     },
   }));
 
   const handleOk = () => {
     setIsModalVisible(false);
     dispatch({ type: "reset" });
-    // setIsSelected(!isSelected);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
     dispatch({ type: "reset" });
-    // setIsSelected(!isSelected);
   };
 
   const handleCancelcheck = () => {
     setIsCheckModalVisible(false);
     dispatch({ type: "reset" });
-    // setIsSelected(!isSelected);
   };
 
   const handleOkcheck = () => {
     setIsCheckModalVisible(false);
     dispatch({ type: "reset" });
-    // setIsSelected(!isSelected);
+  };
+
+  const handleOverCountModalOk = () => {
+    setIsOverCountModalVisible(false);
+    dispatch({ type: "reset" });
+  };
+
+  const handleOverCountModalCancel = () => {
+    setIsOverCountModalVisible(false);
+    dispatch({ type: "reset" });
   };
 
   const columns = [
@@ -151,12 +157,9 @@ const StyledTimeTable = ({
             <div
               key={course._id}
               className={selectedCourses[course._id] ? "selected" : ""}
-              // className={isSelected ? "selected" : ""} // isSelected 상태에 따라 CSS 클래스를 바꿉니다.
               onClick={(event) => {
                 event.stopPropagation();
                 onRowClick(course);
-                console.log("클릭된 강의:", course);
-                // 선택 상태를 토글하기 위해 'toggle' 액션을 dispatch합니다.
                 dispatch({ type: "toggle", courseId: course._id });
               }}
             >
@@ -195,7 +198,6 @@ const StyledTimeTable = ({
           onRow={(record) => ({
             onClick: (event) => {
               const day = event.target.getAttribute("data-column-key");
-              console.log("클릭된 강의:", record[day]);
               if (day && record[day]) {
                 onRowClick(record[day]);
               }
@@ -216,6 +218,12 @@ const StyledTimeTable = ({
         onCancel={handleCancelcheck}
         handleOk={handleOkcheck}
         message={`${data.name} ${data.count} 수강신청이 완료되었습니다`}
+      />
+      <StyledModal
+        isOpen={isOverCountModalVisible}
+        handleClose={handleOverCountModalCancel}
+        message="수강신청 가능한 학점을 초과하였습니다."
+        handleOk={handleOverCountModalOk}
       />
     </>
   );

@@ -21,36 +21,36 @@ const DroppableTable = ({
   const token = cookies.x_auth;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const [isOverCountModalVisible, setIsOverCountModalVisible] = useState(false); // 초과 학점 모달 visible 상태
   const [isCheckModalVisible, setIsCheckModalVisible] = useState(false);
 
   const [, dropRef] = useDrop(() => ({
     accept: "COURSE",
-    drop: (item, monitor) => {
-      setAddedData((prevData) => {
-        if (!prevData.some((data) => data._id === item.course._id)) {
-          const data = {
-            userToken: token,
-            lectureId: item.course._id,
-          };
-          axios
-            .post("/application/add", data)
-            .then((res) => {
-              if (res.data.count !== 0) {
-                setIsCheckModalVisible(true);
-              } // count가 0이 아니라면 수강신청 완료 모달을 띄웁니다.
-              refreshSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
-              setCount(res.data.count);
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-          return [...prevData, item.course]; // item.course를 추가합니다.
-        } else {
-          setIsModalVisible(true); // 만약 이미 수강신청된 강의라면 모달을 띄웁니다.
+    drop: async (item, monitor) => {
+      const data = {
+        userToken: token,
+        lectureId: item.course._id,
+      };
+
+      try {
+        const res = await axios.post("/application/add", data);
+
+        if (res.status === 200) {
+          setIsCheckModalVisible(true);
+          refreshSelectedCourses();
+          setCount(res.data.count);
+          setAddedData((prevData) => [...prevData, item.course]);
         }
-        return prevData; // 그렇지 않다면, prevData를 그대로 반환합니다.
-      });
+      } catch (err) {
+        if (err.response.status === 401) {
+          setIsModalVisible(true);
+        }
+        if (err.response.status === 402) {
+          //초과학점 경고 모달
+          setIsOverCountModalVisible(true);
+          setCount(err.response.data.count);
+        }
+      }
     },
   }));
 
@@ -86,6 +86,22 @@ const DroppableTable = ({
     });
   };
 
+  const handleOverCountModalOk = () => {
+    setIsOverCountModalVisible(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
+  };
+
+  const handleOverCountModalCancel = () => {
+    setIsOverCountModalVisible(false);
+    setSelectedRow({
+      tableId: null,
+      rowId: null,
+    });
+  };
+
   return (
     <>
       <Table
@@ -114,7 +130,14 @@ const DroppableTable = ({
         isOpen={isCheckModalVisible}
         onCancel={handleCancelcheck}
         handleOk={handleOkcheck}
-        message={`${dataSource.name} ${dataSource.count} 수강신청이 완료되었습니다`}
+        message={"수강신청이 완료되었습니다"}
+        // message={`${dataSource.name} ${dataSource.count} 수강신청이 완료되었습니다`}
+      />
+      <StyledModal
+        isOpen={isOverCountModalVisible}
+        handleClose={handleOverCountModalCancel}
+        message="수강신청 가능한 학점을 초과하였습니다."
+        handleOk={handleOverCountModalOk}
       />
     </>
   );

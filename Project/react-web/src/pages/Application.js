@@ -290,6 +290,13 @@ const Application = () => {
     });
   };
 
+  window.addEventListener("scroll", function () {
+    const container = document.querySelector(".container");
+    const scrollPosition = window.scrollY;
+
+    container.style.transform = `translate(45%, ${scrollPosition}px)`;
+  });
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Layout>
@@ -422,6 +429,7 @@ const Application = () => {
             </div>
 
             {/* 강의 신청 부분 */}
+
             <div className={styles.gutter16}>
               <div className={styles.flexWrapper}>
                 <div className={styles.contentWrapper}>
@@ -449,14 +457,16 @@ const Application = () => {
                     })}
                   />
                 </div>
-                <div className={styles.button_wrapper}>
-                  <Button shape="circle" onClick={handleAddButtonClick}>
-                    +
-                  </Button>
-                  <div className={styles.button_space}></div>
-                  <Button shape="circle" onClick={() => handleDelete()}>
-                    -
-                  </Button>
+                <div className="container">
+                  <div className={styles.button_wrapper}>
+                    <Button shape="circle" onClick={handleAddButtonClick}>
+                      +
+                    </Button>
+                    <div className={styles.button_space}></div>
+                    <Button shape="circle" onClick={() => handleDelete()}>
+                      -
+                    </Button>
+                  </div>
                 </div>
 
                 <div className={styles.contentWrapper}>

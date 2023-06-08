@@ -294,7 +294,7 @@ const Application = () => {
     const container = document.querySelector(".container");
     const scrollPosition = window.scrollY;
 
-    container.style.transform = `translate(45%, ${scrollPosition}px)`;
+    container.style.transform = `translate(0, ${scrollPosition}px)`;
   });
 
   return (

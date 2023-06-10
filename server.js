@@ -18,6 +18,15 @@ app.use(
     credentials: true,
   })
 );
+app.use(
+  session({
+    // express-session middleware 설정
+    secret: "your_secret_key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }, // https 환경에서만 세션 쿠키 전송
+  })
+);
 app.set("trust proxy", 1);
 
 // mongoose로 DB연결
@@ -169,22 +178,13 @@ app.post("/signin", async (req, res) => {
             .status(500)
             .json({ loginSuccess: false, message: "Internal server error" });
         }
-        // 토큰을 쿠키에 저장하고, 유효기간을 30분으로 설정
-        res
-          .cookie("x_auth", userInfoWithToken.token, {
-            // expires: new Date(Date.now() + 900000),
-            // maxAge: 1800000,
-            // sameSite: "None",
-            // httpOnly: false,
-            // secure: true, // 추가
-            // domain: "www.3plus.world",
-          })
-          .status(200)
-          .json({
-            loginSuccess: true,
-            userId: userInfoWithToken._id,
-            token: userInfoWithToken.token,
-          });
+        // 세션에 토큰 저장
+        req.session.token = userInfoWithToken.token;
+        res.status(200).json({
+          loginSuccess: true,
+          userId: userInfoWithToken._id,
+          token: userInfoWithToken.token,
+        });
       });
     });
   } catch (error) {

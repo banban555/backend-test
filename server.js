@@ -174,10 +174,10 @@ app.post("/signin", async (req, res) => {
           .cookie("x_auth", userInfoWithToken.token, {
             // expires: new Date(Date.now() + 900000),
             // maxAge: 1800000,
-            sameSite: "None",
-            httpOnly: false, // 추가
-            secure: true, // 추가
-            domain: "www.3plus.world",
+            // sameSite: "None",
+            // httpOnly: false,
+            // secure: true, // 추가
+            // domain: "www.3plus.world",
           })
           .status(200)
           .json({

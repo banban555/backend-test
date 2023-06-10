@@ -14,10 +14,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: [
-      "https://web-frontend-test-7xwyjq992llipki9am.sel4.cloudtype.app",
-      "http://localhost:3000",
-    ],
+    origin: true,
     credentials: true,
   })
 );

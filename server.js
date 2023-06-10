@@ -15,7 +15,6 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: ["https://www.3plus.world", "http://localhost:3000"],
-    credentials: true,
   })
 );
 

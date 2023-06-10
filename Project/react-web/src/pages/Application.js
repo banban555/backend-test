@@ -434,7 +434,7 @@ const Application = () => {
                     <h3 className={styles.smallTitle}>종합강의시간표목록</h3>
                     <h3 className={styles.smallTitle}>
                       신청 가능학점:{" "}
-                      <span style={{ color: "#E79E2F" }}>{count}</span>
+                      <span style={{ color: "#D8722A" }}>{count}</span>
                     </h3>
                   </div>
                   <StyledDefaultTable

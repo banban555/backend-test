@@ -15,6 +15,10 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: true,
+    // [
+    //   "https://web-frontend-test-7xwyjq992llipki9am.sel4.cloudtype.app",
+    //   "http://localhost:3000",
+    // ],
     credentials: true,
   })
 );
@@ -179,6 +183,7 @@ app.post("/signin", async (req, res) => {
           .json({
             loginSuccess: true,
             userId: userInfoWithToken._id,
+            token: userInfoWithToken.token,
           });
       });
     });

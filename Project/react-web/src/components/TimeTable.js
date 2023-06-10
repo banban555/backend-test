@@ -151,20 +151,24 @@ const StyledTimeTable = ({
             (course) =>
               course.startTime <= record.time && course.endTime > record.time
           )
-          .map((course) => (
-            <div
-              key={course._id}
-              className={selectedCourses[course._id] ? "selected" : ""}
-              onClick={(event) => {
-                console.log("map안에 돌고있는 강의는: ", course);
-                event.stopPropagation();
-                onRowClick(course);
-                dispatch({ type: "toggle", courseId: course._id });
-              }}
-            >
-              {/* {course.} */}
-              {course.name}
-            </div>
+          .map((course, index, arr) => (
+            <>
+              <div
+                key={course._id}
+                className={`${selectedCourses[course._id] ? "selected" : ""} ${
+                  index < arr.length - 1 ? "border-bottom" : ""
+                }`}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onRowClick(course);
+                  dispatch({ type: "toggle", courseId: course._id });
+                }}
+              >
+                <p>{course.professor}</p>
+                <p>{course.name}</p>
+              </div>
+              {index < arr.length - 1 && <hr />}
+            </>
           ));
 
         return {

@@ -29,25 +29,13 @@ const CustomInput = styled(Input)`
   }
 `;
 
-const Table = styled(AntTable)`
-  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
-    .ant-table-tbody
-    > tr.ant-tabel-row:hover
-    > th,
-  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
-    .ant-table-tbody
-    > tr.ant-table-row:hover
-    > td,
-  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
-    .ant-table-tbody
-    > tr
-    > th.ant-table-cell-row-hover,
-  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
+const StyledDefaultTable = styled(AntTable)`
+  :where(.css-dev-only-do-not-override-12jzuas).ant-table-wrapper
     .ant-table-tbody
     > tr
     > td.ant-table-cell-row-hover {
-    background-color: #e79e2f;
-    color: white;
+    background-color: #e79e2f !important;
+    color: white !important;
   }
 `;
 
@@ -302,13 +290,6 @@ const Application = () => {
     });
   };
 
-  window.addEventListener("scroll", function () {
-    const container = document.querySelector(".container");
-    const scrollPosition = window.scrollY;
-
-    container.style.transform = `translate(0, ${scrollPosition}px)`;
-  });
-
   return (
     <DndProvider backend={HTML5Backend}>
       <Layout>
@@ -342,7 +323,7 @@ const Application = () => {
                   window.location.href = "/mypage";
                 }}
               >
-                회원정보수정
+                마이페이지
               </Button>
             </div>
           </div>
@@ -441,7 +422,6 @@ const Application = () => {
             </div>
 
             {/* 강의 신청 부분 */}
-
             <div className={styles.gutter16}>
               <div className={styles.flexWrapper}>
                 <div className={styles.contentWrapper}>
@@ -451,7 +431,7 @@ const Application = () => {
                       신청 가능학점: {count}
                     </h3>
                   </div>
-                  <Table
+                  <StyledDefaultTable
                     components={{
                       body: {
                         row: CourseRow,
@@ -469,16 +449,14 @@ const Application = () => {
                     })}
                   />
                 </div>
-                <div className="container">
-                  <div className={styles.button_wrapper}>
-                    <Button shape="circle" onClick={handleAddButtonClick}>
-                      +
-                    </Button>
-                    <div className={styles.button_space}></div>
-                    <Button shape="circle" onClick={() => handleDelete()}>
-                      -
-                    </Button>
-                  </div>
+                <div className={styles.button_wrapper}>
+                  <Button shape="circle" onClick={handleAddButtonClick}>
+                    +
+                  </Button>
+                  <div className={styles.button_space}></div>
+                  <Button shape="circle" onClick={() => handleDelete()}>
+                    -
+                  </Button>
                 </div>
 
                 <div className={styles.contentWrapper}>

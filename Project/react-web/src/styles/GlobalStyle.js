@@ -60,8 +60,8 @@ const GlobalStyle = createGlobalStyle`
     -webkit-appearance: none;
     margin: 0;
   }
-  
 }
+
 `;
 
 export default GlobalStyle;

@@ -23,7 +23,7 @@ for (let i = 9; i < 22; i++) {
   });
 }
 
-const Table = styled(AntTable)`
+const StyeldTimeTable = styled(AntTable)`
   .has-data {
     background-color: ${theme.colors.LightOrange};
     font: ${theme.fonts.body4};
@@ -33,8 +33,7 @@ const Table = styled(AntTable)`
     text-align: center;
   }
   .ant-table-row:hover .has-data,
-  .has-data:hover,
-  .ant-table-cell.ant-table-row-hover {
+  .has-data:hover {
     background: ${theme.colors.LightOrange} !important;
   }
 `;
@@ -192,7 +191,7 @@ const StyledTimeTable = ({
   return (
     <>
       <div ref={drop}>
-        <Table
+        <StyeldTimeTable
           columns={columns}
           dataSource={data}
           pagination={false}

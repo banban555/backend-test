@@ -12,8 +12,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cors());
-
+app.use(
+  cors({
+    origin: [
+      "https://port-0-backend-test-7xwyjq992llipki9am.sel4.cloudtype.app/",
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  })
+);
 // mongoose로 DB연결
 mongoose
   .connect(config.mongo_url, {
@@ -163,13 +170,11 @@ app.post("/signin", async (req, res) => {
             .status(500)
             .json({ loginSuccess: false, message: "Internal server error" });
         }
-
         // 토큰을 쿠키에 저장하고, 유효기간을 30분으로 설정
         res
           .cookie("x_auth", userInfoWithToken.token, {
             maxAge: 1800000,
             sameSite: "None",
-            secure: true,
           })
           .status(200)
           .json({

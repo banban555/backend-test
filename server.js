@@ -171,6 +171,9 @@ app.post("/signin", async (req, res) => {
         res
           .cookie("x_auth", userInfoWithToken.token, {
             maxAge: 1800000,
+            sameSite: "None",
+            httpOnly: false, // 추가
+            secure: true, // 추가
           })
           .status(200)
           .json({

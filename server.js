@@ -18,6 +18,7 @@ app.use(
     credentials: true,
   })
 );
+app.set("trust proxy", 1);
 
 // mongoose로 DB연결
 mongoose

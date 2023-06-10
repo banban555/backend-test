@@ -1,7 +1,8 @@
 import { React, useEffect, useState } from "react";
 import styled from "styled-components";
-import { Input, PasswordInput } from "../components/common/Input";
+import { Input } from "../components/common/Input";
 import SelectInput from "../components/signup/Select";
+import StyledModal from "../components/common/Modal.js";
 import axios from "axios";
 
 const ModifyContainer = styled.div`
@@ -46,12 +47,11 @@ const ModifyUserInfo = () => {
         console.error(error);
       });
   }, []);
-
+  const [isModalVisible, setIsModalVisible] = useState(false); // 모달 visible state
   const [userInfo, setUserInfo] = useState({
     name: "",
     studentNum: "",
     email: "",
-    password: "",
     major: "",
     grade: "",
   });
@@ -69,7 +69,6 @@ const ModifyUserInfo = () => {
       name: userInfo.name,
       studentNum: userInfo.studentNum,
       email: userInfo.email,
-      password: userInfo.password,
       major: userInfo.major,
       grade: userInfo.grade,
     };
@@ -79,6 +78,14 @@ const ModifyUserInfo = () => {
       .catch((err) => {
         console.error(err);
       });
+    setIsModalVisible(true);
+  };
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  const handleOk = () => {
+    setIsModalVisible(false);
+    window.location.reload();
   };
 
   return (
@@ -101,13 +108,6 @@ const ModifyUserInfo = () => {
           name="email"
           type="email"
           placeholder={userInfo.email}
-          onChange={handleChange}
-          required
-        />
-        <PasswordInput
-          name="password"
-          type="password"
-          placeholder="비밀번호"
           onChange={handleChange}
           required
         />
@@ -139,6 +139,13 @@ const ModifyUserInfo = () => {
           수정
         </ModifyButton>
       </ModifyForm>
+      <StyledModal
+        title="확인"
+        isOpen={isModalVisible}
+        onCancel={handleCancel}
+        handleOk={handleOk}
+        message="회원정보가 수정되었습니다"
+      />
     </ModifyContainer>
   );
 };

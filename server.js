@@ -172,12 +172,12 @@ app.post("/signin", async (req, res) => {
         // 토큰을 쿠키에 저장하고, 유효기간을 30분으로 설정
         res
           .cookie("x_auth", userInfoWithToken.token, {
-            expires: new Date(Date.now() + 900000),
+            // expires: new Date(Date.now() + 900000),
             // maxAge: 1800000,
             sameSite: "None",
             httpOnly: false, // 추가
             secure: true, // 추가
-            domain: "https://www.3plus.world",
+            domain: "www.3plus.world",
           })
           .status(200)
           .json({

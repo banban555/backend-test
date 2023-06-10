@@ -14,11 +14,11 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://www.3plus.world", "http://localhost:3000"],
+    // origin: ["https://www.3plus.world", "http://localhost:3000"],
+    origin: true,
     credentials: true,
   })
 );
-app.set("trust proxy", 1);
 
 // mongoose로 DB연결
 mongoose
@@ -36,7 +36,7 @@ app.listen(8080, function () {
   console.log("listening on 8080");
 });
 
-app.get("/application/count", auth, async (req, res) => {
+app.get("/application/count", async (req, res) => {
   try {
     const userToken = req.query.token;
     const userInfo = await new Promise((resolve, reject) => {
@@ -208,7 +208,7 @@ app.post("/auth", auth, (req, res) => {
 app.use(express.static(__dirname + "/react-web/build/"));
 
 // search API
-app.get("/application/search", auth, async (req, res) => {
+app.get("/application/search", async (req, res) => {
   const { major = "", keyword = "" } = req.query;
   try {
     const lectures = await Lecture.findLectures(major, keyword);
@@ -219,8 +219,9 @@ app.get("/application/search", auth, async (req, res) => {
   }
 });
 
-app.get("/application/userInfo", auth, function (req, res) {
-  const token = req.body.token;
+//확인 완료
+app.get("/application/userInfo", function (req, res) {
+  const token = req.query.token;
 
   // 토큰을 디코드하여 유저 정보 가져오기
   user.findByToken(token, (err, userInfo) => {
@@ -230,7 +231,6 @@ app.get("/application/userInfo", auth, function (req, res) {
         .status(500)
         .json({ success: false, error: "Internal server error" });
     }
-
     if (!userInfo) {
       return res.json({ isAuth: false, error: true });
     }
@@ -238,8 +238,8 @@ app.get("/application/userInfo", auth, function (req, res) {
   });
 });
 
-// 클라이언트에서 '/application/seclectedCourse'에 대한 GET 요청 처리
-app.get("/application/seclectedCourse", auth, async (req, res) => {
+//확인완료
+app.get("/application/seclectedCourse", async (req, res) => {
   try {
     const userToken = req.query.token;
 
@@ -287,7 +287,7 @@ app.get("/application/seclectedCourse", auth, async (req, res) => {
 app.put("/mypage/userInfo", auth, async (req, res) => {
   try {
     const { name, studentNum, email, password, major, grade } = req.body;
-    const userToken = req.body.token;
+    const userToken = req.query.token;
 
     const userInfo = await user.findOneAndUpdate(
       { token: userToken },
@@ -320,7 +320,7 @@ app.put("/mypage/userInfo", auth, async (req, res) => {
   }
 });
 
-app.post("/application/add", auth, async (req, res) => {
+app.post("/application/add", async (req, res) => {
   try {
     const selectLectureId = req.body.lectureId;
     const userToken = req.body.userToken;
@@ -396,11 +396,10 @@ app.post("/application/add", auth, async (req, res) => {
   }
 });
 
-app.delete("/application/delete", auth, async (req, res) => {
+app.delete("/application/delete", async (req, res) => {
   try {
     const selectLectureId = req.body.lectureId;
     const userToken = req.body.userToken;
-
     const userInfo = await new Promise((resolve, reject) => {
       user.findByToken(userToken, (err, userInfo) => {
         if (err) {

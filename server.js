@@ -14,11 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(
-  cors({
-    origin: "https://web-frontend-test-7xwyjq992llipki9am.sel4.cloudtype.app",
-  })
-);
+app.use(cors());
 
 // mongoose로 DB연결
 mongoose

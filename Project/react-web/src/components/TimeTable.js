@@ -23,7 +23,7 @@ for (let i = 9; i < 22; i++) {
   });
 }
 
-const Table = styled(AntTable)`
+const StyeldTimeTable = styled(AntTable)`
   .has-data {
     background-color: ${theme.colors.LightOrange};
     font: ${theme.fonts.body4};
@@ -33,8 +33,7 @@ const Table = styled(AntTable)`
     text-align: center;
   }
   .ant-table-row:hover .has-data,
-  .has-data:hover,
-  .ant-table-cell.ant-table-row-hover {
+  .has-data:hover {
     background: ${theme.colors.LightOrange} !important;
   }
 `;
@@ -60,7 +59,7 @@ const StyledTimeTable = ({
         newState[action.courseId] = !newState[action.courseId];
         return newState;
       case "reset":
-        return {}; // 모든 선택 상태를 초기화합니다.
+        return {};
       default:
         throw new Error();
     }
@@ -89,7 +88,6 @@ const StyledTimeTable = ({
           setIsModalVisible(true);
         }
         if (err.response.status === 402) {
-          //초과학점 경고 모달
           setIsOverCountModalVisible(true);
           setCount(err.response.data.count);
         }
@@ -158,11 +156,13 @@ const StyledTimeTable = ({
               key={course._id}
               className={selectedCourses[course._id] ? "selected" : ""}
               onClick={(event) => {
+                console.log("map안에 돌고있는 강의는: ", course);
                 event.stopPropagation();
                 onRowClick(course);
                 dispatch({ type: "toggle", courseId: course._id });
               }}
             >
+              {/* {course.} */}
               {course.name}
             </div>
           ));
@@ -191,7 +191,7 @@ const StyledTimeTable = ({
   return (
     <>
       <div ref={drop}>
-        <Table
+        <StyeldTimeTable
           columns={columns}
           dataSource={data}
           pagination={false}

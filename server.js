@@ -1,13 +1,11 @@
 const express = require("express");
 const app = express();
-const MongoClient = require("mongodb").MongoClient;
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const config = require("./config/key.js");
 const { user, Lecture } = require("./models/user"); // Lecture 모델 추가
 const { auth } = require("./middleware/auth.js");
-const { send } = require("process");
 const cors = require("cors");
 
 app.use(express.urlencoded({ extended: true }));
@@ -132,9 +130,7 @@ app.post("/signup", async (req, res) => {
 
 /// 로그인 API
 app.post("/signin", async (req, res) => {
-  console.log("서버 실행");
   try {
-    console.log("userInfo", req.body);
     const userInfo = await user.findOne({ studentNum: req.body.studentNum });
 
     if (!userInfo) {
@@ -170,7 +166,11 @@ app.post("/signin", async (req, res) => {
 
         // 토큰을 쿠키에 저장하고, 유효기간을 30분으로 설정
         res
-          .cookie("x_auth", userInfoWithToken.token, { maxAge: 1800000 })
+          .cookie("x_auth", userInfoWithToken.token, {
+            maxAge: 1800000,
+            sameSite: "None",
+            secure: true,
+          })
           .status(200)
           .json({
             loginSuccess: true,
@@ -228,7 +228,6 @@ app.get("/application/userInfo", auth, function (req, res) {
     if (!userInfo) {
       return res.json({ isAuth: false, error: true });
     }
-    // console.log(userInfo);
     return res.status(200).json({ success: true, data: userInfo });
   });
 });
@@ -420,7 +419,6 @@ app.delete("/application/delete", auth, async (req, res) => {
 
     // 신청한 강의의 lectureID를 기반으로 lecture 컬렉션에서 해당 강의의 학점을 받아온다.
     const lecture = await Lecture.findById(selectLectureId);
-    // console.log("삭제하는 강의는:", lecture);
     const credit = lecture.학점;
 
     // 신청한 강의의 학점만큼 count 변수에서 차감하여 유저 고유의 컬렉션을 저장한다.
@@ -428,11 +426,6 @@ app.delete("/application/delete", auth, async (req, res) => {
 
     if (count > 24) {
       count = 24;
-      // return res.status(400).json({
-      //   success: false,
-      //   message: "강의를 삭제할 수 없습니다.",
-      //   count: count,
-      // });
     }
 
     const result = await userCollection.updateOne(

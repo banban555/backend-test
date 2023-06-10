@@ -7,6 +7,7 @@ const config = require("./config/key.js");
 const { user, Lecture } = require("./models/user"); // Lecture 모델 추가
 const { auth } = require("./middleware/auth.js");
 const cors = require("cors");
+const session = require("express-session");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -21,6 +21,7 @@ app.use(
     credentials: true,
   })
 );
+
 // mongoose로 DB연결
 mongoose
   .connect(config.mongo_url, {
@@ -175,6 +176,7 @@ app.post("/signin", async (req, res) => {
           .cookie("x_auth", userInfoWithToken.token, {
             maxAge: 1800000,
             sameSite: "None",
+            secure: true,
           })
           .status(200)
           .json({

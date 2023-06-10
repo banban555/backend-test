@@ -149,7 +149,6 @@ const Application = () => {
 
   // 플러스 버튼으로 강의를 add하는 클릭 이벤트 핸들러
   const handleAddButtonClick = () => {
-    setAddedData((prevData) => [...prevData, selectedData]);
     const data = {
       userToken: token,
       lectureId: selectedData._id,
@@ -158,7 +157,7 @@ const Application = () => {
       .post("/application/add", data)
       .then((res) => {
         if (res.status === 200) {
-          //강의신청성공모달
+          setAddedData((prevData) => [...prevData, selectedData]);
           setIsCheckModalVisible(true);
           getSelectedCourses(); // 강의 추가 후 강의 목록을 다시 불러옴
           setCount(res.data.count);
@@ -167,7 +166,6 @@ const Application = () => {
       .catch((err) => {
         if (err.response) {
           if (err.response.status === 401) {
-            //중복강의 신청 모달
             setIsModalVisible(true);
           }
           if (err.response.status === 402) {
@@ -290,6 +288,13 @@ const Application = () => {
     });
   };
 
+  window.addEventListener("scroll", function () {
+    const container = document.querySelector(".container");
+    const scrollPosition = window.scrollY;
+
+    container.style.transform = `translate(0, ${scrollPosition}px)`;
+  });
+
   return (
     <DndProvider backend={HTML5Backend}>
       <Layout>
@@ -323,7 +328,7 @@ const Application = () => {
                   window.location.href = "/mypage";
                 }}
               >
-                마이페이지
+                회원정보수정
               </Button>
             </div>
           </div>
@@ -428,7 +433,7 @@ const Application = () => {
                   <div className={styles.textWrapper}>
                     <h3 className={styles.smallTitle}>종합강의시간표목록</h3>
                     <h3 className={styles.smallTitle}>
-                      신청 가능학점: {count}
+                      신청 가능학점: {count}ㄴ{" "}
                     </h3>
                   </div>
                   <StyledDefaultTable
@@ -449,14 +454,16 @@ const Application = () => {
                     })}
                   />
                 </div>
-                <div className={styles.button_wrapper}>
-                  <Button shape="circle" onClick={handleAddButtonClick}>
-                    +
-                  </Button>
-                  <div className={styles.button_space}></div>
-                  <Button shape="circle" onClick={() => handleDelete()}>
-                    -
-                  </Button>
+                <div className="container">
+                  <div className={styles.button_wrapper}>
+                    <Button shape="circle" onClick={handleAddButtonClick}>
+                      +
+                    </Button>
+                    <div className={styles.button_space}></div>
+                    <Button shape="circle" onClick={() => handleDelete()}>
+                      -
+                    </Button>
+                  </div>
                 </div>
 
                 <div className={styles.contentWrapper}>

@@ -55,7 +55,6 @@ const DroppableTable = ({
           setIsModalVisible(true);
         }
         if (err.response.status === 402) {
-          //초과학점 경고 모달
           setIsOverCountModalVisible(true);
           setCount(err.response.data.count);
         }

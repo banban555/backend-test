@@ -110,7 +110,6 @@ app.post("/signup", async (req, res) => {
         console.log(err);
         return res.json({ success: false, err });
       }
-
       // 새로 만든 컬렉션에 문서 삽입
       const userCollection = mongoose.connection.db.collection(collectionName);
       userCollection.insertOne(
@@ -133,7 +132,9 @@ app.post("/signup", async (req, res) => {
 
 /// 로그인 API
 app.post("/signin", async (req, res) => {
+  console.log("서버 실행");
   try {
+    console.log("userInfo", req.body);
     const userInfo = await user.findOne({ studentNum: req.body.studentNum });
 
     if (!userInfo) {
@@ -142,7 +143,6 @@ app.post("/signin", async (req, res) => {
         message: "학번을 확인해주세요",
       });
     }
-
     // 요청한 이메일이 db에 있다면 비밀번호도 똑같은지 확인
     userInfo.comparePassword(req.body.password, (err, isMatched) => {
       if (err) {

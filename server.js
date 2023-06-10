@@ -8,11 +8,17 @@ const config = require("./config/key.js");
 const { user, Lecture } = require("./models/user"); // Lecture 모델 추가
 const { auth } = require("./middleware/auth.js");
 const { send } = require("process");
+const cors = require("cors");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "https://web-frontend-test-7xwyjq992llipki9am.sel4.cloudtype.app",
+  })
+);
 
 // mongoose로 DB연결
 mongoose
@@ -209,11 +215,6 @@ app.get("/application/search", auth, async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-// app.get("/application/applicationLecture", function (req, res)
-// {
-
-// }
 
 app.get("/application/userInfo", auth, function (req, res) {
   // 쿠키에 저장된 토큰 가져오기

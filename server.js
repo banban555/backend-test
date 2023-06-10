@@ -25,7 +25,7 @@ app.use(
     secret: "your_secret_key",
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: true }, // https 환경에서만 세션 쿠키 전송
+    cookie: { secure: true, httpOnly: false, secure: true, sameSite: "None" }, // https 환경에서만 세션 쿠키 전송
   })
 );
 app.set("trust proxy", 1);

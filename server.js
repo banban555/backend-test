@@ -15,7 +15,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: [
-      "https://port-0-backend-test-7xwyjq992llipki9am.sel4.cloudtype.app/",
+      "https://web-frontend-test-7xwyjq992llipki9am.sel4.cloudtype.app",
       "http://localhost:3000",
     ],
     credentials: true,

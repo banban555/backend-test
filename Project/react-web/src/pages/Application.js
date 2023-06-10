@@ -1,15 +1,6 @@
 import { React, useEffect, useState } from "react";
-import {
-  Layout,
-  Select,
-  Button,
-  Form,
-  Input,
-  Row,
-  Col,
-  Table,
-  Tabs,
-} from "antd";
+import { Layout, Select, Button, Form, Input, Row, Col, Tabs } from "antd";
+import { Table as AntTable } from "antd";
 
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -24,7 +15,6 @@ import StyledTimeTable from "../components/TimeTable.js";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import StyledModal from "../components/common/Modal.js";
-import TableComponent from "../components/TableComponent.js";
 
 const { Option } = Select;
 const { TabPane } = Tabs;
@@ -36,6 +26,28 @@ const CustomInput = styled(Input)`
   &:focus {
     border-color: ${theme.colors.gray200} !important;
     box-shadow: none !important;
+  }
+`;
+
+const Table = styled(AntTable)`
+  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
+    .ant-table-tbody
+    > tr.ant-tabel-row:hover
+    > th,
+  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
+    .ant-table-tbody
+    > tr.ant-table-row:hover
+    > td,
+  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
+    .ant-table-tbody
+    > tr
+    > th.ant-table-cell-row-hover,
+  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
+    .ant-table-tbody
+    > tr
+    > td.ant-table-cell-row-hover {
+    background-color: #e79e2f;
+    color: white;
   }
 `;
 

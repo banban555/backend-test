@@ -6,8 +6,8 @@ body {
 }
 
 .selectedRow {
-  background-color: #e79e2f;
-  color: white;
+  background-color: #e79e2f !important;
+  color: white !important;
 }
 
 .textWrapper {
@@ -192,6 +192,7 @@ body {
   color: #ffffff;
   margin-right: 20px;
 }
+
 Button:hover {
   background-color: #d54728 !important;
   color: #ffffff;

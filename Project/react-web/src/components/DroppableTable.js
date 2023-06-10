@@ -6,6 +6,29 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 import styles from "../css/Application.module.css";
 import classNames from "classnames";
+import styled from "styled-components";
+
+const StyledTable = styled(Table)`
+  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
+    .ant-table-tbody
+    > tr.ant-tabel-row:hover
+    > th,
+  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
+    .ant-table-tbody
+    > tr.ant-table-row:hover
+    > td,
+  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
+    .ant-table-tbody
+    > tr
+    > th.ant-table-cell-row-hover,
+  :where(.css-dev-only-do-not-override-dfjnss).ant-table-wrapper
+    .ant-table-tbody
+    > tr
+    > td.ant-table-cell-row-hover {
+    background-color: #e79e2f;
+    color: white;
+  }
+`;
 
 const DroppableTable = ({
   dataSource,
@@ -104,7 +127,7 @@ const DroppableTable = ({
 
   return (
     <>
-      <Table
+      <StyledTable
         ref={dropRef}
         dataSource={dataSource}
         columns={columns}

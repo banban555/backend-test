@@ -14,11 +14,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: true,
-    // [
-    //   "https://web-frontend-test-7xwyjq992llipki9am.sel4.cloudtype.app",
-    //   "http://localhost:3000",
-    // ],
+    origin: ["https://www.3plus.world", "http://localhost:3000"],
     credentials: true,
   })
 );
@@ -176,8 +172,6 @@ app.post("/signin", async (req, res) => {
         res
           .cookie("x_auth", userInfoWithToken.token, {
             maxAge: 1800000,
-            sameSite: "None",
-            secure: true,
           })
           .status(200)
           .json({

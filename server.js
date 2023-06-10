@@ -7,7 +7,6 @@ const config = require("./config/key.js");
 const { user, Lecture } = require("./models/user"); // Lecture 모델 추가
 const { auth } = require("./middleware/auth.js");
 const cors = require("cors");
-const session = require("express-session");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,15 +16,6 @@ app.use(
   cors({
     origin: ["https://www.3plus.world", "http://localhost:3000"],
     credentials: true,
-  })
-);
-app.use(
-  session({
-    // express-session middleware 설정
-    secret: "your_secret_key",
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: true, httpOnly: false, secure: true, sameSite: "None" }, // https 환경에서만 세션 쿠키 전송
   })
 );
 app.set("trust proxy", 1);
@@ -179,13 +169,22 @@ app.post("/signin", async (req, res) => {
             .status(500)
             .json({ loginSuccess: false, message: "Internal server error" });
         }
-        // 세션에 토큰 저장
-        req.session.token = userInfoWithToken.token;
-        res.status(200).json({
-          loginSuccess: true,
-          userId: userInfoWithToken._id,
-          token: userInfoWithToken.token,
-        });
+        // 토큰을 쿠키에 저장하고, 유효기간을 30분으로 설정
+        res
+          .cookie("x_auth", userInfoWithToken.token, {
+            // expires: new Date(Date.now() + 900000),
+            // maxAge: 1800000,
+            // sameSite: "None",
+            // httpOnly: false, // 추가
+            // secure: true, // 추가
+            // domain: "www.3plus.world",
+          })
+          .status(200)
+          .json({
+            loginSuccess: true,
+            userId: userInfoWithToken._id,
+            token: userInfoWithToken.token,
+          });
       });
     });
   } catch (error) {
@@ -196,8 +195,6 @@ app.post("/signin", async (req, res) => {
 
 // 사용자 인증 API 이후 다양한 페이지에서 사용예정임.
 app.post("/auth", auth, (req, res) => {
-  // auth 함수 실행을 통과한 이후 실행될 코드
-  // auth를 통과했다는 얘기는 authentication이 true라는 말
   res.status(200).json({
     _id: req.user._id,
     isAuth: true,
@@ -223,8 +220,7 @@ app.get("/application/search", auth, async (req, res) => {
 });
 
 app.get("/application/userInfo", auth, function (req, res) {
-  // 쿠키에 저장된 토큰 가져오기
-  let token = req.cookies.x_auth;
+  const token = req.body.token;
 
   // 토큰을 디코드하여 유저 정보 가져오기
   user.findByToken(token, (err, userInfo) => {
@@ -291,7 +287,7 @@ app.get("/application/seclectedCourse", auth, async (req, res) => {
 app.put("/mypage/userInfo", auth, async (req, res) => {
   try {
     const { name, studentNum, email, password, major, grade } = req.body;
-    const userToken = req.cookies.x_auth;
+    const userToken = req.body.token;
 
     const userInfo = await user.findOneAndUpdate(
       { token: userToken },
@@ -448,7 +444,6 @@ app.delete("/application/delete", auth, async (req, res) => {
         .status(400)
         .json({ success: false, message: "강의 삭제에 실패했습니다." });
     }
-
     res.status(200).json({
       success: true,
       message: "강의 삭제에 성공했습니다.",

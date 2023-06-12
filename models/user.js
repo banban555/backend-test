@@ -63,17 +63,14 @@ userSchema.methods.comparePassword = function (plainPassword, callBack) {
   });
 };
 
-userSchema.methods.generateToken = function (callBack) {
-  //json webtoken을 이용해서 token을 생성하기
-  var user = this;
-  //user._id와 secretToken을 결합하여 토큰생성
-  var token = jwt.sign(user._id.toHexString(), "secretToken");
+userSchema.methods.generateToken = function (callback) {
+  const user = this;
+  const token = jwt.sign({ _id: user._id.toHexString() }, 'secretToken', { expiresIn: '30m' });
   user.token = token;
 
   user.save(function (err, userInfo) {
-    if (err) return callBack(err);
-    //에러가 없다면 에러자리는 null이고 userInfo반환
-    callBack(null, userInfo);
+    if (err) return callback(err);
+    callback(null, userInfo);
   });
 };
 

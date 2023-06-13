@@ -284,13 +284,9 @@ app.get("/application/seclectedCourse", async (req, res) => {
 });
 
 app.put("/mypage/userInfo", async (req, res) => {
-  console.log("들어왔어");
   try {
     const { token, userData } = req.body;
     const { name, studentNum, email, major, grade } = userData;
-
-    console.log("userData:", userData);
-    console.log("token", token);
 
     const userInfo = await user.findOneAndUpdate(
       { token: token },

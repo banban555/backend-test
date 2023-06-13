@@ -14,7 +14,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
   cors({
-    // origin: ["https://www.3plus.world", "http://localhost:3000"],
     origin: true,
     credentials: true,
   })
@@ -284,19 +283,22 @@ app.get("/application/seclectedCourse", async (req, res) => {
   }
 });
 
-app.put("/mypage/userInfo", auth, async (req, res) => {
+app.put("/mypage/userInfo", async (req, res) => {
+  console.log("들어왔어");
   try {
-    const { name, studentNum, email, password, major, grade } = req.body;
-    const userToken = req.query.token;
+    const { token, userData } = req.body;
+    const { name, studentNum, email, major, grade } = userData;
+
+    console.log("userData:", userData);
+    console.log("token", token);
 
     const userInfo = await user.findOneAndUpdate(
-      { token: userToken },
+      { token: token },
       {
         $set: {
           name: name,
           studentNum: studentNum,
           email: email,
-          password: password,
           major: major,
           grade: grade,
         },
@@ -455,5 +457,5 @@ app.delete("/application/delete", async (req, res) => {
 });
 
 app.get("*", function (req, res) {
-  res.sendFile(__dirname + "/react-web/build/index.html");
+  res.sendFile(__dirname + "../frontend-test/build/index.html");
 });

@@ -65,7 +65,9 @@ userSchema.methods.comparePassword = function (plainPassword, callBack) {
 
 userSchema.methods.generateToken = function (callback) {
   const user = this;
-  const token = jwt.sign({ _id: user._id.toHexString() }, 'secretToken', { expiresIn: '30m' });
+  const token = jwt.sign({ _id: user._id.toHexString() }, "secretToken", {
+    expiresIn: "30m",
+  });
   user.token = token;
 
   user.save(function (err, userInfo) {

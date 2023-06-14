@@ -85,7 +85,7 @@ app.post("/signup", async (req, res) => {
 
   // 회원가입 시 유저의 컬렉션 생성
   const collectionName = "user_" + userInfo._id; // 회원의 고유 ID를 사용하여 컬렉션 이름 생성
-
+  console.log("컬렌션 이름", collectionName);
   // 유저 콜렉션에 대한 스키마 정의
   const userCollectionSchema = new mongoose.Schema({
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
